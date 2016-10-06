@@ -21,6 +21,12 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
+    private final String CREATE_ACCOUNTS_TABLE = "CREATE TABLE accounts ( " +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "admin BOOLEAN, "+
+            "username TEXT, "+
+            "nfcid TEXT, "+
+            "balance DOUBLE )";
 
     public SqlDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,25 +34,27 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // SQL statement to create book table
-        String CREATE_ACCOUNTS_TABLE = "CREATE TABLE accounts ( " +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT, "+
-                "nfcid TEXT, "+
-                "balance DOUBLE )";
-
         // create books table
         db.execSQL(CREATE_ACCOUNTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older books table if existed
+        // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS accounts");
 
-        // create fresh books table
+        // create fresh table
         this.onCreate(db);
     }
+
+    public void resetDatabase()
+    {
+        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS accounts");
+
+        // create books table
+        this.getWritableDatabase().execSQL(CREATE_ACCOUNTS_TABLE);
+    }
+
     //---------------------------------------------------------------------
 
     /**
@@ -58,11 +66,12 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Accounts Table Columns names
     private static final String KEY_ID = "id";
+    private static final String KEY_ADMIN = "admin";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_NFCID = "nfcid";
     private static final String KEY_BALANCE = "balance";
 
-    private static final String[] COLUMNS = {KEY_ID, KEY_USERNAME, KEY_NFCID, KEY_BALANCE};
+    private static final String[] COLUMNS = {KEY_ID, KEY_ADMIN, KEY_USERNAME, KEY_NFCID, KEY_BALANCE};
 
     public void addAccount(Account account){
         Log.d("addAccount", account.toString());
@@ -71,6 +80,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
+        values.put(KEY_ADMIN, account.getAdmin());
         values.put(KEY_USERNAME, account.getUsername());
         values.put(KEY_NFCID, account.getNfcId());
         values.put(KEY_BALANCE, account.getBalance());
@@ -105,11 +115,12 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         // 4. build account object
-        Account account = new Account();
-        account.setId(Integer.parseInt(cursor.getString(0)));
-        account.setUsername(cursor.getString(1));
-        account.setNfcId(cursor.getString(2));
-        account.setBalance(Double.parseDouble(cursor.getString(3)));
+        Account account = new Account(
+            Integer.parseInt(cursor.getString(0)),
+            Boolean.parseBoolean(cursor.getString(1)),
+            cursor.getString(2),
+            cursor.getString(3),
+            Double.parseDouble(cursor.getString(4)));
 
         Log.d("getAccount("+id+")", account.toString());
 
@@ -133,18 +144,19 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         Account account = null;
         if (cursor.moveToFirst()) {
             do {
-                account = new Account();
-                account.setId(Integer.parseInt(cursor.getString(0)));
-                account.setUsername(cursor.getString(1));
-                account.setNfcId(cursor.getString(2));
-                account.setBalance(Double.parseDouble(cursor.getString(3)));
+                account = new Account(
+                    Integer.parseInt(cursor.getString(0)),
+                    Boolean.parseBoolean(cursor.getString(1)),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Double.parseDouble(cursor.getString(4)));
+
 
                 // Add account to books
                 accounts.add(account);
             } while (cursor.moveToNext());
         }
 
-        Log.d("getAllAccounts()", account.toString());
         cursor.close();
         return accounts;
     }
@@ -157,6 +169,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
+        values.put(KEY_ADMIN, account.getAdmin());
         values.put(KEY_USERNAME, account.getUsername());
         values.put(KEY_NFCID, account.getNfcId());
         values.put(KEY_BALANCE, account.getBalance());

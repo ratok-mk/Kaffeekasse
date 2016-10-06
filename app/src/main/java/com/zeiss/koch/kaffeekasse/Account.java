@@ -8,24 +8,33 @@ package com.zeiss.koch.kaffeekasse;
 class Account {
 
     private int id;
+    private boolean admin;
     private String username;
     private String nfcid;
     private Double balance;
 
-    Account(){}
-
     public Account(String username, String nfcid) {
         super();
+        this.admin = false;
         this.username = username;
         this.nfcid = nfcid;
         this.balance = 0.0;
+    }
+
+    public Account(int id, boolean admin, String username, String nfcid, double balance) {
+        super();
+        this.admin = admin;
+        this.id = id;
+        this.username = username;
+        this.nfcid = nfcid;
+        this.balance = balance;
     }
 
     //getters & setters
 
     @Override
     public String toString() {
-        return "Account [id=" + id + ", username=" + username + ", nfcid=" + nfcid
+        return "Account [id=" + id + ", admin=" + admin + ", username=" + username + ", nfcid=" + nfcid
                 + ", balance=" + balance
                 + "]";
     }
@@ -42,23 +51,11 @@ class Account {
         return balance;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    void setUsername(String username) {
-        this.username = username;
-    }
-
-    void setNfcId(String nfcId) {
-        this.nfcid = nfcId;
-    }
-
-    void setBalance(double balance) {
-        this.balance = balance;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public boolean getAdmin() {
+        return admin;
     }
 }
