@@ -13,6 +13,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+
+    public void payButtonClick(View view)
+    {
+        Intent intent = new Intent(this, PayActivity.class);
+        startActivity(intent);
+    }
+
     public void accountButtonClick(View view)
     {
         Intent intent = new Intent(this, AccountActivity.class);

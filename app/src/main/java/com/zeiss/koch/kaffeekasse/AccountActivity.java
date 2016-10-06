@@ -9,22 +9,35 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AccountActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    private int currentUserIndex;
+    private List<Account> accounts;
+    private SqlDatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
+        db = new SqlDatabaseHelper(this);
+        accounts = db.getAllAccounts();
+
         updateUserSpinner();
-        updateBalance(0);
+        if (accounts.size() > 0)
+        {
+            int currentUserIndex = 0;
+            updateBalance(currentUserIndex);
+        }
     }
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
+        this.currentUserIndex = pos;
         updateBalance(pos);
     }
 
@@ -34,25 +47,23 @@ public class AccountActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void updateBalance(int position) {
-        final Spinner userSpinner = (Spinner) findViewById(R.id.userSpinner);
-        SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-        List<Account> accounts = db.getAllAccounts();
-
         if (position < accounts.size()) {
             Double balance = accounts.get(position).getBalance();
             TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
-            balanceText.setText(balance.toString());
+
+            DecimalFormat round = new DecimalFormat("0.00");
+            String formatted = round.format(balance);
+
+            balanceText.setText(formatted);
         }
     }
 
     private void updateUserSpinner() {
-        SqlDatabaseHelper db = new SqlDatabaseHelper(this);
         final Spinner userSpinner = (Spinner) findViewById(R.id.userSpinner);
+        userSpinner.setOnItemSelectedListener(this);
 
-        List<Account> accounts = db.getAllAccounts();
         List<String> users = new ArrayList<>();
-        for (Account account:accounts
-                ) {
+        for (Account account:accounts) {
             users.add(account.getUsername());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter(this,

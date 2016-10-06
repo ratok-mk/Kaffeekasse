@@ -58,4 +58,8 @@ class Account {
     public boolean getAdmin() {
         return admin;
     }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }

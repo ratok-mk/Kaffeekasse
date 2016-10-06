@@ -25,10 +25,11 @@
         android:id="@+id/payButton"
         android:layout_width="200dp"
         android:layout_alignTop="@+id/accountButton"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="payButtonClick" />
 
     <Button
-        android:text="Einstellungen"
+        android:text="Administration"
         android:layout_width="200dp"
         android:layout_height="75dp"
         android:id="@+id/settingsButton"

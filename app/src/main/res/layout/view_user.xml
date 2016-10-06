@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="match_parent"
+    android:useDefaultMargins="true"
+    android:alignmentMode="alignBounds"
+    android:rowCount="2"
+    android:columnCount="2">
+
+    <TextView
+        android:text="Benutzer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:id="@+id/userLabeltextView"
+        android:layout_row="0"
+        android:layout_column="0"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/userSpinner"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:minWidth="200dp" />
+
+    <TextView
+        android:text="Kontostand(€)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:id="@+id/balanceLabelTextView"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:elevation="1dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/balanceTextView"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:textAlignment="center" />
+</GridLayout>
