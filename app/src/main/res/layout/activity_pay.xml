@@ -11,11 +11,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zeiss.koch.kaffeekasse.PayActivity">
 
-    <include layout="@layout/view_user"/>
-
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:srcCompat="@android:drawable/ic_input_add"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
@@ -23,8 +21,8 @@
         android:onClick="pay10Click" />
 
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:srcCompat="@android:drawable/ic_input_add"
         android:id="@+id/Button20"
         android:layout_alignTop="@+id/Button10"
@@ -32,13 +30,22 @@
         android:onClick="pay20Click" />
 
     <ImageButton
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         app:srcCompat="@android:drawable/ic_input_add"
         android:id="@+id/Button40"
         android:layout_alignTop="@+id/Button20"
         android:layout_alignParentEnd="true"
         android:onClick="pay40Click" />
+
+    <TextView
+        android:text="0,10€"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10"
+        android:layout_marginStart="57dp"
+        android:layout_below="@+id/Button10"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="0,20€"
@@ -50,23 +57,17 @@
         android:layout_centerInParent="false" />
 
     <TextView
-        android:text="0,10€"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView10"
-        android:layout_below="@+id/Button10"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="81dp"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
         android:text="0,40€"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="82dp"
         android:id="@+id/textView40"
         android:layout_below="@+id/Button40"
-        android:layout_alignStart="@+id/Button40"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="54dp" />
+
+    <include layout="@layout/view_user"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp" />
 
 </RelativeLayout>

@@ -15,17 +15,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:id="@+id/userEditText"
         android:layout_marginTop="54dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="18dp" />
 
     <Button
         android:text="Nutzer hinzufügen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:id="@+id/AddUserButton"
         android:layout_alignTop="@+id/userEditText"
         android:layout_toEndOf="@+id/userEditText"
