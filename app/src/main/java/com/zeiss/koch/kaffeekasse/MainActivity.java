@@ -38,12 +38,6 @@ public class MainActivity extends AbstractNfcActivity {
         startActivity(intent);
     }
 
-    public void accountButtonClick(View view)
-    {
-        Intent intent = new Intent(this, AccountActivity.class);
-        startActivity(intent);
-    }
-
     public void settingsButtonClick(View view)
     {
         Intent intent = new Intent(this, SettingsActivity.class);

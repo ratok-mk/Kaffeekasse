@@ -19,7 +19,7 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
 
 
     private int currentUserIndex;
-    private List<Account> accounts;
+    private List<User> users;
     private SqlDatabaseHelper db;
 
     private Spinner userSpinner;
@@ -31,7 +31,7 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_pay);
 
         db = new SqlDatabaseHelper(this);
-        accounts = db.getAllAccounts();
+        users = db.getAllUsers();
 
         updateUserSpinner();
 
@@ -43,13 +43,13 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
     }
 
     private void updateCurrentUser(String nfcUserId) {
-        if (accounts.size() > 0)
+        if (users.size() > 0)
         {
             boolean userFound = false;
             int i = 0;
-            for (Account account:accounts)
+            for (User user : users)
             {
-                if (nfcUserId.equals(account.getNfcId()))
+                if (nfcUserId.equals(user.getNfcId()))
                 {
                     this.currentUserIndex = i;
                     userFound = true;
@@ -93,8 +93,8 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
     }
 
     private void updateBalance(int position) {
-        if (position < accounts.size()) {
-            Double balance = accounts.get(position).getBalance();
+        if (position < users.size()) {
+            Double balance = 0.0; // TODO
             TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
             DecimalFormat round = new DecimalFormat("0.00");
@@ -109,8 +109,8 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
         userSpinner.setOnItemSelectedListener(this);
 
         List<String> users = new ArrayList<>();
-        for (Account account:accounts) {
-            users.add(account.getUsername());
+        for (User user : this.users) {
+            users.add(user.getName());
         }
         spinnerAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, users);
@@ -120,28 +120,28 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
 
     public void pay10Click(View view)
     {
-        Account user = accounts.get(currentUserIndex);
+        /*User user = users.get(currentUserIndex);
         double balanceNew = user.getBalance() - 0.10;
         user.setBalance(balanceNew);
-        db.updateAccount(user);
-        updateBalance(currentUserIndex);
+        db.updateUser(user);
+        updateBalance(currentUserIndex);*/
     }
 
     public void pay20Click(View view)
     {
-        Account user = accounts.get(currentUserIndex);
+        /*User user = users.get(currentUserIndex);
         double balanceNew = user.getBalance() - 0.20;
         user.setBalance(balanceNew);
-        db.updateAccount(user);
-        updateBalance(currentUserIndex);
+        db.updateUser(user);
+        updateBalance(currentUserIndex);*/
     }
 
     public void pay40Click(View view)
     {
-        Account user = accounts.get(currentUserIndex);
+        /*User user = users.get(currentUserIndex);
         double balanceNew = user.getBalance() - 0.40;
         user.setBalance(balanceNew);
-        db.updateAccount(user);
-        updateBalance(currentUserIndex);
+        db.updateUser(user);
+        updateBalance(currentUserIndex);*/
     }
 }

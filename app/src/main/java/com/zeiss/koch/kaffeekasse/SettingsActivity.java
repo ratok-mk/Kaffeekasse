@@ -1,15 +1,11 @@
 package com.zeiss.koch.kaffeekasse;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -57,11 +53,11 @@ public class SettingsActivity extends AppCompatActivity implements LoginDialogFr
         SqlDatabaseHelper db = new SqlDatabaseHelper(this);
         final Spinner userSpinner = (Spinner) findViewById(R.id.userSpinner);
 
-        List<Account> accounts = db.getAllAccounts();
+        List<User> accounts = db.getAllUsers();
         List<String> users = new ArrayList<>();
-        for (Account account:accounts
+        for (User user :accounts
                 ) {
-            users.add(account.getUsername());
+            users.add(user.getName());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, users);
@@ -73,8 +69,8 @@ public class SettingsActivity extends AppCompatActivity implements LoginDialogFr
     {
         SqlDatabaseHelper db = new SqlDatabaseHelper(this);
         final EditText userEditText = (EditText) findViewById(R.id.userEditText);
-        Account newAccount = new Account(userEditText.getText().toString(), "");
-        db.addAccount(newAccount);
+        User newUser = new User(userEditText.getText().toString(), "");
+        db.addUser(newUser);
 
         updateUserSpinner();
     }

@@ -11,15 +11,6 @@
     tools:context="com.zeiss.koch.kaffeekasse.MainActivity">
 
     <Button
-        android:text="Kontostand"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
-        android:id="@+id/accountButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="accountButtonClick" />
-
-    <Button
         android:text="Bezahlen"
         android:layout_height="75dp"
         android:id="@+id/payButton"

@@ -5,6 +5,7 @@ package com.zeiss.koch.kaffeekasse;
  * Created by koch on 01.10.2016.
  */
 
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,15 +19,20 @@ import android.util.Log;
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
-    private final String CREATE_ACCOUNTS_TABLE = "CREATE TABLE accounts ( " +
+    private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "admin BOOLEAN, "+
-            "username TEXT, "+
+            "name TEXT, "+
             "nfcid TEXT, "+
-            "balance DOUBLE )";
+            "role string )";
+
+    private final String CREATE_PAYMENTS_TABLE = "CREATE TABLE payments ( " +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "datetime DATETIME, " +
+            "userid INTEGER, "+
+            "amount DOUBLE )";
 
     public SqlDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,58 +41,46 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // create books table
-        db.execSQL(CREATE_ACCOUNTS_TABLE);
+        db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_PAYMENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS accounts");
+        db.execSQL("DROP TABLE IF EXISTS users");
+        db.execSQL("DROP TABLE IF EXISTS payments");
 
         // create fresh table
         this.onCreate(db);
     }
 
-    public void resetDatabase()
-    {
-        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS accounts");
+    // Users table name
+    private static final String TABLE_USERS = "users";
 
-        // create books table
-        this.getWritableDatabase().execSQL(CREATE_ACCOUNTS_TABLE);
-    }
+    // Users Table Columns names
+    private static final String USERS_KEY_ID = "id";
+    private static final String USERS_KEY_NAME = "name";
+    private static final String USERS_KEY_NFCID = "nfcid";
+    private static final String USERS_KEY_ROLE = "role";
 
-    //---------------------------------------------------------------------
+    private static final String[] COLUMNS_USERS =
+        {USERS_KEY_ID, USERS_KEY_NAME, USERS_KEY_NFCID, USERS_KEY_ROLE};
 
-    /**
-     * CRUD operations (create "add", read "get", update, delete) book + get all books + delete all books
-     */
-
-    // Accounts table name
-    private static final String TABLE_ACCOUNTS = "accounts";
-
-    // Accounts Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_ADMIN = "admin";
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_NFCID = "nfcid";
-    private static final String KEY_BALANCE = "balance";
-
-    private static final String[] COLUMNS = {KEY_ID, KEY_ADMIN, KEY_USERNAME, KEY_NFCID, KEY_BALANCE};
-
-    public void addAccount(Account account){
-        Log.d("addAccount", account.toString());
+    public void addUser(User user){
+        Log.d("addUser", user.toString());
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ADMIN, account.getAdmin());
-        values.put(KEY_USERNAME, account.getUsername());
-        values.put(KEY_NFCID, account.getNfcId());
-        values.put(KEY_BALANCE, account.getBalance());
+        values.put(USERS_KEY_NAME, user.getName());
+        values.put(USERS_KEY_NFCID, user.getNfcId());
+        values.put(USERS_KEY_ROLE, user.getRole());
 
         // 3. insert
-        db.insert(TABLE_ACCOUNTS, // table
+        db.insert(TABLE_USERS, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
 
@@ -94,15 +88,15 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Account getAccount(int id){
+    public User getUser(int id){
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // 2. build query
         Cursor cursor =
-                db.query(TABLE_ACCOUNTS, // a. table
-                        COLUMNS, // b. column names
+                db.query(TABLE_USERS, // a. table
+                        COLUMNS_USERS, // b. column names
                         " id = ?", // c. selections
                         new String[] { String.valueOf(id) }, // d. selections args
                         null, // e. group by
@@ -114,71 +108,69 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        // 4. build account object
-        Account account = new Account(
+        // 4. build user object
+        User user = new User(
             Integer.parseInt(cursor.getString(0)),
-            Boolean.parseBoolean(cursor.getString(1)),
+            cursor.getString(1),
             cursor.getString(2),
-            cursor.getString(3),
-            Double.parseDouble(cursor.getString(4)));
+            cursor.getString(3));
 
-        Log.d("getAccount("+id+")", account.toString());
+        Log.d("getUser("+id+")", user.toString());
 
         cursor.close();
-        // 5. return account
-        return account;
+        // 5. return user
+        return user;
     }
 
-    // Get All Accounts
-    public List<Account> getAllAccounts() {
-        List<Account> accounts = new LinkedList<>();
+    // Get All Users
+    public List<User> getAllUsers() {
+        List<User> users = new LinkedList<>();
 
         // 1. build the query
-        String query = "SELECT  * FROM " + TABLE_ACCOUNTS;
+        String query = "SELECT  * FROM " + TABLE_USERS;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        // 3. go over each row, build account and add it to list
-        Account account = null;
+        // 3. go over each row, build user and add it to list
+        User user = null;
         if (cursor.moveToFirst()) {
             do {
-                account = new Account(
+                user = new User(
                     Integer.parseInt(cursor.getString(0)),
-                    Boolean.parseBoolean(cursor.getString(1)),
+                    cursor.getString(1),
                     cursor.getString(2),
-                    cursor.getString(3),
-                    Double.parseDouble(cursor.getString(4)));
+                    cursor.getString(3)
+                );
 
 
-                // Add account to books
-                accounts.add(account);
+                // Add user to books
+                users.add(user);
             } while (cursor.moveToNext());
         }
 
         cursor.close();
-        return accounts;
+        return users;
     }
 
-    // Updating single account
-    public int updateAccount(Account account) {
+    // Updating single user
+    public int updateUser(User user) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_ADMIN, account.getAdmin());
-        values.put(KEY_USERNAME, account.getUsername());
-        values.put(KEY_NFCID, account.getNfcId());
-        values.put(KEY_BALANCE, account.getBalance());
+        values.put(USERS_KEY_NAME, user.getName());
+        values.put(USERS_KEY_NFCID, user.getNfcId());
+        values.put(USERS_KEY_ROLE, user.getRole());
 
         // 3. updating row
-        int i = db.update(TABLE_ACCOUNTS, //table
+        int i = db.update(TABLE_USERS, //table
                 values, // column/value
-                KEY_ID+" = ?", // selections
-                new String[] { String.valueOf(account.getId()) }); //selection args
+                USERS_KEY_ID +" = ?", // selections
+                new String[] { String.valueOf(user.getId()) }); //selection args
 
         // 4. close
         db.close();
@@ -187,21 +179,54 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    // Deleting single account
-    public void deleteAccount(Account account) {
+    // Deleting single user
+    public void deleteUser(User user) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_ACCOUNTS,
-                KEY_ID+" = ?",
-                new String[] { String.valueOf(account.getId()) });
+        db.delete(TABLE_USERS,
+                USERS_KEY_ID +" = ?",
+                new String[] { String.valueOf(user.getId()) });
 
         // 3. close
         db.close();
 
-        Log.d("deleteAccount", account.toString());
+        Log.d("deleteUser", user.toString());
 
+    }
+
+
+    // Payments table name
+    private static final String TABLE_PAYMENTS = "payments";
+
+    // Users Table Columns names
+    private static final String PAYMENTS_KEY_ID = "id";
+    private static final String PAYMENTS_KEY_DATETIME = "datetime";
+    private static final String PAYMENTS_KEY_USERID = "userid";
+    private static final String PAYMENTS_KEY_AMOUNT = "amount";
+
+    private static final String[] COLUMNS_PAYMENTS =
+            {PAYMENTS_KEY_ID, PAYMENTS_KEY_DATETIME, PAYMENTS_KEY_USERID, PAYMENTS_KEY_AMOUNT};
+
+    public void addPayment(Payment payment){
+        Log.d("addUser", payment.toString());
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(PAYMENTS_KEY_DATETIME, payment.getDatetime().toString());
+        values.put(PAYMENTS_KEY_USERID, payment.getUserid());
+        values.put(PAYMENTS_KEY_AMOUNT, payment.getAmount());
+
+        // 3. insert
+        db.insert(TABLE_PAYMENTS, // table
+                null, //nullColumnHack
+                values); // key/value -> keys = column names/ values = column values
+
+        // 4. close
+        db.close();
     }
 }
