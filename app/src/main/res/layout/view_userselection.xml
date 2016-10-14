@@ -18,32 +18,13 @@
         android:layout_column="0"
         android:textSize="18dp" />
 
-    <TextView
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/usernametextView"
-        android:layout_row="0"
-        android:layout_column="1"/>
-
-    <TextView
-        android:text="Kontostand(€)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="left"
-        android:id="@+id/balanceLabelTextView"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:elevation="1dp"
-        android:textSize="18dp" />
-
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/balanceTextView"
-        android:layout_row="1"
-        android:layout_column="1" />
+        android:id="@+id/userSpinner"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:minWidth="200dp" />
 </GridLayout>

@@ -10,21 +10,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zeiss.koch.kaffeekasse.MainActivity">
 
-    <Button
-        android:text="Bezahlen"
-        android:layout_height="75dp"
-        android:id="@+id/payButton"
-        android:layout_width="150dp"
-        android:layout_alignTop="@+id/accountButton"
-        android:layout_alignParentStart="true"
-        android:onClick="payButtonClick" />
+    <include layout="@layout/view_userselection"/>
 
-    <Button
-        android:text="Administration"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
-        android:id="@+id/settingsButton"
-        android:onClick="settingsButtonClick"
-        android:layout_alignTop="@+id/accountButton"
-        android:layout_alignParentEnd="true" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="124dp">
+
+        <Button
+            android:text="Bezahlen"
+            android:layout_height="75dp"
+            android:id="@+id/payButton"
+            android:layout_width="match_parent"
+            android:onClick="payButtonClick"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Administration"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:id="@+id/settingsButton"
+            android:onClick="settingsButtonClick"
+            android:layout_alignTop="@+id/payButton"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
 </RelativeLayout>

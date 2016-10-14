@@ -19,14 +19,14 @@ import android.util.Log;
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
     private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, "+
             "nfcid TEXT, "+
-            "role string )";
+            "role TEXT )";
 
     private final String CREATE_PAYMENTS_TABLE = "CREATE TABLE payments ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -107,7 +107,8 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         // 3. if we got results get the first one
         if (cursor != null)
             cursor.moveToFirst();
-
+        else
+            return null;
         // 4. build user object
         User user = new User(
             Integer.parseInt(cursor.getString(0)),
@@ -116,6 +117,42 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
             cursor.getString(3));
 
         Log.d("getUser("+id+")", user.toString());
+
+        cursor.close();
+        // 5. return user
+        return user;
+    }
+
+    public User getUserByNfcId(String nfcId){
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query(TABLE_USERS, // a. table
+                        COLUMNS_USERS, // b. column names
+                        " nfcid = ?", // c. selections
+                        new String[] { nfcId }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+        else
+            return null;
+
+        // 4. build user object
+        User user = new User(
+                Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3));
+
+        Log.d("getUserByNfcId("+nfcId+")", user.toString());
 
         cursor.close();
         // 5. return user
@@ -138,10 +175,10 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 user = new User(
-                    Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3)
+                        Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3)
                 );
 
 
@@ -228,5 +265,24 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         // 4. close
         db.close();
+    }
+
+    public Double getBalance(User user){
+        String query = "SELECT sum(amount) FROM " + TABLE_PAYMENTS + " WHERE userid='" +user.getId() + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Double balance = 0.0;
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+            if (cursor.getString(0) != null) {
+                balance = Double.parseDouble(cursor.getString(0));
+            }
+        }
+
+        cursor.close();
+        return balance;
     }
 }

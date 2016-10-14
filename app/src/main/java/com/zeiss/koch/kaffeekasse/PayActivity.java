@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,19 +12,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PayActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener{
+public class PayActivity extends AppCompatActivity {
 
 
-    private int currentUserIndex;
-    private List<User> users;
+    private User currentUser;
+
     private SqlDatabaseHelper db;
-
-    private Spinner userSpinner;
-    private ArrayAdapter<String> spinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,117 +30,53 @@ public class PayActivity extends AbstractNfcActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_pay);
 
         db = new SqlDatabaseHelper(this);
-        users = db.getAllUsers();
-
-        updateUserSpinner();
 
         Intent intent = getIntent();
-        String nfcUserId = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_USERID);
-        if (nfcUserId != null){
-            updateCurrentUser(nfcUserId);
+        int userId = intent.getIntExtra(MainActivity.EXTRA_MESSAGE_USERID, -1);
+        if (userId != -1) {
+            this.currentUser = db.getUser(userId);
+            updateUsername(this.currentUser);
+            updateBalance(this.currentUser);
         }
     }
 
-    private void updateCurrentUser(String nfcUserId) {
-        if (users.size() > 0)
-        {
-            boolean userFound = false;
-            int i = 0;
-            for (User user : users)
-            {
-                if (nfcUserId.equals(user.getNfcId()))
-                {
-                    this.currentUserIndex = i;
-                    userFound = true;
-                }
-
-                i++;
-            }
-
-            if (userFound) {
-                updateBalance(this.currentUserIndex);
-            }
-            else
-            {
-                Toast.makeText(this, "Could not find user with NFC ID: " + nfcUserId , Toast.LENGTH_LONG).show();
-            }
-        }
+    private void updateUsername(User user) {
+        TextView usernameText = (TextView) findViewById(R.id.usernametextView);
+        usernameText.setText(user.getName());
     }
 
-    @Override
-    protected void handleIntent(Intent intent) {
-        String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
-            // In case we would still use the Tag Discovered Intent
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            byte[] tagId = tag.getId();
-            String userTagId = tagId.toString();
-            Toast.makeText(this, "NFC ID found: " + userTagId , Toast.LENGTH_LONG).show();
-            updateCurrentUser(userTagId);
-        }
-    }
 
-    public void onItemSelected(AdapterView<?> parent,
-                               View view, int pos, long id) {
-        this.currentUserIndex = pos;
-        updateBalance(pos);
-    }
-
-    public void onNothingSelected(AdapterView parent) {
-        TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
-        balanceText.setText("");
-    }
-
-    private void updateBalance(int position) {
-        if (position < users.size()) {
-            Double balance = 0.0; // TODO
+    private void updateBalance(User user) {
+            Double balance = db.getBalance(user);
             TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
             DecimalFormat round = new DecimalFormat("0.00");
             String formatted = round.format(balance);
 
             balanceText.setText(formatted);
-        }
-    }
-
-    private void updateUserSpinner() {
-        userSpinner = (Spinner) findViewById(R.id.userSpinner);
-        userSpinner.setOnItemSelectedListener(this);
-
-        List<String> users = new ArrayList<>();
-        for (User user : this.users) {
-            users.add(user.getName());
-        }
-        spinnerAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, users);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userSpinner.setAdapter(spinnerAdapter);
     }
 
     public void pay10Click(View view)
     {
-        /*User user = users.get(currentUserIndex);
-        double balanceNew = user.getBalance() - 0.10;
-        user.setBalance(balanceNew);
-        db.updateUser(user);
-        updateBalance(currentUserIndex);*/
+        java.util.Date currentDate = new java.util.Date();
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.10);
+        db.addPayment(payment);
+        updateBalance(currentUser);
     }
 
     public void pay20Click(View view)
     {
-        /*User user = users.get(currentUserIndex);
-        double balanceNew = user.getBalance() - 0.20;
-        user.setBalance(balanceNew);
-        db.updateUser(user);
-        updateBalance(currentUserIndex);*/
+        java.util.Date currentDate = new java.util.Date();
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.20);
+        db.addPayment(payment);
+        updateBalance(currentUser);
     }
 
     public void pay40Click(View view)
     {
-        /*User user = users.get(currentUserIndex);
-        double balanceNew = user.getBalance() - 0.40;
-        user.setBalance(balanceNew);
-        db.updateUser(user);
-        updateBalance(currentUserIndex);*/
+        java.util.Date currentDate = new java.util.Date();
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.40);
+        db.addPayment(payment);
+        updateBalance(currentUser);
     }
 }

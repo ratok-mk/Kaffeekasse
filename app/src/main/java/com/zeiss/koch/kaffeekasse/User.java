@@ -19,7 +19,7 @@ class User {
         this.nfcid = nfcid;
     }
 
-    public User(int id, String role, String name, String nfcid) {
+    public User(int id, String name, String nfcid, String role) {
         super();
         this.role = role;
         this.id = id;
