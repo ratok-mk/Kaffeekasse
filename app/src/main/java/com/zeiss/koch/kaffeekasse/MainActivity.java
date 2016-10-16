@@ -63,7 +63,21 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
-        user = this.users.get(pos);
+        if (user == null) {
+            user = this.users.get(pos);
+        }
+        else {
+            user = this.users.get(pos);
+            StartPayActivityWithCurrentUser();
+        }
+    }
+
+    private void StartPayActivityWithCurrentUser() {
+        if (user != null) {
+            Intent newIntent = new Intent(this, PayActivity.class);
+            newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
+            startActivity(newIntent);
+        }
     }
 
     public void onNothingSelected(AdapterView parent) {
@@ -85,17 +99,12 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
     public void payButtonClick(View view)
     {
-        if (user != null)
-        {
-            Intent newIntent = new Intent(this, PayActivity.class);
-            newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
-            startActivity(newIntent);
-        }
+        StartPayActivityWithCurrentUser();
     }
 
     public void settingsButtonClick(View view)
     {
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

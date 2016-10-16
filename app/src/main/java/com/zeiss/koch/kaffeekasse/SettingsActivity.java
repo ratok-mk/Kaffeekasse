@@ -11,40 +11,13 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsActivity extends AppCompatActivity implements LoginDialogFragment.NoticeDialogListener{
-
-
-    public void showNoticeDialog() {
-        // Create an instance of the dialog fragment and show it
-        DialogFragment dialog = new LoginDialogFragment();
-        dialog.show(getFragmentManager(), "LoginDialogFragment");
-    }
-
-    // The dialog fragment receives a reference to this Activity through the
-    // Fragment.onAttach() callback, which it uses to call the following methods
-    // defined by the NoticeDialogFragment.NoticeDialogListener interface
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialog) {
-        EditText adminPasswordText = (EditText)dialog.getDialog().findViewById(R.id.adminPasswordEditText);
-        String password = adminPasswordText.getText().toString();
-        if (!password.equals("admin"))
-        {
-            finish();
-        }
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
-        finish();
-    }
+public class SettingsActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        showNoticeDialog();
 
         updateUserSpinner();
     }
