@@ -1,18 +1,24 @@
 package com.zeiss.koch.kaffeekasse;
 
 import android.app.DialogFragment;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AbstractNfcActivity {
 
+
+    private String currentNfcTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +26,21 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         updateUserSpinner();
+    }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+            // In case we would still use the Tag Discovered Intent
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            byte[] tagId = tag.getId();
+
+            this.currentNfcTag  = tagId.toString();
+
+            TextView nfcTextView = (TextView)this.findViewById(R.id.nfcTextView);
+            nfcTextView.setText(this.currentNfcTag);
+        }
     }
 
     private void updateUserSpinner() {

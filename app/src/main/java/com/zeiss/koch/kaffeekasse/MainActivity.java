@@ -19,7 +19,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
 
-
+    private boolean usersInitialized;
     private Spinner userSpinner;
     private List<User> users;
     private ArrayAdapter<String> spinnerAdapter;
@@ -34,11 +34,19 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
         db = new SqlDatabaseHelper(this);
         users = db.getAllUsers();
-
+        usersInitialized = false;
         updateUserSpinner();
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        usersInitialized = false;
+        users = db.getAllUsers();
+        updateUserSpinner();
+    }
+
+        @Override
     protected void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
@@ -63,11 +71,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
-        if (user == null) {
+        if (usersInitialized == false) {
             user = this.users.get(pos);
+            usersInitialized = true;
         }
         else {
             user = this.users.get(pos);
+            usersInitialized = true;
             StartPayActivityWithCurrentUser();
         }
     }

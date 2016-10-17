@@ -90,10 +90,8 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     public User getUser(int id){
 
-        // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // 2. build query
         Cursor cursor =
                 db.query(TABLE_USERS, // a. table
                         COLUMNS_USERS, // b. column names
@@ -104,31 +102,26 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
                         null, // g. order by
                         null); // h. limit
 
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
-        else
-            return null;
-        // 4. build user object
-        User user = new User(
-            Integer.parseInt(cursor.getString(0)),
-            cursor.getString(1),
-            cursor.getString(2),
-            cursor.getString(3));
+        User user = null;
+        if (cursor != null && cursor.moveToFirst() == true) {
+            user = new User(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3));
 
-        Log.d("getUser("+id+")", user.toString());
+            Log.d("getUser(" + id + ")", user.toString());
+        }
 
         cursor.close();
-        // 5. return user
+
         return user;
     }
 
     public User getUserByNfcId(String nfcId){
 
-        // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // 2. build query
         Cursor cursor =
                 db.query(TABLE_USERS, // a. table
                         COLUMNS_USERS, // b. column names
@@ -139,23 +132,20 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
                         null, // g. order by
                         null); // h. limit
 
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
-        else
-            return null;
+        User user = null;
+        if (cursor != null && cursor.moveToFirst() == true)
+        {
+            user = new User(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3));
 
-        // 4. build user object
-        User user = new User(
-                Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getString(3));
-
-        Log.d("getUserByNfcId("+nfcId+")", user.toString());
+            Log.d("getUserByNfcId("+nfcId+")", user.toString());
+        }
 
         cursor.close();
-        // 5. return user
+
         return user;
     }
 
@@ -274,9 +264,8 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         Double balance = 0.0;
-        if (cursor != null)
+        if (cursor != null && cursor.moveToFirst() == true)
         {
-            cursor.moveToFirst();
             if (cursor.getString(0) != null) {
                 balance = Double.parseDouble(cursor.getString(0));
             }
