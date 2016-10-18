@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,18 +29,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         db = new SqlDatabaseHelper(this);
-        users = db.getAllUsers();
-        usersInitialized = false;
         updateUserSpinner();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        usersInitialized = false;
-        users = db.getAllUsers();
         updateUserSpinner();
     }
 
@@ -52,9 +45,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            byte[] tagId = tag.getId();
+            String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
-            String userTagId = tagId.toString();
             User user = db.getUserByNfcId(userTagId);
             if (user != null)
             {
@@ -82,6 +74,10 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
+    public void onNothingSelected(AdapterView parent) {
+        this.user = null;
+    }
+
     private void StartPayActivityWithCurrentUser() {
         if (user != null) {
             Intent newIntent = new Intent(this, PayActivity.class);
@@ -90,12 +86,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
-    public void onNothingSelected(AdapterView parent) {
-        TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
-        balanceText.setText("");
-    }
-
     private void updateUserSpinner() {
+        usersInitialized = false;
+        users = db.getAllUsers();
         userSpinner = (Spinner) findViewById(R.id.userSpinner);
         List<String> users = new ArrayList<>();
         for (User user : this.users) {
@@ -107,6 +100,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         userSpinner.setAdapter(spinnerAdapter);
         userSpinner.setOnItemSelectedListener(this);
     }
+
     public void payButtonClick(View view)
     {
         StartPayActivityWithCurrentUser();

@@ -49,4 +49,8 @@ class User {
     public String getRole() {
         return role;
     }
+
+    public void SetNfcId(String nfcId) {
+        this.nfcid = nfcId;
+    }
 }
