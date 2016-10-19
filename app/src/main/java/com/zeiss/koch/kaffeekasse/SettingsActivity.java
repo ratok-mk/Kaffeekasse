@@ -1,10 +1,8 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,6 +44,19 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         setContentView(R.layout.activity_settings);
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
+        showPayments();
+    }
+
+    private void showPayments() {
+        List<Payment> payments = db.getAllPayments();
+        TextView paymentsTextView = (TextView)this.findViewById(R.id.paymentsTextView);
+        String paymentsTable = "Id;Date;UserId;Amount\n";
+        for(Payment payment:payments)
+        {
+            paymentsTable += String.format("%1$04d;%2$s;%3$04d;%4$.2f€\n", payment.getId(), payment.getDatetime(), payment.getUserid(), payment.getAmount());
+        }
+
+        paymentsTextView.setText(paymentsTable);
     }
 
     public void onItemSelected(AdapterView<?> parent,

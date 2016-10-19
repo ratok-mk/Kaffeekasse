@@ -1,6 +1,9 @@
 package com.zeiss.koch.kaffeekasse;
 
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * User
@@ -13,10 +16,26 @@ class Payment {
     private Date datetime;
     private int userid;
     private Double amount;
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public Payment(Date datetime, int userid, Double amount) {
         super();
         this.datetime = datetime;
+        this.userid = userid;
+        this.amount = amount;
+    }
+
+    public Payment(int id, String datetimeString, int userid, Double amount) {
+        super();
+        Date dateParsed = null;
+        try {
+            dateParsed = dateFormat.parse(datetimeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.id = id;
+        this.datetime = dateParsed;
         this.userid = userid;
         this.amount = amount;
     }
@@ -32,8 +51,8 @@ class Payment {
         return id;
     }
 
-    public Date getDatetime() {
-        return datetime;
+    public String getDatetime() {
+        return dateFormat.format(datetime);
     }
 
     public int getUserid() {

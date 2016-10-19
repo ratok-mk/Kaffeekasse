@@ -19,7 +19,7 @@ import android.util.Log;
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
     private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
@@ -30,7 +30,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     private final String CREATE_PAYMENTS_TABLE = "CREATE TABLE payments ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "datetime DATETIME, " +
+            "datetime TEXT, " +
             "userid INTEGER, "+
             "amount DOUBLE )";
 
@@ -244,7 +244,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(PAYMENTS_KEY_DATETIME, payment.getDatetime().toString());
+        values.put(PAYMENTS_KEY_DATETIME, payment.getDatetime());
         values.put(PAYMENTS_KEY_USERID, payment.getUserid());
         values.put(PAYMENTS_KEY_AMOUNT, payment.getAmount());
 
@@ -273,5 +273,33 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return balance;
+    }
+
+    public List<Payment> getAllPayments() {
+        List<Payment> payments = new LinkedList<>();
+
+        String query = "SELECT  * FROM " + TABLE_PAYMENTS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Payment payment = null;
+        if (cursor.moveToFirst()) {
+            do {
+                payment = new Payment(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getDouble(3)
+                );
+
+
+                // Add user to books
+                payments.add(payment);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return payments;
     }
 }

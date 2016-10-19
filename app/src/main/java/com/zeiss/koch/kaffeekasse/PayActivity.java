@@ -59,7 +59,7 @@ public class PayActivity extends AppCompatActivity {
     public void pay10Click(View view)
     {
         java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.10);
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.10);
         db.addPayment(payment);
         updateBalance(currentUser);
     }
@@ -67,7 +67,7 @@ public class PayActivity extends AppCompatActivity {
     public void pay20Click(View view)
     {
         java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.20);
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.20);
         db.addPayment(payment);
         updateBalance(currentUser);
     }
@@ -75,7 +75,7 @@ public class PayActivity extends AppCompatActivity {
     public void pay40Click(View view)
     {
         java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), 0.40);
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.40);
         db.addPayment(payment);
         updateBalance(currentUser);
     }
