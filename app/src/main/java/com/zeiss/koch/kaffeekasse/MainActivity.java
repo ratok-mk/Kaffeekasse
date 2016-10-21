@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,12 +43,15 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     private void CheckBackup(DBFileBackupHelper backup) {
-        if (backup.BackupIsUpToDate()) {
+        if (!backup.BackupIsUpToDate()) {
             backup.Backup();
         }
 
         CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
         backupCheckBox.setChecked(backup.BackupIsUpToDate());
+
+        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
+        backupTextView.setText(backup.LastBackupDate());
     }
 
     @Override

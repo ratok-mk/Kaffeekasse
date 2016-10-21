@@ -25,6 +25,7 @@ public class DBFileBackupHelper {
     private final SqlDatabaseHelper db;
     public static final String BACKUP_DB_PATH = "//databasebackup//";
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private Date lastBackupDate;
 
     public DBFileBackupHelper(Context context) {
         db = new SqlDatabaseHelper(context);
@@ -37,15 +38,16 @@ public class DBFileBackupHelper {
         String dateFormatted = dateFormat.format(currentDate);
         try {
             File data = Environment.getDataDirectory();
-
+            File publicData =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             String currentDBPath = "//data//com.zeiss.koch.kaffeekasse//databases//" + databaseName;
             String backupDBFilePath = BACKUP_DB_PATH + databaseName + "_" + dateFormatted;
             File currentDBFile = new File(data, currentDBPath);
-            File backupDBDirectory = new File(data, BACKUP_DB_PATH);
-            File backupDBFile = new File(data, backupDBFilePath);
+            File backupDBDirectory = new File(publicData, BACKUP_DB_PATH);
+            File backupDBFile = new File(publicData, backupDBFilePath);
 
             if (!(backupDBDirectory.exists() && backupDBDirectory.isDirectory())) {
-                backupDBDirectory.mkdir();
+                backupDBDirectory.mkdirs();
             }
 
             if (currentDBFile.exists()) {
@@ -60,15 +62,15 @@ public class DBFileBackupHelper {
         }
     }
 
-    public Date LastBackupDate() {
+    public void CheckBackupDate() {
         Date currentDate = new Date();
         String databaseName = db.getDatabaseName();
         try {
-            File data = Environment.getDataDirectory();
+            File publicData =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
-            String currentDBPath = "//data//com.zeiss.koch.kaffeekasse//databases//" + databaseName;
             String backupDBFilePath = BACKUP_DB_PATH + databaseName + "_*";
-            File backupDBFile = new File(data, backupDBFilePath);
+            File backupDBFile = new File(publicData, backupDBFilePath);
 
             File[] matchingFiles = backupDBFile.listFiles();
 
@@ -82,7 +84,7 @@ public class DBFileBackupHelper {
                         long diff = currentDate.getTime() - lastBackup.getTime();
                         long diffHours = diff / (60 * 60 * 1000);
                         if (diffHours <= 24) {
-                            return lastBackup;
+                            this.lastBackupDate = lastBackup;
                         }
                     } catch (ParseException e) {
                     }
@@ -90,12 +92,20 @@ public class DBFileBackupHelper {
             }
         } catch (Exception e) {
         }
-
-        return null;
     }
 
     public boolean BackupIsUpToDate()
     {
-        return this.LastBackupDate() != null;
+        CheckBackupDate();
+        return this.lastBackupDate != null;
+    }
+
+    public String LastBackupDate()
+    {
+        if (this.lastBackupDate != null) {
+            return dateFormat.format(this.lastBackupDate);
+        }
+
+        return "";
     }
 }
