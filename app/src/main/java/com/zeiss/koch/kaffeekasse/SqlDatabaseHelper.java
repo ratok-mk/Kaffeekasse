@@ -56,6 +56,12 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    public String getDatabaseName()
+    {
+        return DATABASE_NAME;
+    }
+
+
     // Users table name
     private static final String TABLE_USERS = "users";
 

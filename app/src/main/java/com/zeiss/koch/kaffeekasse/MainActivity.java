@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener{
 
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
+    private static final String DATABASE = "DB_Backup";
 
     private boolean usersInitialized;
     private Spinner userSpinner;
@@ -28,9 +30,24 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        DBFileBackupHelper backup = new DBFileBackupHelper(this);
+
+        CheckBackup(backup);
+
+
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
+    }
+
+    private void CheckBackup(DBFileBackupHelper backup) {
+        if (backup.BackupIsUpToDate()) {
+            backup.Backup();
+        }
+
+        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
+        backupCheckBox.setChecked(backup.BackupIsUpToDate());
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener{
@@ -112,6 +113,20 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             this.user.SetNfcId(this.currentNfcTag);
             db.updateUser(this.user);
+        }
+    }
+
+    public void UpdateAccountClick(View view)
+    {
+        if (this.user != null) {
+            final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
+            Double amount = Double.parseDouble(amountEditText.getText().toString());
+            if (amount != null) {
+                SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+                Payment payment = new Payment(new Date(), this.user.getId(), amount);
+                db.addPayment(payment);
+                showPayments();
+            }
         }
     }
 }

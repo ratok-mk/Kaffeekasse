@@ -53,6 +53,7 @@
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity android:name=".LoginActivity"></activity>
-    </application>
 
+        <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIYLl6Bcf7Rr9nTCR2RjFxgW4_DLTCsHylyYAv4w" />
+    </application>
 </manifest>

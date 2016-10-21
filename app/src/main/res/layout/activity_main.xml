@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -13,30 +14,62 @@
     <include layout="@layout/view_userselection"/>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="124dp">
+        android:layout_marginBottom="136dp">
 
-        <Button
-            android:text="Bezahlen"
-            android:layout_height="75dp"
-            android:id="@+id/payButton"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:onClick="payButtonClick"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:text="Administration"
+            <Button
+                android:text="Bezahlen"
+                android:layout_height="100dp"
+                android:id="@+id/payButton"
+                android:layout_width="wrap_content"
+                android:onClick="payButtonClick"
+                android:layout_weight="2"/>
+
+            <Button
+                android:text="Administration"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:id="@+id/settingsButton"
+                android:onClick="settingsButtonClick"
+                android:layout_weight="1"/>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:id="@+id/settingsButton"
-            android:onClick="settingsButtonClick"
-            android:layout_alignTop="@+id/payButton"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content">
 
+            <CheckBox
+                android:text="Backup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/backupCheckBox"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:clickable="false"
+                android:focusable="false"
+                android:checked="false" />
+
+            <TextView
+                android:text="Date: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_weight="1"
+                android:textSize="18sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

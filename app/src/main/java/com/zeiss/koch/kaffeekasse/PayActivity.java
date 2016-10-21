@@ -79,4 +79,9 @@ public class PayActivity extends AppCompatActivity {
         db.addPayment(payment);
         updateBalance(currentUser);
     }
+
+    public void finishClick(View view)
+    {
+        finish();
+    }
 }
