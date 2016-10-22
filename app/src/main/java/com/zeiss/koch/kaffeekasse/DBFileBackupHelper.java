@@ -41,10 +41,10 @@ public class DBFileBackupHelper {
             File publicData =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             String currentDBPath = "//data//com.zeiss.koch.kaffeekasse//databases//" + databaseName;
-            String backupDBFilePath = BACKUP_DB_PATH + databaseName + "_" + dateFormatted;
+            String backupDBFileName = databaseName + "_" + dateFormatted;
             File currentDBFile = new File(data, currentDBPath);
             File backupDBDirectory = new File(publicData, BACKUP_DB_PATH);
-            File backupDBFile = new File(publicData, backupDBFilePath);
+            File backupDBFile = new File(backupDBDirectory, backupDBFileName);
 
             if (!(backupDBDirectory.exists() && backupDBDirectory.isDirectory())) {
                 backupDBDirectory.mkdirs();
@@ -59,6 +59,7 @@ public class DBFileBackupHelper {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -69,7 +70,7 @@ public class DBFileBackupHelper {
             File publicData =
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 
-            String backupDBFilePath = BACKUP_DB_PATH + databaseName + "_*";
+            String backupDBFilePath = BACKUP_DB_PATH;
             File backupDBFile = new File(publicData, backupDBFilePath);
 
             File[] matchingFiles = backupDBFile.listFiles();
