@@ -1,6 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -52,6 +53,14 @@ public class PayActivity extends AppCompatActivity {
 
             DecimalFormat round = new DecimalFormat("0.00");
             String formatted = round.format(balance);
+            if (balance < 0.0)
+            {
+                balanceText.setTextColor(Color.RED);
+            }
+            else
+            {
+                balanceText.setTextColor(Color.WHITE);
+            }
 
             balanceText.setText(formatted);
     }
