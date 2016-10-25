@@ -48,7 +48,7 @@
         android:layout_marginStart="57dp"
         android:layout_below="@+id/Button10"
         android:layout_alignParentStart="true"
-        android:textSize="18sp" />
+        android:textSize="20dp" />
 
     <TextView
         android:text="0,20€"
@@ -58,7 +58,7 @@
         android:layout_below="@+id/Button20"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="false"
-        android:textSize="18sp" />
+        android:textSize="20dp" />
 
     <TextView
         android:text="0,40€"
@@ -68,7 +68,7 @@
         android:layout_below="@+id/Button40"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="54dp"
-        android:textSize="18sp" />
+        android:textSize="20dp" />
 
     <Button
         android:text="Beenden"
@@ -77,7 +77,7 @@
         android:id="@+id/finishButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textSize="18sp"
+        android:textSize="20dp"
         android:onClick="finishClick" />
 
 
