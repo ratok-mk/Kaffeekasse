@@ -11,9 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     };
 
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
-    private static final String DATABASE = "DB_Backup";
 
     private boolean usersInitialized;
     private Spinner userSpinner;
@@ -78,12 +75,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         if (!backup.BackupIsUpToDate()) {
             backup.Backup();
         }
-
-        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
-        backupCheckBox.setChecked(backup.BackupIsUpToDate());
-
-        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
-        backupTextView.setText(backup.LastBackupDate());
     }
 
     @Override
@@ -92,7 +83,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         updateUserSpinner();
     }
 
-        @Override
+    @Override
     protected void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {

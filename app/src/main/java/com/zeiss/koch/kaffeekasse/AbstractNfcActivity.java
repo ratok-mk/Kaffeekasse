@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractNfcActivity extends AppCompatActivity{
+public abstract class AbstractNfcActivity extends Activity{
 
     private NfcAdapter mNfcAdapter;
 

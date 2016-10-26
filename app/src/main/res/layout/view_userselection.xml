@@ -5,27 +5,15 @@
     android:layout_height="match_parent"
     android:useDefaultMargins="true"
     android:alignmentMode="alignBounds"
-    android:rowCount="2"
-    android:columnCount="2">
-
-    <TextView
-        android:text="Benutzer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="left"
-        android:id="@+id/userLabeltextView"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:textSize="40dp" />
+    android:rowCount="1"
+    android:columnCount="1">
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/userSpinner"
         android:layout_row="0"
-        android:layout_column="1"
+        android:layout_column="0"
         android:minWidth="200dp" />
 </GridLayout>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -46,6 +47,22 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
         showPayments();
+
+        DBFileBackupHelper backup = new DBFileBackupHelper(this);
+        CheckBackup(backup);
+    }
+
+
+    private void CheckBackup(DBFileBackupHelper backup) {
+        if (!backup.BackupIsUpToDate()) {
+            backup.Backup();
+        }
+
+        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
+        backupCheckBox.setChecked(backup.BackupIsUpToDate());
+
+        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
+        backupTextView.setText(backup.LastBackupDate());
     }
 
     private void showPayments() {
@@ -116,8 +133,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         }
     }
 
-    public void UpdateAccountClick(View view)
-    {
+    public void UpdateAccountClick(View view) {
         if (this.user != null) {
             final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
             Double amount = Double.parseDouble(amountEditText.getText().toString());
@@ -128,5 +144,9 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                 showPayments();
             }
         }
+    }
+    public void ExitClick(View view)
+    {
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

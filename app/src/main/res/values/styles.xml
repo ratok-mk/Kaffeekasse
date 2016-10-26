@@ -2,9 +2,13 @@
 
     <!-- Base application theme. -->
     <style name="DarkTheme" parent="android:Theme.Material">
+        <item name="android:textAppearanceLarge">@style/TextAppearance.Huge</item>
     </style>
 
-    <style name="DarkTheme.TextAppearance.Red" parent="android:TextAppearance.DeviceDefault.Medium">
+    <style name="TextAppearance.Huge" parent="android:TextAppearance.Large">
+        <item name="android:textSize">60dp</item>
+    </style>
+    <style name="TextAppearance.Red" parent="android:TextAppearance.Medium">
         <item name="android:textSize">20dp</item>
         <item name="android:textColor">#ff4444</item>
     </style>
