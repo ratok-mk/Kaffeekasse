@@ -1,9 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.app.backup.FileBackupHelper;
 import android.content.Context;
 import android.os.Environment;
-import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +10,6 @@ import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 
 /**

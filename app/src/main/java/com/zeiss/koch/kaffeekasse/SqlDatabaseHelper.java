@@ -5,16 +5,15 @@ package com.zeiss.koch.kaffeekasse;
  * Created by koch on 01.10.2016.
  */
 
-import java.sql.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 

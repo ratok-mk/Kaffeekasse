@@ -4,19 +4,8 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractNfcActivity extends Activity{
 
@@ -96,24 +85,18 @@ public abstract class AbstractNfcActivity extends Activity{
         //IntentFilter[] filters = new IntentFilter[];
         String[][] techList = new String[][]{};
 
-        // Notice that this is the same filter as in our manifest.
-//        filters[0] = new IntentFilter();
-//        filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
-//        filters[0].addCategory(Intent.CATEGORY_DEFAULT);
-//        try {
-//            filters[0].addDataType(MIME_TEXT_PLAIN);
-//        } catch (IntentFilter.MalformedMimeTypeException e) {
-//            throw new RuntimeException("Check your mime type.");
-//        }
-
-        adapter.enableForegroundDispatch(activity, pendingIntent, null, techList);
+        if (adapter != null) {
+            adapter.enableForegroundDispatch(activity, pendingIntent, null, techList);
+        }
     }
 
     /**
-     * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
+     * @param activity The corresponding {@link Activity} requesting to stop the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
-        adapter.disableForegroundDispatch(activity);
+        if (adapter != null) {
+            adapter.disableForegroundDispatch(activity);
+        }
     }
 }
