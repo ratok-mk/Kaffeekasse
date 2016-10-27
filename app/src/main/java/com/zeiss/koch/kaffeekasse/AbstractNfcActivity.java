@@ -5,9 +5,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-public abstract class AbstractNfcActivity extends Activity{
+public abstract class AbstractNfcActivity extends AppCompatActivity{
 
     private NfcAdapter mNfcAdapter;
 

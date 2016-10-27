@@ -3,6 +3,7 @@ package com.zeiss.koch.kaffeekasse;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -10,7 +11,7 @@ import android.widget.Toast;
 import java.sql.Date;
 import java.text.DecimalFormat;
 
-public class PayActivity extends Activity {
+public class PayActivity extends AppCompatActivity {
 
 
     private User currentUser;

@@ -11,18 +11,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zeiss.koch.kaffeekasse.MainActivity">
 
-    <include layout="@layout/view_userselection"/>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="85dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
-
-    </LinearLayout>
-
     <Button
         android:text="Admin"
         android:layout_width="wrap_content"
@@ -31,19 +19,37 @@
         android:onClick="settingsButtonClick"
         android:layout_weight="1"
         style="@android:style/TextAppearance.Large"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
 
-    <Button
-        android:text="Bezahlen"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:id="@+id/payButton"
-        android:layout_width="300dp"
-        android:onClick="payButtonClick"
-        android:layout_weight="0.35"
-        style="@android:style/TextAppearance.Large"
-        android:layout_marginEnd="62dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/settingsButton" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
+
+        <include layout="@layout/view_userselection"
+            android:layout_weight="2" />
+
+        <Button
+            android:text="Bezahlen"
+            android:layout_height="match_parent"
+            android:id="@+id/payButton"
+            android:layout_width="wrap_content"
+            android:onClick="payButtonClick"
+            android:layout_weight="2"
+            style="@android:style/TextAppearance.Large"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/include" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/ic_check_in_with_card"
+            android:id="@+id/imageView"
+            android:layout_weight="1"
+            android:layout_marginLeft="50dp"/>
+    </LinearLayout>
 
 </RelativeLayout>
