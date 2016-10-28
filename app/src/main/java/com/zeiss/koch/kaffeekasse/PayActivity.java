@@ -92,7 +92,7 @@ public class PayActivity extends AppCompatActivity {
         Double balance = db.getBalance(currentUser);
         String name = currentUser.getName();
         String message =
-            String.format("%1s hat %2$.2f bezahlt. Neuer Kontostand: %3$.2f", name, paymentValue, balance);
+            String.format("%1s hat %2$.2f€ bezahlt. Neuer Kontostand: %3$.2f€", name, Math.abs(paymentValue), balance);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
