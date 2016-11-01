@@ -53,4 +53,12 @@ class User {
     public void SetNfcId(String nfcId) {
         this.nfcid = nfcId;
     }
+
+    public boolean isAdmin() {
+        if (this.role.equals("admin") || this.role.equals("treasurer"))
+        {
+            return true;
+        }
+        return false;
+    }
 }

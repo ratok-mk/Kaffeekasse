@@ -1,20 +1,22 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AbstractNfcActivity{
 
     private Date date;
+    private SqlDatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,28 @@ public class LoginActivity extends AppCompatActivity {
         this.date = new Date();
         TextView textViewDate = (TextView) findViewById(R.id.textViewDate);
         textViewDate.setText(this.date.toString());
+        db = new SqlDatabaseHelper(this);
+    }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+            // In case we would still use the Tag Discovered Intent
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
+
+            User user = db.getUserByNfcId(userTagId);
+            if (user != null && user.isAdmin())
+            {
+                Intent newIntent = new Intent(this, SettingsActivity.class);
+                startActivity(newIntent);
+            }
+            else
+            {
+                Toast.makeText(this, "Could not find admin with NFC ID: " + userTagId , Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void cancelButtonClick(View view)
