@@ -15,7 +15,7 @@
 
     <Button
         android:text="Zurück"
-        android:layout_width="400dp"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:id="@+id/finishButton"
         android:textSize="20dp"
@@ -44,8 +44,8 @@
                 android:layout_alignParentStart="true"
                 android:id="@+id/Button10"
                 android:onClick="pay10Click"
-                android:scaleType="fitCenter"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:text="0,10€"
