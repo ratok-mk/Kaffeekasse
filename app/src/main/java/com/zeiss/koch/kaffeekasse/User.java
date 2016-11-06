@@ -8,20 +8,20 @@ package com.zeiss.koch.kaffeekasse;
 class User {
 
     private int id;
-    private String role;
+    private Role role;
     private String name;
     private String nfcid;
 
     public User(String name, String nfcid) {
         super();
-        this.role = "user";
+        this.role = Role.user;
         this.name = name;
         this.nfcid = nfcid;
     }
 
     public User(int id, String name, String nfcid, String role) {
         super();
-        this.role = role;
+        this.role = Role.valueOf(role);
         this.id = id;
         this.name = name;
         this.nfcid = nfcid;
@@ -47,7 +47,12 @@ class User {
     }
 
     public String getRole() {
-        return role;
+        return ConvertRoleToDatabaseString(role);
+    }
+
+    public void setRole(Role role)
+    {
+        this.role = role;
     }
 
     public void SetNfcId(String nfcId) {
@@ -60,5 +65,42 @@ class User {
             return true;
         }
         return false;
+    }
+
+    public enum Role
+    {
+        user,
+        admin,
+        treasurer
+    }
+
+    private static String ConvertRoleToDatabaseString(Role role)
+    {
+        switch(role)
+        {
+            case user:
+                return "user";
+            case admin:
+                return "admin";
+            case treasurer:
+                return "treasurer";
+            default:
+                throw new IndexOutOfBoundsException("Role is unknown.");
+        }
+    }
+
+    public static String ConvertRoleToGuiString(Role role)
+    {
+        switch(role)
+        {
+            case user:
+                return "User";
+            case admin:
+                return "Admin";
+            case treasurer:
+                return "Treasurer";
+            default:
+                throw new IndexOutOfBoundsException("Role is unknown.");
+        }
     }
 }

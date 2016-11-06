@@ -21,9 +21,12 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
     private String currentNfcTag;
     private List<User> users;
+    private List<User.Role> roles;
     private Spinner userSpinner;
+    private Spinner roleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
     private User user;
+    private User.Role role;
 
     private boolean isInFocus = false;
     private SqlDatabaseHelper db;
@@ -46,10 +49,26 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         setContentView(R.layout.activity_settings);
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
+        updateRoleSpinner();
         showPayments();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         CheckBackup(backup);
+    }
+
+    private void updateRoleSpinner() {
+        roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
+        roles = new ArrayList<>();
+        List<String> roleStrings = new ArrayList<>();
+        for (User.Role role : User.Role.values()) {
+            this.roles.add(role);
+            roleStrings.add(User.ConvertRoleToGuiString(role));
+        }
+        spinnerAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, roleStrings);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        roleSpinner.setAdapter(spinnerAdapter);
+        roleSpinner.setOnItemSelectedListener(this);
     }
 
 
@@ -79,11 +98,24 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
-        user = this.users.get(pos);
+        switch(parent.getId())
+        {
+            case R.id.userSpinner:
+                user = this.users.get(pos);
+                break;
+            case R.id.roleSpinner:
+                role = this.roles.get(pos);
+                break;
+        }
+
     }
 
     public void onNothingSelected(AdapterView parent) {
-        this.user = null;
+        switch(parent.getId()) {
+            case R.id.userSpinner:
+                this.user = null;
+                break;
+        }
     }
 
     private void updateUserSpinner() {
@@ -145,6 +177,14 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             }
         }
     }
+
+    public void UpdateRoleClick(View view)
+    {
+        if (this.user != null) {
+
+        }
+    }
+
     public void ExitClick(View view)
     {
         android.os.Process.killProcess(android.os.Process.myPid());
