@@ -1,8 +1,9 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -10,12 +11,14 @@ import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PayActivity extends AppCompatActivity {
 
 
     private User currentUser;
-
+    private int timeToFinish;
     private SqlDatabaseHelper db;
 
     @Override
@@ -32,7 +35,36 @@ public class PayActivity extends AppCompatActivity {
             updateUsername(this.currentUser);
             updateBalance(this.currentUser);
         }
+
+
+        timeToFinish = 15;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timerHandler.obtainMessage(1).sendToTarget();
+            }
+        }, 0, 1000);
     }
+
+    private void automaticExit() {
+        Toast.makeText(this, "Automatische Abmeldung!", Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    private Handler timerHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (timeToFinish <= 0)
+            {
+                automaticExit();
+            }
+
+            TextView timeToFinishText = (TextView) findViewById(R.id.timeToFinishTextView);
+            timeToFinishText.setText(
+                    String.format("Automatische Abmeldung in %1$d Sekunden!", timeToFinish));
+            timeToFinish--;
+        }
+    };
 
     private void updateUsername(User user) {
         TextView usernameText = (TextView) findViewById(R.id.usernametextView);
