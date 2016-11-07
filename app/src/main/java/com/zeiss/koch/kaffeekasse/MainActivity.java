@@ -49,11 +49,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         verifyStoragePermissions(this);
         setContentView(R.layout.activity_main);
-        DBFileBackupHelper backup = new DBFileBackupHelper(this);
 
-        CheckBackup(backup);
-
-
+        backupDatabase();
         db = new SqlDatabaseHelper(this);
         updateUserList();
     }
@@ -80,10 +77,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
-    private void CheckBackup(DBFileBackupHelper backup) {
-        if (!backup.BackupIsUpToDate()) {
-            backup.Backup();
-        }
+    private void backupDatabase() {
+        DBFileBackupHelper backup = new DBFileBackupHelper(this);
+        backup.Backup();
     }
 
     @Override

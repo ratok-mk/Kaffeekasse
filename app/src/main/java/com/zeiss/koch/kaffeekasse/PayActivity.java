@@ -18,8 +18,9 @@ public class PayActivity extends AppCompatActivity {
 
 
     private User currentUser;
-    private int timeToFinish;
+    private int secondsToFinish;
     private SqlDatabaseHelper db;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,9 @@ public class PayActivity extends AppCompatActivity {
         }
 
 
-        timeToFinish = 15;
-        Timer timer = new Timer();
+        secondsToFinish = 15;
+
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -48,21 +50,26 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void automaticExit() {
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
         Toast.makeText(this, "Automatische Abmeldung!", Toast.LENGTH_LONG).show();
         finish();
     }
 
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (timeToFinish <= 0)
+            if (secondsToFinish <= 0)
             {
                 automaticExit();
             }
 
             TextView timeToFinishText = (TextView) findViewById(R.id.timeToFinishTextView);
             timeToFinishText.setText(
-                    String.format("Automatische Abmeldung in %1$d Sekunden!", timeToFinish));
-            timeToFinish--;
+                    String.format("Automatische Abmeldung in %1$d Sekunden!", secondsToFinish));
+            secondsToFinish--;
         }
     };
 
