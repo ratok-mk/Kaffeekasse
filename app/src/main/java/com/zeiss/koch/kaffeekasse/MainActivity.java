@@ -35,7 +35,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     private boolean usersInitialized;
     private ListView userList;
     private List<User> users;
-    private ArrayAdapter<String> userListAdapter;
+    private CustomUserListAdapter userListAdapter;
 
     private SqlDatabaseHelper db;
     private User user;
@@ -133,12 +133,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         usersInitialized = false;
         users = db.getAllUsers();
         userList = (ListView) findViewById(R.id.userList);
-        List<String> users = new ArrayList<>();
-        for (User user : this.users) {
-            users.add(user.getName());
-        }
-        userListAdapter = new ArrayAdapter(
-                this, android.R.layout.simple_list_item_1, users);
+        userListAdapter = new CustomUserListAdapter(this, users);
         userList.setAdapter(userListAdapter);
         userList.setOnItemClickListener(this);
     }
@@ -161,7 +156,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation");
+                getSupportActionBar().setTitle("Nutzerliste");
             }
         };
 
