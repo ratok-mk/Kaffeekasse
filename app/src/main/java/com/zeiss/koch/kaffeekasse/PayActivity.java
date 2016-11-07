@@ -39,7 +39,6 @@ public class PayActivity extends AppCompatActivity {
 
 
         secondsToFinish = 15;
-
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -47,6 +46,15 @@ public class PayActivity extends AppCompatActivity {
                 timerHandler.obtainMessage(1).sendToTarget();
             }
         }, 0, 1000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     private void automaticExit() {
