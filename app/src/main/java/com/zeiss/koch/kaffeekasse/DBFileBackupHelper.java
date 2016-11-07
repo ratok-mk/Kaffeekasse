@@ -19,28 +19,35 @@ import java.util.Date;
 
 public class DBFileBackupHelper {
 
-    private final SqlDatabaseHelper db;
-    public static final String BACKUP_DB_PATH = "//databasebackup//";
     final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private final SqlDatabaseHelper db;
+    private static final String BACKUP_DB_PATH = "//databasebackup//";
+    private static final String DB_PATH = "//data//com.zeiss.koch.kaffeekasse//databases//";
     private Date lastBackupDate;
 
     public DBFileBackupHelper(Context context) {
         db = new SqlDatabaseHelper(context);
     }
 
-    public void Backup() {
-        String databaseName = db.getDatabaseName();
+    public static File BackupDirectory()
+    {
+        File publicData =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        File backupDBDirectory = new File(publicData, BACKUP_DB_PATH);
+        return backupDBDirectory;
+    }
 
+    public void Backup() {
         Date currentDate = new Date();
         String dateFormatted = dateFormat.format(currentDate);
         try {
             File data = Environment.getDataDirectory();
-            File publicData =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            String currentDBPath = "//data//com.zeiss.koch.kaffeekasse//databases//" + databaseName;
+            String databaseName = db.getDatabaseName();
+            String currentDBPath = DB_PATH + databaseName;
             String backupDBFileName = databaseName + "_" + dateFormatted;
             File currentDBFile = new File(data, currentDBPath);
-            File backupDBDirectory = new File(publicData, BACKUP_DB_PATH);
+            File backupDBDirectory = BackupDirectory();
             File backupDBFile = new File(backupDBDirectory, backupDBFileName);
 
             if (!(backupDBDirectory.exists() && backupDBDirectory.isDirectory())) {
@@ -60,16 +67,32 @@ public class DBFileBackupHelper {
         }
     }
 
+    public void Restore(File restoreFile) {
+        try {
+            File backupDBFile = restoreFile;
+
+            File data = Environment.getDataDirectory();
+            String databaseName = db.getDatabaseName();
+            String currentDBPath = DB_PATH + databaseName;
+            File currentDBFile = new File(data, currentDBPath);
+
+            if (backupDBFile.exists()) {
+                FileChannel src = new FileInputStream(backupDBFile).getChannel();
+                FileChannel dst = new FileOutputStream(currentDBFile).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void CheckBackupDate() {
         Date currentDate = new Date();
-        String databaseName = db.getDatabaseName();
         try {
-            File publicData =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-
-            String backupDBFilePath = BACKUP_DB_PATH;
-            File backupDBFile = new File(publicData, backupDBFilePath);
-
+            File backupDBFile = BackupDirectory();
             File[] matchingFiles = backupDBFile.listFiles();
 
             for (int i = 0; i < matchingFiles.length; ++i) {

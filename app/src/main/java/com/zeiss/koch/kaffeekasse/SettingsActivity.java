@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -196,6 +199,25 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             this.user.setRole(this.role);
             db.updateUser(this.user);
         }
+    }
+
+    public void RestoreDatabaseClick(View view)
+    {
+        File mPath = DBFileBackupHelper.BackupDirectory();
+        FileDialog fileDialog = new FileDialog(this, mPath, null);
+        fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+            public void fileSelected(File file) {
+                Log.d(getClass().getName(), "selected file " + file.toString());
+                restoreDatabase(file);
+            }
+        });
+
+        fileDialog.showDialog();
+    }
+
+    private void restoreDatabase(File file) {
+        DBFileBackupHelper backup = new DBFileBackupHelper(this);
+        backup.Restore(file);
     }
 
     public void ExitClick(View view)
