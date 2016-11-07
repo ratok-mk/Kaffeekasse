@@ -4,20 +4,24 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener{
+public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener{
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -29,12 +33,16 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
 
     private boolean usersInitialized;
-    private Spinner userSpinner;
+    private ListView userList;
     private List<User> users;
-    private ArrayAdapter<String> spinnerAdapter;
+    private ArrayAdapter<String> userListAdapter;
 
     private SqlDatabaseHelper db;
     private User user;
+
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
 
         db = new SqlDatabaseHelper(this);
-        updateUserSpinner();
+        updateUserList();
     }
+
 
     /**
      * Checks if the app has permission to write to device storage
@@ -80,7 +89,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     @Override
     public void onResume() {
         super.onResume();
-        updateUserSpinner();
+        updateUserList();
     }
 
     @Override
@@ -105,21 +114,11 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
-    public void onItemSelected(AdapterView<?> parent,
+    public void onItemClick(AdapterView<?> parent,
                                View view, int pos, long id) {
-        if (usersInitialized == false) {
-            user = this.users.get(pos);
-            usersInitialized = true;
-        }
-        else {
-            user = this.users.get(pos);
-            usersInitialized = true;
-            StartPayActivityWithCurrentUser();
-        }
-    }
-
-    public void onNothingSelected(AdapterView parent) {
-        this.user = null;
+        user = this.users.get(pos);
+        usersInitialized = true;
+        StartPayActivityWithCurrentUser();
     }
 
     private void StartPayActivityWithCurrentUser() {
@@ -130,20 +129,78 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
-    private void updateUserSpinner() {
+    private void updateUserList() {
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mTitle = getTitle().toString();
+        setupDrawer();
+
         usersInitialized = false;
         users = db.getAllUsers();
-        userSpinner = (Spinner) findViewById(R.id.userSpinner);
+        userList = (ListView) findViewById(R.id.userList);
         List<String> users = new ArrayList<>();
         for (User user : this.users) {
             users.add(user.getName());
         }
-        spinnerAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, users);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userSpinner.setAdapter(spinnerAdapter);
-        userSpinner.setOnItemSelectedListener(this);
+        userListAdapter = new ArrayAdapter(
+                this, android.R.layout.simple_list_item_1, users);
+        userList.setAdapter(userListAdapter);
+        userList.setOnItemClickListener(this);
     }
+
+    private void setupDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mTitle);
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation");
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void payButtonClick(View view)
     {
