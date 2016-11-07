@@ -1,5 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
+import java.util.Comparator;
+
 /**
  * User
  * Created by koch on 01.10.2016.
@@ -103,4 +105,6 @@ class User {
                 throw new IndexOutOfBoundsException("Role is unknown.");
         }
     }
+
+
 }

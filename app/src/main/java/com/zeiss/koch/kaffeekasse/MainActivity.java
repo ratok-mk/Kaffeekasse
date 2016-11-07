@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener{
@@ -129,6 +131,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         setupDrawer();
 
         users = db.getAllUsers();
+        Collections.sort(users, new UserComparator());
         userList = (ListView) findViewById(R.id.userList);
         userListAdapter = new CustomUserListAdapter(this, users);
         userList.setAdapter(userListAdapter);

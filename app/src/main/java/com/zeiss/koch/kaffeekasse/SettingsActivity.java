@@ -50,7 +50,6 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
         updateRoleSpinner();
-        showPayments();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         CheckBackup(backup);
@@ -84,17 +83,17 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         backupTextView.setText(backup.LastBackupDate());
     }
 
-    private void showPayments() {
-        List<Payment> payments = db.getAllPayments();
-        TextView paymentsTextView = (TextView)this.findViewById(R.id.paymentsTextView);
-        String paymentsTable = "Id;Date;UserId;Amount\n";
-        for(Payment payment:payments)
-        {
-            paymentsTable += String.format("%1$04d;%2$s;%3$04d;%4$.2f€\n", payment.getId(), payment.getDatetime(), payment.getUserid(), payment.getAmount());
-        }
-
-        paymentsTextView.setText(paymentsTable);
-    }
+//    private void showPayments() {
+//        List<Payment> payments = db.getAllPayments();
+//        TextView paymentsTextView = (TextView)this.findViewById(R.id.paymentsTextView);
+//        String paymentsTable = "Id;Date;UserId;Amount\n";
+//        for(Payment payment:payments)
+//        {
+//            paymentsTable += String.format("%1$04d;%2$s;%3$04d;%4$.2f€\n", payment.getId(), payment.getDatetime(), payment.getUserid(), payment.getAmount());
+//        }
+//
+//        paymentsTextView.setText(paymentsTable);
+//    }
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
@@ -156,6 +155,15 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         updateUserSpinner();
     }
 
+    public void DeleteUserClick(View view) {
+        if (this.user != null)
+        {
+            db.deleteUser(user);
+            this.user = null;
+            updateUserSpinner();
+        }
+    }
+
     public void UpdateUserClick(View view)
     {
         if (this.user != null && !this.currentNfcTag.isEmpty()) {
@@ -175,7 +183,6 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     SqlDatabaseHelper db = new SqlDatabaseHelper(this);
                     Payment payment = new Payment(new Date(), this.user.getId(), amount);
                     db.addPayment(payment);
-                    showPayments();
                 }
             }
         }

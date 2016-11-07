@@ -9,11 +9,24 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zeiss.koch.kaffeekasse.AddUserActivity"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <EditText
+    <TextView
+        android:text="Nutzer registrieren"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        style="@style/TextAppearance.Huge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+
+        <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="75dp"
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/userNameTextView"
@@ -21,7 +34,7 @@
     <Button
         android:text="Abbrechen"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:id="@+id/cancelButton"
         android:layout_weight="1"
         android:onClick="CancelClick" />
@@ -29,9 +42,11 @@
     <Button
         android:text="Nutzer hinzufügen"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:id="@+id/addUserButton"
         android:layout_weight="1"
         android:onClick="AddUserClick" />
+
+    </LinearLayout>
 
 </LinearLayout>
