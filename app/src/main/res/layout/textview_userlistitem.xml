@@ -25,5 +25,6 @@
     android:layout_height="fill_parent"
     android:layout_weight="1"
     android:gravity="center"
-    android:background="#444444" />
+    android:background="#444444"
+    android:textAlignment="textEnd" />
 </LinearLayout>

@@ -19,8 +19,10 @@ public class CustomUserListAdapter extends BaseAdapter {
     private static List<User> searchArrayList;
 
     private LayoutInflater mInflater;
+    private final SqlDatabaseHelper db;
 
     public CustomUserListAdapter(Context context, List<User> results) {
+        db = new SqlDatabaseHelper(context);
         searchArrayList = results;
         mInflater = LayoutInflater.from(context);
     }
@@ -50,8 +52,11 @@ public class CustomUserListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.txtName.setText(searchArrayList.get(position).getName());
-        holder.txtInfo.setText(searchArrayList.get(position).getRole());
+        User user = searchArrayList.get(position);
+        Double balance = db.getBalance(user);
+        String balanceText = String.format("%1$.2f€", balance);
+        holder.txtName.setText(user.getName());
+        holder.txtInfo.setText(balanceText);
 
         return convertView;
     }

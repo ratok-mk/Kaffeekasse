@@ -60,7 +60,7 @@ class User {
     }
 
     public boolean isAdmin() {
-        if (this.role.equals("admin") || this.role.equals("treasurer"))
+        if (this.role == Role.admin || this.role == Role.treasurer)
         {
             return true;
         }

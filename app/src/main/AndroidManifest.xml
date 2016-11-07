@@ -52,8 +52,13 @@
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
 
-        <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIYLl6Bcf7Rr9nTCR2RjFxgW4_DLTCsHylyYAv4w" />
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIYLl6Bcf7Rr9nTCR2RjFxgW4_DLTCsHylyYAv4w" />
+
+        <activity android:name=".AddUserActivity"></activity>
     </application>
+
 </manifest>

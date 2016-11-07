@@ -14,11 +14,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener{
@@ -31,8 +28,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     };
 
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
+    public final static String EXTRA_MESSAGE_NFCID = "com.zeiss.koch.kaffeekasse.NFCID";
 
-    private boolean usersInitialized;
     private ListView userList;
     private List<User> users;
     private CustomUserListAdapter userListAdapter;
@@ -105,7 +102,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             }
             else
             {
-                Toast.makeText(this, "Could not find user with NFC ID: " + userTagId , Toast.LENGTH_LONG).show();
+                Intent newIntent = new Intent(this, AddUserActivity.class);
+                newIntent.putExtra(EXTRA_MESSAGE_NFCID, userTagId);
+                startActivity(newIntent);
             }
         }
     }
@@ -113,7 +112,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent,
                                View view, int pos, long id) {
         user = this.users.get(pos);
-        usersInitialized = true;
         StartPayActivityWithCurrentUser();
     }
 
@@ -130,7 +128,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         mTitle = getTitle().toString();
         setupDrawer();
 
-        usersInitialized = false;
         users = db.getAllUsers();
         userList = (ListView) findViewById(R.id.userList);
         userListAdapter = new CustomUserListAdapter(this, users);
@@ -140,6 +137,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     private void setupDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final String title = "Nutzerliste";
+        getSupportActionBar().setTitle(title);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -150,13 +149,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(title);
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Nutzerliste");
+                getSupportActionBar().setTitle(title);
             }
         };
 

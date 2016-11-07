@@ -168,20 +168,26 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     public void UpdateAccountClick(View view) {
         if (this.user != null) {
             final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
-            Double amount = Double.parseDouble(amountEditText.getText().toString());
-            if (amount != null) {
-                SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-                Payment payment = new Payment(new Date(), this.user.getId(), amount);
-                db.addPayment(payment);
-                showPayments();
+            String valueText = amountEditText.getText().toString();
+            if (!valueText.isEmpty()) {
+                Double amount = Double.parseDouble(valueText);
+                if (amount != null) {
+                    SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+                    Payment payment = new Payment(new Date(), this.user.getId(), amount);
+                    db.addPayment(payment);
+                    showPayments();
+                }
             }
         }
     }
 
     public void UpdateRoleClick(View view)
     {
-        if (this.user != null) {
+        if (this.user != null && this.role != null) {
 
+            roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
+            this.user.setRole(this.role);
+            db.updateUser(this.user);
         }
     }
 
