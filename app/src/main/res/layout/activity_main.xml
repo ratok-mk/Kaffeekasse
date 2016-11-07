@@ -7,12 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zeiss.koch.kaffeekasse.MainActivity">
-    <ListView
-        android:id="@+id/userList"
-        android:layout_width="300dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|start" />
-
+    <!-- The main content view -->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -44,7 +39,7 @@
 
         <ImageView
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             app:srcCompat="@drawable/ic_check_in_with_card"
             android:id="@+id/imageView"
             android:layout_weight="1"
@@ -53,5 +48,12 @@
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
+
+    <!-- The navigation drawer -->
+    <ListView
+        android:id="@+id/userList"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|start" />
 
 </android.support.v4.widget.DrawerLayout>
