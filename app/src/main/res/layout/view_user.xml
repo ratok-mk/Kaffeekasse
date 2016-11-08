@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,20 +13,33 @@
         style="@style/TextAppearance.Huge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="8.18"/>
 
-    <TextView
-        android:text="Kontostand(€)"
-        android:id="@+id/balanceLabelTextView"
-        style="@android:style/TextAppearance.Medium"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/balanceTextView"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.2"/>
+        <TextView
+            android:id="@+id/balanceTextView"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_weight="0.71"
+            android:textAlignment="center"
+            tools:ignore="NestedWeights" />
+
+        <TextView
+            android:text="@string/balance"
+            android:id="@+id/balanceLabelTextView"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
 </LinearLayout>

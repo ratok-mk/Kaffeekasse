@@ -54,7 +54,7 @@ public class CustomUserListAdapter extends BaseAdapter {
 
         User user = searchArrayList.get(position);
         Double balance = db.getBalance(user);
-        String balanceText = String.format("%1$.2f€", balance);
+        String balanceText = Helper.valueToCurrencyString(balance);
         holder.txtName.setText(user.getName());
         holder.txtInfo.setText(balanceText);
 

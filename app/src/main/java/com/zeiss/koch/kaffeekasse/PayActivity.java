@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -89,12 +90,11 @@ public class PayActivity extends AppCompatActivity {
         Double balance = db.getBalance(user);
         TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
-        DecimalFormat round = new DecimalFormat("0.00");
-        String formatted = round.format(balance);
+        String formatted = Helper.valueToCurrencyString(balance);
         if (balance < 0.0) {
-            balanceText.setTextAppearance(R.style.TextAppearance_Red);
+            balanceText.setTextAppearance(R.style.balance_minus);
         } else {
-            balanceText.setTextAppearance(R.style.TextAppearance_Medium);
+            balanceText.setTextAppearance(R.style.balance_plus);
         }
 
         balanceText.setText(formatted);
@@ -104,7 +104,7 @@ public class PayActivity extends AppCompatActivity {
         payAmount(-0.1);
     }
 
-    public void pay20Click(View view) {
+    public void pay20Click(View view){
         payAmount(-0.2);
     }
 
