@@ -58,6 +58,15 @@ public class CustomUserListAdapter extends BaseAdapter {
         holder.txtName.setText(user.getName());
         holder.txtInfo.setText(balanceText);
 
+        if (balance < 0.0)
+        {
+            holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Red);
+        }
+        else
+        {
+            holder.txtInfo.setTextAppearance(android.R.style.TextAppearance_Large);
+        }
+
         return convertView;
     }
 

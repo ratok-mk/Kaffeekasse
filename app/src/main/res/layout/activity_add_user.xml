@@ -30,7 +30,8 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/userNameTextView"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+            android:hint="Vorname Nachname" />
     <Button
         android:text="Abbrechen"
         android:layout_width="wrap_content"

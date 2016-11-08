@@ -95,7 +95,7 @@ public class PayActivity extends AppCompatActivity {
             String formatted = round.format(balance);
             if (balance < 0.0)
             {
-                balanceText.setTextAppearance(R.style.TextAppearance_Red);
+                balanceText.setTextAppearance(R.style.TextAppearance_Medium_Red);
             }
             else
             {

@@ -45,7 +45,7 @@ public class DBFileBackupHelper {
             File data = Environment.getDataDirectory();
             String databaseName = db.getDatabaseName();
             String currentDBPath = DB_PATH + databaseName;
-            String backupDBFileName = databaseName + "_" + dateFormatted;
+            String backupDBFileName = databaseName + "_" + dateFormatted + ".db";
             File currentDBFile = new File(data, currentDBPath);
             File backupDBDirectory = BackupDirectory();
             File backupDBFile = new File(backupDBDirectory, backupDBFileName);
@@ -98,6 +98,7 @@ public class DBFileBackupHelper {
             for (int i = 0; i < matchingFiles.length; ++i) {
                 File file = matchingFiles[i];
                 String filename = file.getAbsolutePath();
+                filename = removeExtension(filename);
                 String[] parts = filename.split("_");
                 if (parts.length == 2) {
                     try {
@@ -128,5 +129,26 @@ public class DBFileBackupHelper {
         }
 
         return "";
+    }
+
+    private static String removeExtension(String s) {
+
+        String separator = System.getProperty("file.separator");
+        String filename = s;
+
+//        // Remove the path upto the filename.
+//        int lastSeparatorIndex = s.lastIndexOf(separator);
+//        if (lastSeparatorIndex == -1) {
+//            filename = s;
+//        } else {
+//            filename = s.substring(lastSeparatorIndex + 1);
+//        }
+
+        // Remove the extension.
+        int extensionIndex = filename.lastIndexOf(".");
+        if (extensionIndex == -1)
+            return filename;
+
+        return filename.substring(0, extensionIndex);
     }
 }

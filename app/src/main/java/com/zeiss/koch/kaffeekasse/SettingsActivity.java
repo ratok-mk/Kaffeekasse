@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -154,25 +155,38 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         final EditText userEditText = (EditText) findViewById(R.id.userEditText);
         User newUser = new User(userEditText.getText().toString(), "");
         db.addUser(newUser);
-
         updateUserSpinner();
+
+
+        String message = String.format("Nutzer %1s wurde hinzugefügt.", newUser.getName());
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     public void DeleteUserClick(View view) {
         if (this.user != null)
         {
+            String name = this.user.getName();
             db.deleteUser(user);
             this.user = null;
             updateUserSpinner();
+
+            String message = String.format("Nutzer %1s wurde gelöscht.", name);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
     public void UpdateUserClick(View view)
     {
-        if (this.user != null && !this.currentNfcTag.isEmpty()) {
+        if (this.user != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             this.user.SetNfcId(this.currentNfcTag);
             db.updateUser(this.user);
+
+            String message = String.format(
+                    "NFC ID von %1s wurde auf %2$s geändert.",
+                    this.user.getName(),
+                    this.currentNfcTag);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -186,6 +200,14 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     SqlDatabaseHelper db = new SqlDatabaseHelper(this);
                     Payment payment = new Payment(new Date(), this.user.getId(), amount);
                     db.addPayment(payment);
+                    Double balance = db.getBalance(this.user);
+
+                    String message = String.format(
+                        "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
+                        this.user.getName(),
+                        amount,
+                        balance);
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -198,6 +220,12 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
             this.user.setRole(this.role);
             db.updateUser(this.user);
+
+            String message = String.format(
+                "Rolle von %1s wurde auf %2$s geändert.",
+                this.user.getName(),
+                User.ConvertRoleToGuiString(this.role));
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -218,6 +246,11 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     private void restoreDatabase(File file) {
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         backup.Restore(file);
+
+        String message = String.format(
+            "Datenbank wurde aus Datei %1$s wiederhergestellt.",
+            file.getAbsolutePath());
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     public void ExitClick(View view)
