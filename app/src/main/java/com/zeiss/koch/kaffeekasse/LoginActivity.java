@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class LoginActivity extends AbstractNfcActivity{
+public class LoginActivity extends AbstractNfcActivity {
 
     private Date date;
     private SqlDatabaseHelper db;
@@ -37,32 +37,27 @@ public class LoginActivity extends AbstractNfcActivity{
             String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
             User user = db.getUserByNfcId(userTagId);
-            if (user != null && user.isAdmin())
-            {
+            if (user != null && user.isAdmin()) {
                 Intent newIntent = new Intent(this, SettingsActivity.class);
                 startActivity(newIntent);
-            }
-            else
-            {
-                Toast.makeText(this, "Could not find admin with NFC ID: " + userTagId , Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Could not find admin with NFC ID: " + userTagId, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public void cancelButtonClick(View view)
-    {
+    public void cancelButtonClick(View view) {
         finish();
     }
 
-    public void loginButtonClick(View view)
-    {
+    public void loginButtonClick(View view) {
         String securePassword = generatePassword(this.date);
-        EditText adminPasswordText = (EditText)findViewById(R.id.adminPasswordText);
+        EditText adminPasswordText = (EditText) findViewById(R.id.adminPasswordText);
         String password = adminPasswordText.getText().toString();
 //TODO        if (password.equals(securePassword))
 //        {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
 //        }
         finish();
     }
@@ -71,10 +66,10 @@ public class LoginActivity extends AbstractNfcActivity{
         Calendar calendar = GregorianCalendar.getInstance(); // creates a new calendar instance
         calendar.setTime(date);
         String password = String.format(
-            "%1$d%2$d%3$d",
-            calendar.get(Calendar.YEAR) * 2,
-            calendar.get(Calendar.MONTH) * 4,
-            calendar.get(Calendar.DAY_OF_MONTH) * 8);
+                "%1$d%2$d%3$d",
+                calendar.get(Calendar.YEAR) * 2,
+                calendar.get(Calendar.MONTH) * 4,
+                calendar.get(Calendar.DAY_OF_MONTH) * 8);
 
         return password;
     }
