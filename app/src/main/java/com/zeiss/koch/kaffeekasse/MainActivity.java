@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,28 +35,25 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     private CustomUserListAdapter userListAdapter;
 
     private SqlDatabaseHelper db;
-    private User user;
 
     private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private CharSequence mTitle;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         verifyStoragePermissions(this);
         setContentView(R.layout.activity_main);
-        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         backupDatabase();
-        db = new SqlDatabaseHelper(this);
+        this.db = new SqlDatabaseHelper(this);
         updateUserList();
     }
 
 
     /**
      * Checks if the app has permission to write to device storage
-     *
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -95,8 +91,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
-            mDrawerLayout.closeDrawers();
-            User user = db.getUserByNfcId(userTagId);
+            this.drawerLayout.closeDrawers();
+            User user = this.db.getUserByNfcId(userTagId);
             if (user != null) {
                 Intent newIntent = new Intent(this, PayActivity.class);
                 newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
@@ -110,13 +106,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-        this.user = this.users.get(pos);
-        StartPayActivityWithCurrentUser();
-    }
-
-    private void StartPayActivityWithCurrentUser() {
+        User user = this.users.get(pos);
         if (user != null) {
-            this.mDrawerLayout.closeDrawers();
+            this.drawerLayout.closeDrawers();
             Intent newIntent = new Intent(this, PayActivity.class);
             newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
             startActivity(newIntent);
@@ -124,25 +116,24 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     private void updateUserList() {
-        mTitle = getTitle().toString();
         setupDrawer();
 
-        users = db.getAllUsers();
-        Collections.sort(users, new UserComparator());
+        this.users = this.db.getAllUsers();
+        Collections.sort(this.users, new UserComparator());
         userList = (ListView) findViewById(R.id.userList);
-        userListAdapter = new CustomUserListAdapter(this, users);
+        userListAdapter = new CustomUserListAdapter(this, this.users);
         userList.setAdapter(userListAdapter);
         userList.setOnItemClickListener(this);
     }
 
     private void setupDrawer() {
-        final String title = "Nutzerliste";
+        final String title = getResources().getString(R.string.userlist);
         getSupportActionBar().setTitle(title);
         mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
+                this,
+                this.drawerLayout,
+                R.string.drawer_open,
+                R.string.drawer_close
         ) {
 
             /** Called when a drawer has settled in a completely closed state. */
@@ -159,7 +150,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         };
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        drawerLayout.setDrawerListener(mDrawerToggle);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -188,11 +179,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         // Handle your other action bar items...
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public void payButtonClick(View view) {
-        StartPayActivityWithCurrentUser();
     }
 
     public void settingsButtonClick(View view) {
