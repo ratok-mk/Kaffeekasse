@@ -20,8 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener{
-
+public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener {
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -48,6 +47,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         verifyStoragePermissions(this);
         setContentView(R.layout.activity_main);
+        this.mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         backupDatabase();
         db = new SqlDatabaseHelper(this);
@@ -95,15 +95,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
+            mDrawerLayout.closeDrawers();
             User user = db.getUserByNfcId(userTagId);
-            if (user != null)
-            {
+            if (user != null) {
                 Intent newIntent = new Intent(this, PayActivity.class);
                 newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
                 startActivity(newIntent);
-            }
-            else
-            {
+            } else {
                 Intent newIntent = new Intent(this, AddUserActivity.class);
                 newIntent.putExtra(EXTRA_MESSAGE_NFCID, userTagId);
                 startActivity(newIntent);
@@ -111,14 +109,14 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         }
     }
 
-    public void onItemClick(AdapterView<?> parent,
-                               View view, int pos, long id) {
-        user = this.users.get(pos);
+    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+        this.user = this.users.get(pos);
         StartPayActivityWithCurrentUser();
     }
 
     private void StartPayActivityWithCurrentUser() {
         if (user != null) {
+            this.mDrawerLayout.closeDrawers();
             Intent newIntent = new Intent(this, PayActivity.class);
             newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
             startActivity(newIntent);
@@ -126,7 +124,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     private void updateUserList() {
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mTitle = getTitle().toString();
         setupDrawer();
 
@@ -139,7 +136,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     private void setupDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final String title = "Nutzerliste";
         getSupportActionBar().setTitle(title);
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -195,16 +191,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
 
-    public void payButtonClick(View view)
-    {
+    public void payButtonClick(View view) {
         StartPayActivityWithCurrentUser();
     }
 
-    public void settingsButtonClick(View view)
-    {
+    public void settingsButtonClick(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
-
 
 }
