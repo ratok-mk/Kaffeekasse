@@ -16,7 +16,6 @@ import java.util.TimerTask;
 
 public class PayActivity extends AppCompatActivity {
 
-
     private User currentUser;
     private int secondsToFinish;
     private SqlDatabaseHelper db;
@@ -51,14 +50,14 @@ public class PayActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
             timer = null;
         }
     }
 
     private void automaticExit() {
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
             timer = null;
         }
@@ -69,8 +68,7 @@ public class PayActivity extends AppCompatActivity {
 
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (secondsToFinish <= 0)
-            {
+            if (secondsToFinish <= 0) {
                 automaticExit();
             }
 
@@ -88,50 +86,38 @@ public class PayActivity extends AppCompatActivity {
 
 
     private void updateBalance(User user) {
-            Double balance = db.getBalance(user);
-            TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
+        Double balance = db.getBalance(user);
+        TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
-            DecimalFormat round = new DecimalFormat("0.00");
-            String formatted = round.format(balance);
-            if (balance < 0.0)
-            {
-                balanceText.setTextAppearance(R.style.TextAppearance_Medium_Red);
-            }
-            else
-            {
-                balanceText.setTextAppearance(android.R.style.TextAppearance_Medium);
-            }
+        DecimalFormat round = new DecimalFormat("0.00");
+        String formatted = round.format(balance);
+        if (balance < 0.0) {
+            balanceText.setTextAppearance(R.style.TextAppearance_Red);
+        } else {
+            balanceText.setTextAppearance(R.style.TextAppearance_Medium);
+        }
 
-            balanceText.setText(formatted);
+        balanceText.setText(formatted);
     }
 
-    public void pay10Click(View view)
-    {
-        java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.10);
-        db.addPayment(payment);
-        updateBalance(currentUser);
-        showPaymentToast(currentUser, -0.10);
-        finish();
+    public void pay10Click(View view) {
+        payAmount(-0.1);
     }
 
-    public void pay20Click(View view)
-    {
-        java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.20);
-        db.addPayment(payment);
-        updateBalance(currentUser);
-        showPaymentToast(currentUser, -0.20);
-        finish();
+    public void pay20Click(View view) {
+        payAmount(-0.2);
     }
 
-    public void pay40Click(View view)
-    {
+    public void pay40Click(View view) {
+        payAmount(-0.4);
+    }
+
+    private void payAmount(Double amount) {
         java.util.Date currentDate = new java.util.Date();
-        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), -0.40);
+        Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), amount);
         db.addPayment(payment);
         updateBalance(currentUser);
-        showPaymentToast(currentUser, -0.40);
+        showPaymentToast(currentUser, amount);
         finish();
     }
 
@@ -139,12 +125,11 @@ public class PayActivity extends AppCompatActivity {
         Double balance = db.getBalance(currentUser);
         String name = currentUser.getName();
         String message =
-            String.format("%1s hat %2$.2f€ bezahlt. Neuer Kontostand: %3$.2f€", name, Math.abs(paymentValue), balance);
+                String.format("%1s hat %2$.2f€ bezahlt. Neuer Kontostand: %3$.2f€", name, Math.abs(paymentValue), balance);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void finishClick(View view)
-    {
+    public void finishClick(View view) {
         finish();
     }
 }
