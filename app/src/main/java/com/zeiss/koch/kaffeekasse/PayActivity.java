@@ -1,5 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
+import com.github.lzyzsd.circleprogress.DonutProgress;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,22 +12,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PayActivity extends AppCompatActivity {
 
     private User currentUser;
-    private int secondsToFinish;
     private SqlDatabaseHelper db;
     private Timer timer;
+    private DonutProgress timeoutProgress;
+    private java.util.Date logoffTime;
+
+    final static private int LOGOFF_TIMEOUT_S = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+        this.timeoutProgress = (DonutProgress) findViewById(R.id.timeout_progress);
 
         db = new SqlDatabaseHelper(this);
 
@@ -37,46 +41,47 @@ public class PayActivity extends AppCompatActivity {
             updateBalance(this.currentUser);
         }
 
+        this.logoffTime = new java.util.Date(new java.util.Date().getTime() + 1000 * this.LOGOFF_TIMEOUT_S);
 
-        secondsToFinish = 15;
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+        this.timer = new Timer();
+        this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 timerHandler.obtainMessage(1).sendToTarget();
             }
-        }, 0, 1000);
+        }, 0, 30);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
         }
     }
 
     private void automaticExit() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
         }
 
-        Toast.makeText(this, "Automatische Abmeldung!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG).show();
         finish();
     }
 
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (secondsToFinish <= 0) {
+            final float fraction = (logoffTime.getTime() - new java.util.Date().getTime()) / 1000.0f;
+            final String caption = "" + (int)Math.ceil(fraction) + " s";
+
+            if (fraction <= 0) {
                 automaticExit();
             }
 
-            TextView timeToFinishText = (TextView) findViewById(R.id.timeToFinishTextView);
-            timeToFinishText.setText(
-                    String.format("Automatische Abmeldung in %1$d Sekunden!", secondsToFinish));
-            secondsToFinish--;
+            timeoutProgress.setProgress(fraction / LOGOFF_TIMEOUT_S * timeoutProgress.getMax());
+            timeoutProgress.setText(caption);
         }
     };
 
