@@ -8,4 +8,6 @@
     <string name="userlist">Nutzerliste</string>
     <string name="balance">Kontostand</string>
     <string name="automatic_logoff">Automatische Abmeldung!</string>
+    <string name="automatic_logoff_in">Automatische Abmeldung in</string>
+    <string name="back">Zurück</string>
 </resources>

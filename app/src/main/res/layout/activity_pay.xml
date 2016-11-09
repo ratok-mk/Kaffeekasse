@@ -121,7 +121,7 @@
         android:layout_alignParentStart="true">
 
         <Button
-            android:text="Zurück"
+            android:text="@string/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/finishButton"
@@ -130,7 +130,7 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:text="Automatische Abmeldung in"
+            android:text="@string/automatic_logoff_in"
             style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,10 +144,11 @@
             android:id="@+id/timeout_progress"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:donut_text_color="@color/colorPrimary"
+            app:donut_text_color="@color/text"
+            app:donut_unfinished_color="@color/dark_grey"
             app:donut_progress="75"
             app:donut_max="100"
-            app:donut_finished_color="@color/colorPrimary"
+            app:donut_finished_color="@color/light_grey"
              />
 
     </LinearLayout>

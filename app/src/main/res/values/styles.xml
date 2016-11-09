@@ -8,12 +8,12 @@
     <style name="TextAppearance.Huge" parent="android:TextAppearance.Large">
         <item name="android:textSize">60dp</item>
     </style>
-    <style name="TextAppearance.Medium.Red" parent="android:TextAppearance.Medium">
-        <item name="android:textColor">@color/red</item>
+    <style name="TextAppearance.Medium.Warning" parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@color/warning</item>
     </style>
 
-    <style name="TextAppearance.Large.Red" parent="android:TextAppearance.Large">
-        <item name="android:textColor">@color/red</item>
+    <style name="TextAppearance.Large.Warning" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/warning</item>
     </style>
 
     <style name="balance_plus" parent="android:TextAppearance.Large">
@@ -21,7 +21,7 @@
     </style>
 
     <style name="balance_minus" parent="balance_plus">
-        <item name="android:textColor">@color/red</item>
+        <item name="android:textColor">@color/warning</item>
     </style>
 
 </resources>

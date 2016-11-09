@@ -59,7 +59,7 @@ public class CustomUserListAdapter extends BaseAdapter {
 
         if (balance < 0.0)
         {
-            holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Red);
+            holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Warning);
         }
         else
         {
