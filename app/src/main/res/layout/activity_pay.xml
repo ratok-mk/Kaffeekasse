@@ -29,14 +29,14 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/ic_tea_cup_1"
+                android:src="@drawable/ic_tea_cup_1"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:id="@+id/Button10"
                 android:onClick="pay10Click"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
-                android:padding="16dp" />
+                android:padding="24dp" />
 
             <TextView
                 android:text="0,10€"
@@ -54,19 +54,21 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingLeft="16sp"
+            android:paddingRight="16sp">
 
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/ic_coffee_cup_1"
+                android:src="@drawable/ic_coffee_cup_1"
                 android:id="@+id/Button20"
                 android:onClick="pay20Click"
                 android:layout_alignTop="@+id/Button10"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitCenter"
                 android:layout_weight="1"
-                android:padding="16dp" />
+                android:padding="24dp" />
 
             <TextView
                 android:text="0,20€"
@@ -90,14 +92,14 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/ic_frappe_4"
+                android:src="@drawable/ic_frappe_4"
                 android:id="@+id/Button40"
                 android:layout_alignTop="@+id/Button20"
                 android:layout_alignParentEnd="true"
                 android:onClick="pay40Click"
                 android:scaleType="fitCenter"
                 android:layout_weight="1"
-                android:padding="16dp" />
+                android:padding="24dp" />
 
             <TextView
                 android:text="0,40€"
