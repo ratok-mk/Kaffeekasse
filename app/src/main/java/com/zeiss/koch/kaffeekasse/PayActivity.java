@@ -10,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -90,7 +88,7 @@ public class PayActivity extends AppCompatActivity {
         Double balance = db.getBalance(user);
         TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
-        String formatted = Helper.valueToCurrencyString(balance);
+        String formatted = Formater.valueToCurrencyString(balance);
         if (balance < 0.0) {
             balanceText.setTextAppearance(R.style.balance_minus);
         } else {

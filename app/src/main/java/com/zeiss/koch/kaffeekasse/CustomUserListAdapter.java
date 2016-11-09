@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,7 +53,7 @@ public class CustomUserListAdapter extends BaseAdapter {
 
         User user = searchArrayList.get(position);
         Double balance = db.getBalance(user);
-        String balanceText = Helper.valueToCurrencyString(balance);
+        String balanceText = Formater.valueToCurrencyString(balance);
         holder.txtName.setText(user.getName());
         holder.txtInfo.setText(balanceText);
 

@@ -13,7 +13,7 @@
         style="@style/TextAppearance.Huge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="8.18"/>
+        android:layout_weight="8"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,8 +26,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:layout_weight="0.71"
+            android:layout_weight="3"
             android:textAlignment="center"
             tools:ignore="NestedWeights" />
 
@@ -37,7 +36,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="1"
             android:textAlignment="center" />
 
     </LinearLayout>

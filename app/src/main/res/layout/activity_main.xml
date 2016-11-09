@@ -44,9 +44,9 @@
             app:srcCompat="@drawable/ic_check_in_with_card"
             android:id="@+id/imageView"
             android:layout_weight="1"
-            android:layout_marginLeft="50dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentStart="true"
+            android:scaleX="-1" />
 
     </RelativeLayout>
 

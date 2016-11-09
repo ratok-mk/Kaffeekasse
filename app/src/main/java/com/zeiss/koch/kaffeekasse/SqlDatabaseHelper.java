@@ -1,7 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
 /**
- * Sql Database Helper
+ * Sql Database Formater
  * Created by koch on 01.10.2016.
  */
 
