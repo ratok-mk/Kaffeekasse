@@ -123,22 +123,30 @@
 
         <Button
             android:text="Zurück"
-            android:layout_width="wrap_content"
+            android:layout_width="132dp"
             android:layout_height="100dp"
             android:id="@+id/finishButton"
             android:textSize="20dp"
-            android:onClick="finishClick"
-            android:layout_weight="1" />
+            android:onClick="finishClick" />
 
         <TextView
-            android:text="Automatische Abmeldung"
+            android:text="Automatische Abmeldung in"
             style="@android:style/TextAppearance.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/timeToFinishTextView"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:layout_marginLeft="16dp"
-            android:textAlignment="center" />
+            android:textAlignment="textEnd" />
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:id="@+id/timeout_progress"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:donut_progress="75"
+            app:donut_max="100"
+            app:donut_finished_color="@color/red"
+             />
 
     </LinearLayout>
 

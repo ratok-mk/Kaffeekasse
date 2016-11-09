@@ -80,4 +80,5 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="userlist">Nutzerliste</string>
     <string name="balance">Kontostand</string>
+    <string name="automatic_logoff">Automatische Abmeldung!</string>
 </resources>
