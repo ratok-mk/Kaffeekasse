@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ public class PayActivity extends AppCompatActivity {
     private java.util.Date logoffTime;
 
     final static private int LOGOFF_TIMEOUT_S = 15;
+    final static private int WARN_LIMIT_S = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,11 @@ public class PayActivity extends AppCompatActivity {
 
             timeoutProgress.setProgress(fraction / LOGOFF_TIMEOUT_S * timeoutProgress.getMax());
             timeoutProgress.setText(caption);
+            if (WARN_LIMIT_S >= (int)Math.ceil(fraction)) {
+                final int colorWarning = ContextCompat.getColor(PayActivity.this, R.color.warning);
+                timeoutProgress.setFinishedStrokeColor(colorWarning);
+                timeoutProgress.setTextColor(colorWarning);
+            }
         }
     };
 
