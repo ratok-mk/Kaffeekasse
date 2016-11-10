@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/background_grey"
     tools:context="com.zeiss.koch.kaffeekasse.PayActivity">
 
     <include layout="@layout/view_user"/>
@@ -127,7 +128,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/finishButton"
-            style="@android:style/TextAppearance.Medium"
             android:onClick="finishClick"
             android:layout_weight="1"/>
 

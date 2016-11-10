@@ -6,6 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_grey"
     tools:context="com.zeiss.koch.kaffeekasse.MainActivity">
     <!-- The main content view -->
 
@@ -18,7 +19,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:id="@+id/linearLayout">
 
             <TextView
                 android:text="Anmeldung"
@@ -44,9 +46,9 @@
             app:srcCompat="@drawable/ic_check_in_with_card"
             android:id="@+id/imageView"
             android:layout_weight="1"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:scaleX="-1" />
+            android:scaleX="-1"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 

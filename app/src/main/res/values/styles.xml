@@ -1,8 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="DarkTheme" parent="android:Theme.Material">
+    <style name="DarkTheme" parent="Theme.AppCompat">
         <item name="android:textAppearanceLarge">@style/TextAppearance.Huge</item>
+        <item name="android:buttonStyle">@style/buttonStyle</item>
+        <item name="android:imageButtonStyle">@style/imageButtonStyle</item>
+
+    </style>
+
+    <style name="buttonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/button_grey</item>
+        <item name="android:textSize">@android:style/TextAppearance.Medium</item>
+        <item name="android:padding">16dp</item>
+
+    </style>
+
+    <style name="imageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@color/button_grey</item>
     </style>
 
     <style name="TextAppearance.Huge" parent="android:TextAppearance.Large">
