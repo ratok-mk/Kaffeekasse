@@ -47,9 +47,9 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS accounts");
+        /*db.execSQL("DROP TABLE IF EXISTS accounts");
         db.execSQL("DROP TABLE IF EXISTS users");
-        db.execSQL("DROP TABLE IF EXISTS payments");
+        db.execSQL("DROP TABLE IF EXISTS payments");*/
 
         // create fresh table
         this.onCreate(db);
