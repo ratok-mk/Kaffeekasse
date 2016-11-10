@@ -73,6 +73,7 @@ public class PayActivity extends AppCompatActivity {
             this.timer = null;
         }
 
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
         Toast.makeText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG).show();
         finish();
     }
@@ -138,7 +139,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void payAmount(Double amount) {
-        SoundManager.getInstance().play(this, R.raw.payment);
+        SoundManager.getInstance().play(this, SoundManager.SoundType.PAY);
         java.util.Date currentDate = new java.util.Date();
         Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), amount);
         db.addPayment(payment);
@@ -157,6 +158,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     public void finishClick(View view) {
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
         finish();
     }
 }
