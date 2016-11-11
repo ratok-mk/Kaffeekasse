@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +23,8 @@ public class PayActivity extends AppCompatActivity {
     private DonutProgress timeoutProgress;
     private java.util.Date logoffTime;
 
-    final static private int LOGOFF_TIMEOUT_S = 15;
+    final static private int INITIAL_TIMEOUT_S = 15;
+    final static private int RESET_TIMEOUT_S = 5;
     final static private int WARN_LIMIT_S = 3;
 
     @Override
@@ -43,7 +43,7 @@ public class PayActivity extends AppCompatActivity {
             updateBalance(this.currentUser);
         }
 
-        this.logoffTime = new java.util.Date(new java.util.Date().getTime() + 1000 * this.LOGOFF_TIMEOUT_S);
+        setLogoffTime(this.INITIAL_TIMEOUT_S);
 
         this.timer = new Timer();
         this.timer.schedule(new TimerTask() {
@@ -51,7 +51,11 @@ public class PayActivity extends AppCompatActivity {
             public void run() {
                 timerHandler.obtainMessage(1).sendToTarget();
             }
-        }, 0, 30);
+        }, 0, 100);
+    }
+
+    private void setLogoffTime(int timeoutInS) {
+        this.logoffTime = new java.util.Date(new java.util.Date().getTime() + 1000 * timeoutInS);
     }
 
     @Override
@@ -69,6 +73,7 @@ public class PayActivity extends AppCompatActivity {
             this.timer = null;
         }
 
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
         Toast.makeText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG).show();
         finish();
     }
@@ -82,13 +87,22 @@ public class PayActivity extends AppCompatActivity {
                 automaticExit();
             }
 
-            timeoutProgress.setProgress(fraction / LOGOFF_TIMEOUT_S * timeoutProgress.getMax());
+            timeoutProgress.setProgress(fraction / INITIAL_TIMEOUT_S * timeoutProgress.getMax());
             timeoutProgress.setText(caption);
+
+            int colorCountDownText;
+            int colorCountDownCircle;
+
             if (WARN_LIMIT_S >= (int)Math.ceil(fraction)) {
-                final int colorWarning = ContextCompat.getColor(PayActivity.this, R.color.warning);
-                timeoutProgress.setFinishedStrokeColor(colorWarning);
-                timeoutProgress.setTextColor(colorWarning);
+                colorCountDownCircle = R.color.warning;
+                colorCountDownText = R.color.warning;
             }
+            else {
+                colorCountDownCircle = R.color.light_grey;
+                colorCountDownText = R.color.text;
+            }
+            timeoutProgress.setFinishedStrokeColor(getColor(colorCountDownCircle));
+            timeoutProgress.setTextColor(getColor(colorCountDownText));
         }
     };
 
@@ -125,12 +139,14 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void payAmount(Double amount) {
+        SoundManager.getInstance().play(this, SoundManager.SoundType.PAY);
         java.util.Date currentDate = new java.util.Date();
         Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), amount);
         db.addPayment(payment);
         updateBalance(currentUser);
-        showPaymentToast(currentUser, amount);
-        finish();
+        setLogoffTime(this.RESET_TIMEOUT_S);
+//        showPaymentToast(currentUser, amount);
+//        finish();
     }
 
     private void showPaymentToast(User currentUser, double paymentValue) {
@@ -142,6 +158,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
     public void finishClick(View view) {
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
         finish();
     }
 }

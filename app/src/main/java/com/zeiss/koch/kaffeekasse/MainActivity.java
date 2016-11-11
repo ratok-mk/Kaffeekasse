@@ -92,6 +92,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
             this.drawerLayout.closeDrawers();
+            SoundManager.getInstance().play(this, SoundManager.SoundType.NFC);
             User user = this.db.getUserByNfcId(userTagId);
             if (user != null) {
                 Intent newIntent = new Intent(this, PayActivity.class);
@@ -109,6 +110,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         User user = this.users.get(pos);
         if (user != null) {
             this.drawerLayout.closeDrawers();
+            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
             Intent newIntent = new Intent(this, PayActivity.class);
             newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
             startActivity(newIntent);
