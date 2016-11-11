@@ -22,6 +22,7 @@ public class PayActivity extends AppCompatActivity {
     private Timer timer;
     private DonutProgress timeoutProgress;
     private java.util.Date logoffTime;
+    private Double totalPurchase;
 
     final static private int INITIAL_TIMEOUT_S = 15;
     final static private int RESET_TIMEOUT_S = 5;
@@ -35,12 +36,15 @@ public class PayActivity extends AppCompatActivity {
 
         db = new SqlDatabaseHelper(this);
 
+        this.totalPurchase = 0.0;
+
         Intent intent = getIntent();
         int userId = intent.getIntExtra(MainActivity.EXTRA_MESSAGE_USERID, -1);
         if (userId != -1) {
             this.currentUser = db.getUser(userId);
             updateUsername(this.currentUser);
             updateBalance(this.currentUser);
+            updatePurchase();
         }
 
         setLogoffTime(this.INITIAL_TIMEOUT_S);
@@ -107,7 +111,7 @@ public class PayActivity extends AppCompatActivity {
     };
 
     private void updateUsername(User user) {
-        TextView usernameText = (TextView) findViewById(R.id.usernametextView);
+        TextView usernameText = (TextView) findViewById(R.id.usernameTextView);
         usernameText.setText(user.getName());
     }
 
@@ -116,7 +120,7 @@ public class PayActivity extends AppCompatActivity {
         Double balance = db.getBalance(user);
         TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
-        String formatted = Formater.valueToCurrencyString(balance);
+        final String formatted = Formater.valueToCurrencyString(balance);
         if (balance < 0.0) {
             balanceText.setTextAppearance(R.style.balance_minus);
         } else {
@@ -124,6 +128,12 @@ public class PayActivity extends AppCompatActivity {
         }
 
         balanceText.setText(formatted);
+    }
+
+    private void updatePurchase() {
+        TextView purchaseText = (TextView) findViewById(R.id.purchaseTextView);
+        final String formatted = Formater.valueToCurrencyString(this.totalPurchase);
+        purchaseText.setText(formatted);
     }
 
     public void pay10Click(View view) {
@@ -145,6 +155,9 @@ public class PayActivity extends AppCompatActivity {
         db.addPayment(payment);
         updateBalance(currentUser);
         setLogoffTime(this.RESET_TIMEOUT_S);
+
+        this.totalPurchase -= amount;
+        updatePurchase();
 //        showPaymentToast(currentUser, amount);
 //        finish();
     }
