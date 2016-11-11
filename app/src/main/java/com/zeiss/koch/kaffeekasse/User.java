@@ -1,5 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
+import android.text.Editable;
+
 import java.util.Comparator;
 
 /**
@@ -67,6 +69,10 @@ class User {
             return true;
         }
         return false;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public enum Role

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener{
+public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener {
 
 
     private String currentNfcTag;
@@ -101,20 +100,26 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
-        switch(parent.getId())
-        {
+        switch (parent.getId()) {
             case R.id.userSpinner:
                 user = this.users.get(pos);
+                UpdateRenameText();
                 break;
             case R.id.roleSpinner:
                 role = this.roles.get(pos);
                 break;
         }
+    }
 
+    private void UpdateRenameText() {
+        if (this.user != null) {
+            TextView renameText = (TextView) this.findViewById(R.id.userRenameText);
+            renameText.setText(this.user.getName());
+        }
     }
 
     public void onNothingSelected(AdapterView parent) {
-        switch(parent.getId()) {
+        switch (parent.getId()) {
             case R.id.userSpinner:
                 this.user = null;
                 break;
@@ -142,15 +147,14 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            this.currentNfcTag  = NfcHelper.ConvertByteArrayToHexString(tag.getId());
+            this.currentNfcTag = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
-            TextView nfcTextView = (TextView)this.findViewById(R.id.nfcTextView);
+            TextView nfcTextView = (TextView) this.findViewById(R.id.nfcTextView);
             nfcTextView.setText(this.currentNfcTag);
         }
     }
 
-    public void AddNewUserClick(View view)
-    {
+    public void AddNewUserClick(View view) {
         SqlDatabaseHelper db = new SqlDatabaseHelper(this);
         final EditText userEditText = (EditText) findViewById(R.id.userEditText);
         User newUser = new User(userEditText.getText().toString(), "");
@@ -162,9 +166,21 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    public void RenameUserClick(View view) {
+        if (this.user != null) {
+            SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+            final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
+            this.user.setName(userEditText.getText().toString());
+            db.updateUser(this.user);
+            updateUserSpinner();
+
+            String message = String.format("Nutzer %1s wurde umbenannt.", this.user.getName());
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void DeleteUserClick(View view) {
-        if (this.user != null)
-        {
+        if (this.user != null) {
             String name = this.user.getName();
             db.deleteUser(user);
             this.user = null;
@@ -175,8 +191,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         }
     }
 
-    public void UpdateUserClick(View view)
-    {
+    public void UpdateUserClick(View view) {
         if (this.user != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             this.user.SetNfcId(this.currentNfcTag);
@@ -203,18 +218,17 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     Double balance = db.getBalance(this.user);
 
                     String message = String.format(
-                        "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
-                        this.user.getName(),
-                        amount,
-                        balance);
+                            "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
+                            this.user.getName(),
+                            amount,
+                            balance);
                     Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
 
-    public void UpdateRoleClick(View view)
-    {
+    public void UpdateRoleClick(View view) {
         if (this.user != null && this.role != null) {
 
             roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
@@ -222,15 +236,14 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             db.updateUser(this.user);
 
             String message = String.format(
-                "Rolle von %1s wurde auf %2$s geändert.",
-                this.user.getName(),
-                User.ConvertRoleToGuiString(this.role));
+                    "Rolle von %1s wurde auf %2$s geändert.",
+                    this.user.getName(),
+                    User.ConvertRoleToGuiString(this.role));
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
 
-    public void RestoreDatabaseClick(View view)
-    {
+    public void RestoreDatabaseClick(View view) {
         File mPath = DBFileBackupHelper.BackupDirectory();
         FileDialog fileDialog = new FileDialog(this, mPath, null);
         fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
@@ -248,13 +261,12 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         backup.Restore(file);
 
         String message = String.format(
-            "Datenbank wurde aus Datei %1$s wiederhergestellt.",
-            file.getAbsolutePath());
+                "Datenbank wurde aus Datei %1$s wiederhergestellt.",
+                file.getAbsolutePath());
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    public void ExitClick(View view)
-    {
+    public void ExitClick(View view) {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
