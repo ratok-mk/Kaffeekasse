@@ -5,11 +5,15 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +30,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     private List<User> users;
     private List<User.Role> roles;
     private Spinner userSpinner;
+    private Spinner userSpinnerTreasurer;
     private Spinner roleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
     private User user;
@@ -33,6 +38,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
     private boolean isInFocus = false;
     private SqlDatabaseHelper db;
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -50,12 +56,39 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         db = new SqlDatabaseHelper(this);
         updateUserSpinner();
         updateRoleSpinner();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         CheckBackup(backup);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        GridLayout adminLayout = (GridLayout) findViewById(R.id.adminLayout);
+        GridLayout treasurerLayout = (GridLayout) findViewById(R.id.treasurerLayout);
+        switch (item.getItemId()) {
+            case R.id.action_admin:
+                adminLayout.setVisibility(View.VISIBLE);
+                treasurerLayout.setVisibility(View.GONE);
+                updateUserSpinner();
+                break;
+            case R.id.action_treasurer:
+                adminLayout.setVisibility(View.GONE);
+                treasurerLayout.setVisibility(View.VISIBLE);
+                updateUserSpinner();
+                break;
+        }
+        return true;
     }
 
     private void updateRoleSpinner() {
@@ -102,10 +135,11 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                                View view, int pos, long id) {
         switch (parent.getId()) {
             case R.id.userSpinner:
+            case R.id.userSpinnerTreasurer:
                 user = this.users.get(pos);
                 UpdateRenameText();
                 break;
-            case R.id.roleSpinner:
+           case R.id.roleSpinner:
                 role = this.roles.get(pos);
                 break;
         }
@@ -121,6 +155,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     public void onNothingSelected(AdapterView parent) {
         switch (parent.getId()) {
             case R.id.userSpinner:
+            case R.id.userSpinnerTreasurer:
                 this.user = null;
                 break;
         }
@@ -130,6 +165,8 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
         users = db.getAllUsers();
         userSpinner = (Spinner) findViewById(R.id.userSpinner);
+        userSpinnerTreasurer = (Spinner) findViewById(R.id.userSpinnerTreasurer);
+
         List<String> users = new ArrayList<>();
         for (User user : this.users) {
             users.add(user.getName());
@@ -139,6 +176,8 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(spinnerAdapter);
         userSpinner.setOnItemSelectedListener(this);
+        userSpinnerTreasurer.setAdapter(spinnerAdapter);
+        userSpinnerTreasurer.setOnItemSelectedListener(this);
     }
 
     @Override
