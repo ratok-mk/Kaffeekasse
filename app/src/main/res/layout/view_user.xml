@@ -19,11 +19,11 @@
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="0.5">
 
         <TextView
             android:id="@+id/purchaseTextView"
-            style="@android:style/TextAppearance.Medium"
+            style="@style/balance_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
@@ -44,7 +44,8 @@
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            />
+            android:textAllCaps="true"
+            android:textColor="@color/light_grey" />
 
 
         <TextView
@@ -70,7 +71,8 @@
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            />
+            android:textAllCaps="true"
+            android:textColor="@color/light_grey" />
 
     </GridLayout>
 
