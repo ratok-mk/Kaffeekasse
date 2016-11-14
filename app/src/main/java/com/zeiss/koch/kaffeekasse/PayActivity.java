@@ -2,6 +2,8 @@ package com.zeiss.koch.kaffeekasse;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,13 +41,15 @@ public class PayActivity extends AppCompatActivity {
         this.totalPurchase = 0.0;
 
         Intent intent = getIntent();
-        int userId = intent.getIntExtra(MainActivity.EXTRA_MESSAGE_USERID, -1);
-        if (userId != -1) {
-            this.currentUser = db.getUser(userId);
-            updateUsername(this.currentUser);
-            updateBalance(this.currentUser);
-            updatePurchase();
+        final int userId = intent.getIntExtra(MainActivity.EXTRA_MESSAGE_USERID, -1);
+        if (userId == -1) {
+            finish();
         }
+
+        this.currentUser = db.getUser(userId);
+        updateUsername(this.currentUser);
+        updateBalance(this.currentUser, false);
+        updatePurchase(false);
 
         setLogoffTime(this.INITIAL_TIMEOUT_S);
 
@@ -85,7 +89,7 @@ public class PayActivity extends AppCompatActivity {
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
             final float fraction = (logoffTime.getTime() - new java.util.Date().getTime()) / 1000.0f;
-            final String caption = "" + (int)Math.ceil(fraction) + " s";
+            final String caption = "" + (int) Math.ceil(fraction) + " s";
 
             if (fraction <= 0) {
                 automaticExit();
@@ -97,11 +101,10 @@ public class PayActivity extends AppCompatActivity {
             int colorCountDownText;
             int colorCountDownCircle;
 
-            if (WARN_LIMIT_S >= (int)Math.ceil(fraction)) {
+            if (WARN_LIMIT_S >= (int) Math.ceil(fraction)) {
                 colorCountDownCircle = R.color.warning;
                 colorCountDownText = R.color.warning;
-            }
-            else {
+            } else {
                 colorCountDownCircle = R.color.light_grey;
                 colorCountDownText = R.color.text;
             }
@@ -116,7 +119,7 @@ public class PayActivity extends AppCompatActivity {
     }
 
 
-    private void updateBalance(User user) {
+    private void updateBalance(User user, Boolean animate) {
         Double balance = db.getBalance(user);
         TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
 
@@ -126,21 +129,32 @@ public class PayActivity extends AppCompatActivity {
         } else {
             balanceText.setTextAppearance(R.style.balance_plus);
         }
-
         balanceText.setText(formatted);
+
+        if (animate) {
+            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
+            set.setTarget(balanceText);
+            set.start();
+        }
     }
 
-    private void updatePurchase() {
+    private void updatePurchase(Boolean animate) {
         TextView purchaseText = (TextView) findViewById(R.id.purchaseTextView);
         final String formatted = Formater.valueToCurrencyString(this.totalPurchase);
         purchaseText.setText(formatted);
+
+        if (animate) {
+            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
+            set.setTarget(purchaseText);
+            set.start();
+        }
     }
 
     public void pay10Click(View view) {
         payAmount(-0.1);
     }
 
-    public void pay20Click(View view){
+    public void pay20Click(View view) {
         payAmount(-0.2);
     }
 
@@ -153,21 +167,11 @@ public class PayActivity extends AppCompatActivity {
         java.util.Date currentDate = new java.util.Date();
         Payment payment = new Payment(new Date(currentDate.getTime()), currentUser.getId(), amount);
         db.addPayment(payment);
-        updateBalance(currentUser);
+        updateBalance(currentUser, true);
         setLogoffTime(this.RESET_TIMEOUT_S);
 
         this.totalPurchase -= amount;
-        updatePurchase();
-//        showPaymentToast(currentUser, amount);
-//        finish();
-    }
-
-    private void showPaymentToast(User currentUser, double paymentValue) {
-        Double balance = db.getBalance(currentUser);
-        String name = currentUser.getName();
-        String message =
-                String.format("%1s hat %2$.2f€ bezahlt. Neuer Kontostand: %3$.2f€", name, Math.abs(paymentValue), balance);
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        updatePurchase(true);
     }
 
     public void finishClick(View view) {
