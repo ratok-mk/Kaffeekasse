@@ -30,7 +30,7 @@ public class AddUserActivity extends AppCompatActivity {
             User newUser = new User(userEditText.getText().toString(), this.nfcId);
             db.addUser(newUser);
             CharSequence message = String.format("Nutzer %1$s hinzugefügt.", newUser.getName());
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, message, Toast.LENGTH_LONG);
             finish();
         }
     }

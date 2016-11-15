@@ -202,7 +202,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
 
         String message = String.format("Nutzer %1s wurde hinzugefügt.", newUser.getName());
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
     public void RenameUserClick(View view) {
@@ -214,7 +214,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             updateUserSpinner();
 
             String message = String.format("Nutzer %1s wurde umbenannt.", this.user.getName());
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
@@ -226,7 +226,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             updateUserSpinner();
 
             String message = String.format("Nutzer %1s wurde gelöscht.", name);
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
@@ -240,7 +240,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     "NFC ID von %1s wurde auf %2$s geändert.",
                     this.user.getName(),
                     this.currentNfcTag);
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
@@ -261,7 +261,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                             this.user.getName(),
                             amount,
                             balance);
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                    CustomToast.showText(this, message, Toast.LENGTH_LONG);
                 }
             }
         }
@@ -278,7 +278,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     "Rolle von %1s wurde auf %2$s geändert.",
                     this.user.getName(),
                     User.ConvertRoleToGuiString(this.role));
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
@@ -302,7 +302,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         String message = String.format(
                 "Datenbank wurde aus Datei %1$s wiederhergestellt.",
                 file.getAbsolutePath());
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
     public void ExitClick(View view) {

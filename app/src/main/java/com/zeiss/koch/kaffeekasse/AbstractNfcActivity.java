@@ -20,11 +20,11 @@ public abstract class AbstractNfcActivity extends AppCompatActivity{
 
         if (mNfcAdapter == null) {
             // Stop here, we definitely need NFC
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            CustomToast.showText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG);
         }
         else {
             if (!mNfcAdapter.isEnabled()) {
-                Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_LONG).show();
+                CustomToast.showText(this, "NFC is disabled.", Toast.LENGTH_LONG);
             }
         }
     }
@@ -68,7 +68,7 @@ public abstract class AbstractNfcActivity extends AppCompatActivity{
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             byte[] tagId = tag.getId();
-            Toast.makeText(this, "NFC ID found: " + tagId.toString(), Toast.LENGTH_LONG).show();
+            Toast.showText(this, "NFC ID found: " + tagId.toString(), Toast.LENGTH_LONG)
         }
     }*/
 

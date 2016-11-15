@@ -82,7 +82,8 @@ public class PayActivity extends AppCompatActivity {
         }
 
         SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
-        Toast.makeText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG).show();
+        // CustomToast.showText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG);
+        ShowTotalPurchase();
         finish();
     }
 
@@ -176,6 +177,13 @@ public class PayActivity extends AppCompatActivity {
 
     public void finishClick(View view) {
         SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
+        ShowTotalPurchase();
         finish();
+    }
+
+    private void ShowTotalPurchase() {
+        String text =
+            String.format("Einkauf von %1$s: %2$.2f€", this.currentUser.getName(), this.totalPurchase);
+        CustomToast.showText(this, text, Toast.LENGTH_LONG);
     }
 }

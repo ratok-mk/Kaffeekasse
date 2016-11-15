@@ -41,7 +41,7 @@ public class LoginActivity extends AbstractNfcActivity {
                 Intent newIntent = new Intent(this, SettingsActivity.class);
                 startActivity(newIntent);
             } else {
-                Toast.makeText(this, "Could not find admin with NFC ID: " + userTagId, Toast.LENGTH_LONG).show();
+                CustomToast.showText(this, "Could not find admin with NFC ID: " + userTagId, Toast.LENGTH_LONG);
             }
         }
     }
