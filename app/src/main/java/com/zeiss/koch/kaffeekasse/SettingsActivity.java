@@ -233,7 +233,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     public void UpdateUserClick(View view) {
         if (this.user != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-            this.user.SetNfcId(this.currentNfcTag);
+            this.user.setNfcId(this.currentNfcTag);
             db.updateUser(this.user);
 
             String message = String.format(

@@ -18,7 +18,7 @@ import java.util.List;
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
     private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
@@ -39,20 +39,20 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // create books table
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_PAYMENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed
-        /*db.execSQL("DROP TABLE IF EXISTS accounts");
-        db.execSQL("DROP TABLE IF EXISTS users");
-        db.execSQL("DROP TABLE IF EXISTS payments");*/
-
-        // create fresh table
-        this.onCreate(db);
+        // upgrade
+        if (newVersion > oldVersion) {
+            // update to v6: drop treasurer role
+            if (oldVersion < 6) {
+                db.execSQL("UPDATE users SET role = 'admin' WHERE role = 'treasurer'");
+            }
+            // add more statements here on subsequent upgrades
+        }
     }
 
     public String getDatabaseName()
