@@ -77,12 +77,12 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         GridLayout adminLayout = (GridLayout) findViewById(R.id.adminLayout);
         GridLayout treasurerLayout = (GridLayout) findViewById(R.id.treasurerLayout);
         switch (item.getItemId()) {
-            case R.id.action_admin:
+            case R.id.action_user:
                 adminLayout.setVisibility(View.VISIBLE);
                 treasurerLayout.setVisibility(View.GONE);
                 updateUserSpinner();
                 break;
-            case R.id.action_treasurer:
+            case R.id.action_account:
                 adminLayout.setVisibility(View.GONE);
                 treasurerLayout.setVisibility(View.VISIBLE);
                 updateUserSpinner();

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_admin"
+        android:id="@+id/action_user"
         android:orderInCategory="100"
-        android:title="Administrator Settings"/>
+        android:title="Nutzerverwaltung"/>
     <item
-        android:id="@+id/action_treasurer"
+        android:id="@+id/action_account"
         android:orderInCategory="101"
-        android:title="Treasurer Settings"/>
+        android:title="Kontoverwaltung"/>
 </menu>
