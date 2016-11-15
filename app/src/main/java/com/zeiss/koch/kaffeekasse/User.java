@@ -1,9 +1,5 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.text.Editable;
-
-import java.util.Comparator;
-
 /**
  * User
  * Created by koch on 01.10.2016.
@@ -11,24 +7,30 @@ import java.util.Comparator;
 
 class User {
 
+    public enum Role
+    {
+        USER,
+        ADMIN
+    }
+
     private int id;
-    private Role role;
     private String name;
     private String nfcid;
+    private Role role;
 
     public User(String name, String nfcid) {
         super();
-        this.role = Role.user;
         this.name = name;
         this.nfcid = nfcid;
+        this.role = Role.USER;
     }
 
     public User(int id, String name, String nfcid, String role) {
         super();
-        this.role = Role.valueOf(role);
         this.id = id;
         this.name = name;
         this.nfcid = nfcid;
+        this.role = ConvertDatabaseStringToRole(role);
     }
 
     //getters & setters
@@ -36,6 +38,10 @@ class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", role=" + role + ", name=" + name + ", nfcid=" + nfcid + "]";
+    }
+
+    public int getId() {
+        return id;
     }
 
     String getName() {
@@ -46,12 +52,16 @@ class User {
         return nfcid;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public String getRole() {
         return ConvertRoleToDatabaseString(role);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNfcId(String nfcId) {
+        this.nfcid = nfcId;
     }
 
     public void setRole(Role role)
@@ -59,41 +69,33 @@ class User {
         this.role = role;
     }
 
-    public void SetNfcId(String nfcId) {
-        this.nfcid = nfcId;
-    }
-
     public boolean isAdmin() {
-        if (this.role == Role.admin || this.role == Role.treasurer)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public enum Role
-    {
-        user,
-        admin,
-        treasurer
+        return (this.role == Role.ADMIN);
     }
 
     private static String ConvertRoleToDatabaseString(Role role)
     {
         switch(role)
         {
-            case user:
+            case USER:
                 return "user";
-            case admin:
+            case ADMIN:
                 return "admin";
-            case treasurer:
-                return "treasurer";
             default:
                 throw new IndexOutOfBoundsException("Role is unknown.");
+        }
+    }
+
+    private static Role ConvertDatabaseStringToRole(String dbString)
+    {
+        switch(dbString)
+        {
+            case "user":
+                return Role.USER;
+            case "admin":
+                return Role.ADMIN;
+            default:
+                throw new IndexOutOfBoundsException("Database role is unknown.");
         }
     }
 
@@ -101,16 +103,12 @@ class User {
     {
         switch(role)
         {
-            case user:
+            case USER:
                 return "User";
-            case admin:
+            case ADMIN:
                 return "Admin";
-            case treasurer:
-                return "Treasurer";
             default:
                 throw new IndexOutOfBoundsException("Role is unknown.");
         }
     }
-
-
 }

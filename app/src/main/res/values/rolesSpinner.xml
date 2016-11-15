@@ -3,6 +3,5 @@
     <string-array name="user_roles">
         <item>user</item>
         <item>admin</item>
-        <item>treasurer</item>
     </string-array>
 </resources>
