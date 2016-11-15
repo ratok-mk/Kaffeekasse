@@ -4,142 +4,146 @@
     android:id="@+id/gridLayoutSettings"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:useDefaultMargins="true"
-    android:layout_alignParentTop="true"
     android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
     android:layout_weight="0.6"
+    android:useDefaultMargins="true"
     tools:showIn="@layout/activity_settings">
 
     <EditText
         android:id="@+id/userEditText"
-        android:layout_width="wrap_content"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="200dp"
         android:layout_column="0"
         android:layout_row="0"
         android:ems="10"
+        android:hint="Vorname Nachname"
         android:inputType="textPersonName"
-        style="@android:style/TextAppearance.Medium"
-        android:hint="Vorname Nachname" />
+        android:maxLength="30"
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/AddUserButton"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_column="1"
         android:layout_row="0"
         android:onClick="AddNewUserClick"
-        android:text="Nutzer hinzufügen"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content" />
+        android:text="Nutzer hinzufügen" />
 
 
     <Spinner
         android:id="@+id/userSpinner"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:minWidth="150dp"
         android:layout_column="2"
+        android:layout_gravity="center_vertical"
         android:layout_row="0"
-        android:layout_gravity="center_vertical" />
+        android:minWidth="150dp" />
 
     <Button
         android:id="@+id/DeleteUserButton"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
         android:layout_row="0"
         android:onClick="DeleteUserClick"
-        android:text="Nutzer löschen"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content" />
+        android:text="Nutzer löschen" />
 
     <EditText
         android:id="@+id/userRenameText"
-        android:layout_width="wrap_content"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="200dp"
         android:layout_column="2"
         android:layout_row="1"
         android:ems="10"
+        android:hint="Vorname Nachname"
         android:inputType="textPersonName"
-        style="@android:style/TextAppearance.Medium"
-        android:hint="Vorname Nachname" />
+        android:maxLength="30"
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/RenameUserButton"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
         android:layout_row="1"
         android:onClick="RenameUserClick"
-        android:text="Nutzer umbenennen"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content" />
+        android:text="Nutzer umbenennen" />
 
 
     <TextView
         android:id="@+id/nfcTextView"
+        style="@android:style/TextAppearance.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="2"
         android:layout_row="2"
-        android:text="NFC"
-        style="@android:style/TextAppearance.Medium" />
+        android:text="NFC" />
 
     <Button
         android:id="@+id/updateUserButton"
+        style="@android:style/TextAppearance.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
         android:layout_row="2"
         android:onClick="UpdateUserClick"
-        android:text="Nutzer aktualisieren"
-        style="@android:style/TextAppearance.Medium" />
+        android:text="Nutzer aktualisieren" />
 
     <Spinner
+        android:id="@+id/roleSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="150dp"
         android:layout_column="2"
+        android:layout_gravity="center_vertical"
         android:layout_row="3"
-        android:id="@+id/roleSpinner"
-        android:layout_gravity="center_vertical" />
+        android:minWidth="150dp" />
 
     <Button
         android:id="@+id/updateRoleButton"
+        style="@android:style/TextAppearance.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="3"
         android:layout_row="3"
         android:onClick="UpdateRoleClick"
-        android:text="Rolle ändern"
-        style="@android:style/TextAppearance.Medium" />
+        android:text="Rolle ändern" />
 
     <Button
-        android:text="Datenbank wiederherstellen"
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:layout_column="0"
         android:layout_columnSpan="2"
-        android:layout_row="2"
         android:layout_gravity="end"
-        android:id="@+id/button"
-        android:onClick="RestoreDatabaseClick" />
+        android:layout_row="2"
+        android:onClick="RestoreDatabaseClick"
+        android:text="Datenbank wiederherstellen" />
 
     <CheckBox
-        android:text="Backup"
+        android:id="@+id/backupCheckBox"
+        style="@android:style/TextAppearance.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/backupCheckBox"
         android:layout_column="0"
         android:layout_row="4"
-        style="@android:style/TextAppearance.Large"
+        android:checked="false"
         android:clickable="false"
         android:focusable="false"
-        android:checked="false" />
+        android:text="Backup" />
 
     <TextView
-        android:text="Date: "
+        android:id="@+id/dateTextView"
+        style="@android:style/TextAppearance.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dateTextView"
         android:layout_column="1"
         android:layout_row="4"
-        style="@android:style/TextAppearance.Large" />
+        android:text="Date: " />
 
 
 </GridLayout>

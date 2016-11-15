@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:background="@color/background_grey">
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userListName"
-    style="@android:style/TextAppearance.Large"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:layout_weight="9"
-    android:padding="16dp"
-    android:gravity="center_vertical|start"
-    android:background="@color/background_grey" />
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userListInfo"
-    style="@android:style/TextAppearance.Large"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:layout_weight="1"
     android:background="@color/background_grey"
-    android:gravity="center_vertical|end"
-    android:padding="16dp" />
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/userListName"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="9"
+        android:background="@color/background_grey"
+        android:gravity="center_vertical|start"
+        android:maxWidth="200dp"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:padding="16dp" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/userListInfo"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:background="@color/background_grey"
+        android:gravity="center_vertical|end"
+        android:maxWidth="100dp"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:padding="16dp" />
 </LinearLayout>
