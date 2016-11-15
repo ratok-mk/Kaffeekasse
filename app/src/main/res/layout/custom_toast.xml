@@ -10,12 +10,12 @@
     >
     <ImageView
         android:id="@+id/image"
-        android:src="@drawable/ic_cookie"
+        android:src="@android:drawable/ic_dialog_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
-        />
+        android:scaleType="fitXY" />
     <TextView android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
