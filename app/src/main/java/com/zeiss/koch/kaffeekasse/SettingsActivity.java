@@ -1,5 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -136,10 +138,11 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         switch (parent.getId()) {
             case R.id.userSpinner:
             case R.id.userSpinnerTreasurer:
-                user = this.users.get(pos);
+                this.user = this.users.get(pos);
                 UpdateRenameText();
+                updateBalance(this.user);
                 break;
-           case R.id.roleSpinner:
+            case R.id.roleSpinner:
                 role = this.roles.get(pos);
                 break;
         }
@@ -262,6 +265,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                             amount,
                             balance);
                     CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                    updateBalance(this.user);
                 }
             }
         }
@@ -280,6 +284,19 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
                     User.ConvertRoleToGuiString(this.role));
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
+    }
+
+    private void updateBalance(User user) {
+        Double balance = db.getBalance(user);
+        TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
+
+        final String formatted = Formater.valueToCurrencyString(balance);
+        if (balance < 0.0) {
+            balanceText.setTextAppearance(R.style.balance_minus);
+        } else {
+            balanceText.setTextAppearance(R.style.balance_plus);
+        }
+        balanceText.setText(formatted);
     }
 
     public void RestoreDatabaseClick(View view) {
