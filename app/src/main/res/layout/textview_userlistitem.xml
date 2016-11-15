@@ -15,8 +15,9 @@
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:layout_weight="9"
-    android:gravity="center"
-    android:background="#444444" />
+    android:padding="16dp"
+    android:gravity="center_vertical|start"
+    android:background="@color/background_grey" />
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/userListInfo"
@@ -25,7 +26,7 @@
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:background="#444444"
-    android:textAlignment="textEnd"
+    android:background="@color/background_grey"
+    android:gravity="center_vertical|end"
     android:padding="16dp" />
 </LinearLayout>
