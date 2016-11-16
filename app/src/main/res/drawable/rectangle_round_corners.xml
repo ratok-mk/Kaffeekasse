@@ -4,15 +4,9 @@
     <solid android:color="@color/toast_grey" />
 
     <stroke
-        android:width="4dp"
+        android:width="3dp"
         android:color="@color/stroke" />
 
-    <padding
-        android:bottom="10dp"
-        android:left="10dp"
-        android:right="10dp"
-        android:top="10dp" />
-
-    <corners android:radius="10dp" />
+    <corners android:radius="3dp" />
 
 </shape>

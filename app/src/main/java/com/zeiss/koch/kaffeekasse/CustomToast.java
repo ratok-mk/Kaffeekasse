@@ -6,10 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by ogmkoch on 15.11.2016.
- */
-
 public class CustomToast {
     public static void showText(android.content.Context context, java.lang.CharSequence text, int duration) {
         LayoutInflater inflater = LayoutInflater.from(context);

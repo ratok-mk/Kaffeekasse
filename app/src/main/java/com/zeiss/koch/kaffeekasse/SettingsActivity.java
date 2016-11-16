@@ -1,7 +1,5 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
