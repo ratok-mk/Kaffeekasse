@@ -1,10 +1,8 @@
 package com.zeiss.koch.kaffeekasse;
 
-import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +11,7 @@ import android.widget.Toast;
  */
 
 public class CustomToast {
-    public static void showText(android.content.Context context, java.lang.CharSequence text, int duration)
-    {
+    public static void showText(android.content.Context context, java.lang.CharSequence text, int duration) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.custom_toast, null);
 
@@ -23,7 +20,7 @@ public class CustomToast {
         toastText.setText(text);
 
         Toast toast = new Toast(context.getApplicationContext());
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 10);
         toast.setDuration(duration);
         toast.setView(layout);
         toast.show();
