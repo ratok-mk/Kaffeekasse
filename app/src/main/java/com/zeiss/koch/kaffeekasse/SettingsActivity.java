@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,17 +23,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener {
+public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
 
     private String currentNfcTag;
+    private ListView userListView;
+    private ArrayAdapter userListAdapter;
     private List<User> users;
     private List<User.Role> roles;
-    private Spinner userSpinner;
-    private Spinner userSpinnerTreasurer;
     private Spinner roleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
-    private User user;
+    private User currentUser;
     private User.Role role;
 
     private boolean isInFocus = false;
@@ -57,8 +57,10 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        userListView = (ListView) findViewById(R.id.userListView);
+
         db = new SqlDatabaseHelper(this);
-        updateUserSpinner();
+        updateUserList();
         updateRoleSpinner();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
@@ -80,12 +82,12 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             case R.id.action_user:
                 adminLayout.setVisibility(View.VISIBLE);
                 treasurerLayout.setVisibility(View.GONE);
-                updateUserSpinner();
+                updateUserList();
                 break;
             case R.id.action_account:
                 adminLayout.setVisibility(View.GONE);
                 treasurerLayout.setVisibility(View.VISIBLE);
-                updateUserSpinner();
+                updateUserList();
                 break;
         }
         return true;
@@ -108,15 +110,15 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
 
     private void CheckBackup(DBFileBackupHelper backup) {
-        if (!backup.BackupIsUpToDate()) {
-            backup.Backup();
-        }
-
-        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
-        backupCheckBox.setChecked(backup.BackupIsUpToDate());
-
-        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
-        backupTextView.setText(backup.LastBackupDate());
+//        if (!backup.BackupIsUpToDate()) {
+//            backup.Backup();
+//        }
+//
+//        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
+//        backupCheckBox.setChecked(backup.BackupIsUpToDate());
+//
+//        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
+//        backupTextView.setText(backup.LastBackupDate());
     }
 
 //    private void showPayments() {
@@ -134,51 +136,74 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     public void onItemSelected(AdapterView<?> parent,
                                View view, int pos, long id) {
         switch (parent.getId()) {
-            case R.id.userSpinner:
-            case R.id.userSpinnerTreasurer:
-                this.user = this.users.get(pos);
-                UpdateRenameText();
-                updateBalance(this.user);
-                break;
             case R.id.roleSpinner:
-                role = this.roles.get(pos);
+                this.role = this.roles.get(pos);
                 break;
         }
     }
 
-    private void UpdateRenameText() {
-        if (this.user != null) {
-            TextView renameText = (TextView) this.findViewById(R.id.userRenameText);
-            renameText.setText(this.user.getName());
+    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+        switch (parent.getId()) {
+            case R.id.userListView:
+                this.currentUser = this.users.get(pos);
+                updateView();
+                break;
+        }
+    }
+
+    private void updateView() {
+        if (this.currentUser != null) {
+            // update user name
+            TextView renameText = (TextView) findViewById(R.id.userRenameText);
+            renameText.setText(this.currentUser.getName());
+
+            // TODO: update role
+
+            // TODO: update NFC id
+
+            // update balance
+            Double balance = db.getBalance(this.currentUser);
+            TextView balanceText = (TextView) findViewById(R.id.textBalance);
+
+            final String formatted = Formater.valueToCurrencyString(balance);
+            if (balance < 0.0) {
+                balanceText.setTextAppearance(R.style.balance_minus);
+            } else {
+                balanceText.setTextAppearance(R.style.balance_plus);
+            }
+            balanceText.setText(formatted);
         }
     }
 
     public void onNothingSelected(AdapterView parent) {
         switch (parent.getId()) {
-            case R.id.userSpinner:
             case R.id.userSpinnerTreasurer:
-                this.user = null;
+                this.currentUser = null;
                 break;
         }
     }
 
-    private void updateUserSpinner() {
-
+    private void updateUserList() {
         users = db.getAllUsers();
-        userSpinner = (Spinner) findViewById(R.id.userSpinner);
-        userSpinnerTreasurer = (Spinner) findViewById(R.id.userSpinnerTreasurer);
-
-        List<String> users = new ArrayList<>();
+        List<String> userList = new ArrayList<>();
         for (User user : this.users) {
-            users.add(user.getName());
+            userList.add(user.getName());
         }
-        spinnerAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, users);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userSpinner.setAdapter(spinnerAdapter);
-        userSpinner.setOnItemSelectedListener(this);
-        userSpinnerTreasurer.setAdapter(spinnerAdapter);
-        userSpinnerTreasurer.setOnItemSelectedListener(this);
+        userListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, userList);
+        userListView.setAdapter(userListAdapter);
+        userListView.setOnItemClickListener(this);
+
+        // select current user
+        // TODO: item needs to be selected, the following does not work :(
+        if (this.currentUser != null) {
+            final String userName = this.currentUser.getName();
+            for (int i = 0; i < userListAdapter.getCount(); i++) {
+                if (userName.equals(userListAdapter.getItem(i).toString())) {
+                    userListView.setItemChecked(i, true);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -195,36 +220,36 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     }
 
     public void AddNewUserClick(View view) {
-        SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-        final EditText userEditText = (EditText) findViewById(R.id.userEditText);
-        User newUser = new User(userEditText.getText().toString(), "");
-        db.addUser(newUser);
-        updateUserSpinner();
-
-
-        String message = String.format("Nutzer %1s wurde hinzugefügt.", newUser.getName());
-        CustomToast.showText(this, message, Toast.LENGTH_LONG);
+//        SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+//        final EditText userEditText = (EditText) findViewById(R.id.userEditText);
+//        User newUser = new User(userEditText.getText().toString(), "");
+//        db.addUser(newUser);
+//        updateUserSpinner();
+//
+//
+//        String message = String.format("Nutzer %1s wurde hinzugefügt.", newUser.getName());
+//        CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
     public void RenameUserClick(View view) {
-        if (this.user != null) {
+        if (this.currentUser != null) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
-            this.user.setName(userEditText.getText().toString());
-            db.updateUser(this.user);
-            updateUserSpinner();
+            this.currentUser.setName(userEditText.getText().toString());
+            db.updateUser(this.currentUser);
+            updateUserList();
 
-            String message = String.format("Nutzer %1s wurde umbenannt.", this.user.getName());
+            String message = String.format("Nutzer %1s wurde umbenannt.", this.currentUser.getName());
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
     public void DeleteUserClick(View view) {
-        if (this.user != null) {
-            String name = this.user.getName();
-            db.deleteUser(user);
-            this.user = null;
-            updateUserSpinner();
+        if (this.currentUser != null) {
+            String name = this.currentUser.getName();
+            db.deleteUser(currentUser);
+            this.currentUser = null;
+            updateUserList();
 
             String message = String.format("Nutzer %1s wurde gelöscht.", name);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
@@ -232,69 +257,56 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     }
 
     public void UpdateUserClick(View view) {
-        if (this.user != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
+        if (this.currentUser != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-            this.user.setNfcId(this.currentNfcTag);
-            db.updateUser(this.user);
+            this.currentUser.setNfcId(this.currentNfcTag);
+            db.updateUser(this.currentUser);
 
             String message = String.format(
                     "NFC ID von %1s wurde auf %2$s geändert.",
-                    this.user.getName(),
+                    this.currentUser.getName(),
                     this.currentNfcTag);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
 
     public void UpdateAccountClick(View view) {
-        if (this.user != null) {
+        if (this.currentUser != null) {
             final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
             String valueText = amountEditText.getText().toString();
             if (!valueText.isEmpty()) {
                 Double amount = Double.parseDouble(valueText);
                 if (amount != null) {
                     SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-                    Payment payment = new Payment(new Date(), this.user.getId(), amount);
+                    Payment payment = new Payment(new Date(), this.currentUser.getId(), amount);
                     db.addPayment(payment);
-                    Double balance = db.getBalance(this.user);
+                    Double balance = db.getBalance(this.currentUser);
 
                     String message = String.format(
                             "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
-                            this.user.getName(),
+                            this.currentUser.getName(),
                             amount,
                             balance);
                     CustomToast.showText(this, message, Toast.LENGTH_LONG);
-                    updateBalance(this.user);
+                    updateView();
                 }
             }
         }
     }
 
     public void UpdateRoleClick(View view) {
-        if (this.user != null && this.role != null) {
+        if (this.currentUser != null && this.role != null) {
 
             roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
-            this.user.setRole(this.role);
-            db.updateUser(this.user);
+            this.currentUser.setRole(this.role);
+            db.updateUser(this.currentUser);
 
             String message = String.format(
                     "Rolle von %1s wurde auf %2$s geändert.",
-                    this.user.getName(),
+                    this.currentUser.getName(),
                     User.ConvertRoleToGuiString(this.role));
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
-    }
-
-    private void updateBalance(User user) {
-        Double balance = db.getBalance(user);
-        TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
-
-        final String formatted = Formater.valueToCurrencyString(balance);
-        if (balance < 0.0) {
-            balanceText.setTextAppearance(R.style.balance_minus);
-        } else {
-            balanceText.setTextAppearance(R.style.balance_plus);
-        }
-        balanceText.setText(formatted);
     }
 
     public void RestoreDatabaseClick(View view) {
