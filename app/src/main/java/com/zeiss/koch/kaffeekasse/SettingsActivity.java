@@ -159,7 +159,9 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
 
             // TODO: update role
 
-            // TODO: update NFC id
+            TextView nfcValue = (TextView) findViewById(R.id.textNfcValue);
+            final String nfcId = this.currentUser.getNfcId();
+            nfcValue.setText(nfcId.isEmpty() ? getString(R.string.nfc_unset) : nfcId);
 
             // update balance
             Double balance = db.getBalance(this.currentUser);
@@ -214,7 +216,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             this.currentNfcTag = NfcHelper.ConvertByteArrayToHexString(tag.getId());
 
-            TextView nfcTextView = (TextView) this.findViewById(R.id.nfcTextView);
+            TextView nfcTextView = (TextView) this.findViewById(R.id.textNfcValue);
             nfcTextView.setText(this.currentNfcTag);
         }
     }
