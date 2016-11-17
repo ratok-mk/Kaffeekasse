@@ -34,7 +34,7 @@ public class LoginActivity extends AbstractNfcActivity {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
+            String userTagId = NfcHelper.getId(tag);
 
             User user = db.getUserByNfcId(userTagId);
             if (user != null && user.isAdmin()) {

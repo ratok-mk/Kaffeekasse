@@ -89,7 +89,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            String userTagId = NfcHelper.ConvertByteArrayToHexString(tag.getId());
+            String userTagId = NfcHelper.getId(tag);
 
             this.drawerLayout.closeDrawers();
             SoundManager.getInstance().play(this, SoundManager.SoundType.NFC);

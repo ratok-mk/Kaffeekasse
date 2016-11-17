@@ -18,8 +18,11 @@ class User {
     private String nfcid;
     private Role role;
 
+    private static final int UNPERSISTED = -1;
+
     public User(String name, String nfcid) {
         super();
+        this.id = UNPERSISTED;
         this.name = name;
         this.nfcid = nfcid;
         this.role = Role.USER;
@@ -71,6 +74,10 @@ class User {
 
     public boolean isAdmin() {
         return (this.role == Role.ADMIN);
+    }
+
+    public boolean isPersisted() {
+        return this.id != UNPERSISTED;
     }
 
     private static String ConvertRoleToDatabaseString(Role role)

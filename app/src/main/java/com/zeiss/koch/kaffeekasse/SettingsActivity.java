@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SettingsActivity extends AbstractNfcActivity implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
-
+public class SettingsActivity extends AbstractNfcActivity
+        implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
     private String currentNfcTag;
     private ListView userListView;
@@ -202,6 +202,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             for (int i = 0; i < userListAdapter.getCount(); i++) {
                 if (userName.equals(userListAdapter.getItem(i).toString())) {
                     userListView.setItemChecked(i, true);
+                    userListView.setSelection(i);
                     break;
                 }
             }
@@ -214,7 +215,7 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            this.currentNfcTag = NfcHelper.ConvertByteArrayToHexString(tag.getId());
+            this.currentNfcTag = NfcHelper.getId(tag);
 
             TextView nfcTextView = (TextView) this.findViewById(R.id.textNfcValue);
             nfcTextView.setText(this.currentNfcTag);
@@ -222,15 +223,11 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
     }
 
     public void AddNewUserClick(View view) {
-//        SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-//        final EditText userEditText = (EditText) findViewById(R.id.userEditText);
-//        User newUser = new User(userEditText.getText().toString(), "");
-//        db.addUser(newUser);
-//        updateUserSpinner();
-//
-//
-//        String message = String.format("Nutzer %1s wurde hinzugefügt.", newUser.getName());
-//        CustomToast.showText(this, message, Toast.LENGTH_LONG);
+
+        this.currentUser = new User("", "");
+        // TODO: currently selected item needs to be unselected, the following does not work :(
+        userListView.clearChoices();
+        updateView();
     }
 
     public void RenameUserClick(View view) {
@@ -238,11 +235,21 @@ public class SettingsActivity extends AbstractNfcActivity implements AdapterView
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
             this.currentUser.setName(userEditText.getText().toString());
-            db.updateUser(this.currentUser);
-            updateUserList();
+            String stringFormat;
+            // check if user exists: rename only
+            if (this.currentUser.isPersisted()) {
+                db.updateUser(this.currentUser);
+                stringFormat = "Nutzer %1s wurde umbenannt.";
+            }
+            // new user: store in db
+            else {
+                db.addUser(this.currentUser);
+                stringFormat = "Nutzer %1s wurde hinzugefügt.";
+            }
 
-            String message = String.format("Nutzer %1s wurde umbenannt.", this.currentUser.getName());
+            final String message = String.format(stringFormat, this.currentUser.getName());
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
+            updateUserList();
         }
     }
 

@@ -12,7 +12,7 @@
         android:layout_weight="0.6"
         android:id="@+id/userListView"
         android:choiceMode="singleChoice"
-        android:listSelector="@color/light_grey"/>
+        android:listSelector="@color/dark_grey"/>
 
     <TableLayout
         android:layout_width="match_parent"
