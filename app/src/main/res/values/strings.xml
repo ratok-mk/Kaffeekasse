@@ -12,4 +12,6 @@
     <string name="automatic_logoff_in">Automatische Abmeldung in</string>
     <string name="back">Zurück</string>
     <string name="nfc_unset">&lt;nicht gesetzt&gt;</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

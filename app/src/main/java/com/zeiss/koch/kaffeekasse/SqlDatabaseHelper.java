@@ -154,6 +154,36 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
+    public User getUserByName(String name) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor =
+                db.query(TABLE_USERS, // a. table
+                        COLUMNS_USERS, // b. column names
+                        " name = ?", // c. selections
+                        new String[]{name}, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        User user = null;
+        if (cursor != null && cursor.moveToFirst() == true) {
+            user = new User(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3));
+
+            Log.d("getUserByName(" + name + ")", user.toString());
+        }
+
+        cursor.close();
+
+        return user;
+    }
+
     // Get All Users
     public List<User> getAllUsers() {
         List<User> users = new LinkedList<>();

@@ -1,5 +1,7 @@
 package com.zeiss.koch.kaffeekasse;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -205,7 +207,7 @@ public class SettingsActivity extends AbstractNfcActivity
             final String userName = this.currentUser.getName();
             for (int i = 0; i < userListAdapter.getCount(); i++) {
                 if (userName.equals(userListAdapter.getItem(i).toString())) {
-                    userListView.setItemChecked(i, true);
+                    userListView.performItemClick(userListView, i, 0);
                     break;
                 }
             }
@@ -246,44 +248,59 @@ public class SettingsActivity extends AbstractNfcActivity
         if (this.currentUser != null) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
-            this.currentUser.setName(userEditText.getText().toString());
+            final String name = userEditText.getText().toString();
+            this.currentUser.setName(name);
             String stringFormat;
             // check empty string
             if (this.currentUser.getName().isEmpty()) {
                 stringFormat = "Nutzername darf nicht leer sein.";
             }
-            // TODO: check existing username
-            else if (false) {
+            else if (db.getUserByName(name) != null) {
+                stringFormat = "Nutzername exisitert bereits.";
             }
             // check if user exists: rename only
             else if (this.currentUser.isPersisted()) {
                 db.updateUser(this.currentUser);
+                updateUserList();
                 stringFormat = "Nutzer %1s wurde umbenannt.";
             }
             // new user: store in db
             else {
                 db.addUser(this.currentUser);
+                updateUserList();
                 stringFormat = "Nutzer %1s wurde hinzugefügt.";
             }
 
-            final String message = String.format(stringFormat, this.currentUser.getName());
+            final String message = String.format(stringFormat, name);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
-            updateUserList();
         }
     }
 
     public void DeleteUserClick(View view) {
         if (this.currentUser != null) {
-            // TODO: show confirmation dialog
             String name = this.currentUser.getName();
-            db.deleteUser(currentUser);
-            this.currentUser = null;
-            updateUserList();
-            selectFirstListItem();
-
-            String message = String.format("Nutzer %1s wurde gelöscht.", name);
-            CustomToast.showText(this, message, Toast.LENGTH_LONG);
+            new AlertDialog.Builder(this)
+                    .setTitle("Nutzer löschen")
+                    .setMessage(String.format("Soll %1s wirklich gelöscht werden?", name))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            SettingsActivity.this.deleteUser();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null).show();
         }
+    }
+
+    private void deleteUser() {
+        db.deleteUser(currentUser);
+        SettingsActivity.this.currentUser = null;
+        updateUserList();
+        selectFirstListItem();
+
+        String name = this.currentUser.getName();
+        String message = String.format("Nutzer %1s wurde gelöscht.", name);
+        CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
     public void UpdateUserClick(View view) {
