@@ -11,10 +11,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,6 +30,8 @@ public class SettingsActivity extends AbstractNfcActivity
         implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
     private String currentNfcTag;
+    ViewGroup userCreditLayout;
+    ViewGroup userDetailsLayout;
     private ListView userListView;
     private ArrayAdapter userListAdapter;
     private List<User> users;
@@ -42,6 +44,7 @@ public class SettingsActivity extends AbstractNfcActivity
     private boolean isInFocus = false;
     private SqlDatabaseHelper db;
 
+    private Double chargeAmount;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -60,10 +63,13 @@ public class SettingsActivity extends AbstractNfcActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        userCreditLayout = (ViewGroup) findViewById(R.id.userCreditLayout);
+        userDetailsLayout = (ViewGroup) findViewById(R.id.userDetailsLayout);
         userListView = (ListView) findViewById(R.id.userListView);
 
         db = new SqlDatabaseHelper(this);
         updateUserList();
+        setupChargeCreditView();
         selectFirstListItem();
         updateRoleSpinner();
 
@@ -80,18 +86,17 @@ public class SettingsActivity extends AbstractNfcActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        GridLayout adminLayout = (GridLayout) findViewById(R.id.adminLayout);
-        GridLayout treasurerLayout = (GridLayout) findViewById(R.id.treasurerLayout);
+        ViewGroup userManagementLayout = (ViewGroup) findViewById(R.id.userManagementLayout);
+//        ViewGroup userFinanceLayout = (ViewGroup) findViewById(R.id.userFinanceLayout);
         switch (item.getItemId()) {
             case R.id.action_user:
-                adminLayout.setVisibility(View.VISIBLE);
-                treasurerLayout.setVisibility(View.GONE);
+                userManagementLayout.setVisibility(View.VISIBLE);
+//                userFinanceLayout.setVisibility(View.GONE);
                 updateUserList();
                 break;
             case R.id.action_account:
-                adminLayout.setVisibility(View.GONE);
-                treasurerLayout.setVisibility(View.VISIBLE);
-                updateUserList();
+                userManagementLayout.setVisibility(View.GONE);
+//                userFinanceLayout.setVisibility(View.VISIBLE);
                 break;
         }
         return true;
@@ -149,13 +154,14 @@ public class SettingsActivity extends AbstractNfcActivity
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
         switch (parent.getId()) {
             case R.id.userListView:
+                showUserDetailsView();
                 this.currentUser = this.users.get(pos);
-                updateView();
+                setCurrentUserToView();
                 break;
         }
     }
 
-    private void updateView() {
+    private void setCurrentUserToView() {
         if (this.currentUser != null) {
             // update user name
             TextView renameText = (TextView) findViewById(R.id.userRenameText);
@@ -183,8 +189,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void onNothingSelected(AdapterView parent) {
         switch (parent.getId()) {
-            case R.id.userSpinnerTreasurer:
-                this.currentUser = null;
+            case R.id.roleSpinner:
                 break;
         }
     }
@@ -232,19 +237,20 @@ public class SettingsActivity extends AbstractNfcActivity
             if (userListView.getCount() > 0) {
                 userListView.performItemClick(userListView, 0, 0);
             } else {
-                AddNewUserClick(null);
+                newUserClick(null);
             }
         }
     }
 
-    public void AddNewUserClick(View view) {
+    public void newUserClick(View view) {
 
         this.currentUser = new User("", "");
+        // TODO: remove selection, method below does not work :(
         userListView.clearChoices();
-        updateView();
+        setCurrentUserToView();
     }
 
-    public void RenameUserClick(View view) {
+    public void renameUserClick(View view) {
         if (this.currentUser != null) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
@@ -276,7 +282,7 @@ public class SettingsActivity extends AbstractNfcActivity
         }
     }
 
-    public void DeleteUserClick(View view) {
+    public void deleteUserClick(View view) {
         if (this.currentUser != null) {
             String name = this.currentUser.getName();
             new AlertDialog.Builder(this)
@@ -293,17 +299,17 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     private void deleteUser() {
-        db.deleteUser(currentUser);
-        SettingsActivity.this.currentUser = null;
+        String name = this.currentUser.getName();
+        db.deleteUser(this.currentUser);
+        this.currentUser = null;
         updateUserList();
         selectFirstListItem();
 
-        String name = this.currentUser.getName();
         String message = String.format("Nutzer %1s wurde gelöscht.", name);
         CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
-    public void UpdateUserClick(View view) {
+    public void updateNfcClick(View view) {
         if (this.currentUser != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
             SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             this.currentUser.setNfcId(this.currentNfcTag);
@@ -317,31 +323,41 @@ public class SettingsActivity extends AbstractNfcActivity
         }
     }
 
-    public void UpdateAccountClick(View view) {
-        if (this.currentUser != null) {
-            final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
-            String valueText = amountEditText.getText().toString();
-            if (!valueText.isEmpty()) {
-                Double amount = Double.parseDouble(valueText);
-                if (amount != null) {
-                    SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-                    Payment payment = new Payment(new Date(), this.currentUser.getId(), amount);
-                    db.addPayment(payment);
-                    Double balance = db.getBalance(this.currentUser);
+    public void showChargeCreditViewClick(View view) {
+        setupChargeCreditView();
+        showChargeCreditView();
+    }
 
-                    String message = String.format(
-                            "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
-                            this.currentUser.getName(),
-                            amount,
-                            balance);
-                    CustomToast.showText(this, message, Toast.LENGTH_LONG);
-                    updateView();
-                }
+    private void showChargeCreditView() {
+        userDetailsLayout.setVisibility(View.GONE);
+        userCreditLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void showUserDetailsView() {
+        userCreditLayout.setVisibility(View.GONE);
+        userDetailsLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void updateAccountClick(View view) {
+        if (this.currentUser != null) {
+            if (this.chargeAmount.intValue() != 0) {
+                SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+                Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
+                db.addPayment(payment);
+                Double balance = db.getBalance(this.currentUser);
+
+                String message = String.format(
+                        "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
+                        this.currentUser.getName(),
+                        chargeAmount,
+                        balance);
+                CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                setCurrentUserToView();
             }
         }
     }
 
-    public void UpdateRoleClick(View view) {
+    public void updateRoleClick(View view) {
         if (this.currentUser != null && this.role != null) {
 
             roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
@@ -354,6 +370,21 @@ public class SettingsActivity extends AbstractNfcActivity
                     User.ConvertRoleToGuiString(this.role));
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
+    }
+
+    private void setupChargeCreditView() {
+        chargeAmount = 0.0;
+        // TODO: show current user's balance
+        updateChargeView();
+    }
+
+    private void updateChargeView() {
+        // TODO: show chargeAmount in textview
+    }
+
+    public void note5Click(View view) {
+        chargeAmount += 5.0;
+        updateChargeView();
     }
 
     public void RestoreDatabaseClick(View view) {

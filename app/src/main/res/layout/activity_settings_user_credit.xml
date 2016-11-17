@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_weight="0.5"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/note5Button"
+            android:layout_width="80dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:onClick="note5Click"
+            android:scaleType="center"
+            app:srcCompat="@drawable/note5" />
+
+        <ImageButton
+            android:id="@+id/note10Button"
+            android:layout_width="80dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:scaleType="center"
+            app:srcCompat="@drawable/note10" />
+
+        <ImageButton
+            android:id="@+id/note20Button"
+            android:layout_width="80dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:scaleType="center"
+            app:srcCompat="@drawable/note20" />
+
+        <ImageButton
+            android:id="@+id/note50Button"
+            android:layout_width="80dp"
+            android:layout_height="150dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:scaleType="center"
+            app:srcCompat="@drawable/note50" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/updateAccountButton"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:onClick="updateAccountClick"
+        android:text="Kontostand korrigieren" />
+
+    <TextView
+        android:id="@+id/balanceLabelTextView"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="8dp"
+        android:text="Kontostand:" />
+
+    <TextView
+        android:id="@+id/balanceTextView"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:text="" />
+
+
+</LinearLayout>

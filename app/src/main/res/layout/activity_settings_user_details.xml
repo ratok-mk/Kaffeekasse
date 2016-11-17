@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginLeft="32dp"
+    android:layout_weight="0.5"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:showIn="@layout/activity_settings_user_management">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textUserNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Nutzer:" />
+
+        <EditText
+            android:id="@+id/userRenameText"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:hint="Vorname Nachname"
+            android:inputType="textPersonName"
+            android:maxLength="30"
+            android:maxLines="1" />
+
+        <ImageButton
+            android:id="@+id/RenameUserButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="renameUserClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_check_black_24dp"
+            android:text="Nutzer umbenennen" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textUserRoleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Rolle:" />
+
+        <Spinner
+            android:id="@+id/roleSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:minWidth="150dp" />
+
+        <ImageButton
+            android:id="@+id/updateRoleButton"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="updateRoleClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_check_black_24dp"
+            android:text="Rolle ändern" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textNfcLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="NFC ID:" />
+
+        <TextView
+            android:id="@+id/textNfcValue"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start" />
+
+        <ImageButton
+            android:id="@+id/updateNfcIdButton"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="updateNfcClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_cached_black_24dp"
+            android:text="Nutzer aktualisieren" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textBalanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Kontostand:" />
+
+        <TextView
+            android:id="@+id/textBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+
+        <ImageButton
+            android:id="@+id/chargeCreditButton"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="showChargeCreditViewClick"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+            android:text="Guthaben aufladen" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_span="3"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/NewUserButton"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:onClick="newUserClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_person_add_black_24dp"
+                android:text="Nutzer hinzufügen" />
+
+            <ImageButton
+                android:id="@+id/DeleteUserButton"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:onClick="deleteUserClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_delete_black_24dp"
+                android:text="Nutzer löschen" />
+
+        </LinearLayout>
+
+    </TableRow>
+</TableLayout>
