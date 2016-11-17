@@ -191,7 +191,7 @@ public class SettingsActivity extends AbstractNfcActivity
         for (User user : this.users) {
             userList.add(user.getName());
         }
-        userListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, userList);
+        userListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, userList);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
 
