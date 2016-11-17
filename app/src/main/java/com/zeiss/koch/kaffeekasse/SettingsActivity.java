@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
         db = new SqlDatabaseHelper(this);
         updateUserList();
+        selectFirstListItem();
         updateRoleSpinner();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
@@ -186,23 +188,24 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     private void updateUserList() {
-        users = db.getAllUsers();
+        this.users = db.getAllUsers();
+        Collections.sort(this.users, new UserComparator());
+
         List<String> userList = new ArrayList<>();
+
         for (User user : this.users) {
             userList.add(user.getName());
         }
-        userListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, userList);
+        userListAdapter = new ArrayAdapter(this, R.layout.user_list_item, userList);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
 
         // select current user
-        // TODO: item needs to be selected, the following does not work :(
         if (this.currentUser != null) {
             final String userName = this.currentUser.getName();
             for (int i = 0; i < userListAdapter.getCount(); i++) {
                 if (userName.equals(userListAdapter.getItem(i).toString())) {
                     userListView.setItemChecked(i, true);
-                    userListView.setSelection(i);
                     break;
                 }
             }
@@ -222,10 +225,19 @@ public class SettingsActivity extends AbstractNfcActivity
         }
     }
 
+    private void selectFirstListItem() {
+        if (userListView != null) {
+            if (userListView.getCount() > 0) {
+                userListView.performItemClick(userListView, 0, 0);
+            } else {
+                AddNewUserClick(null);
+            }
+        }
+    }
+
     public void AddNewUserClick(View view) {
 
         this.currentUser = new User("", "");
-        // TODO: currently selected item needs to be unselected, the following does not work :(
         userListView.clearChoices();
         updateView();
     }
@@ -236,8 +248,15 @@ public class SettingsActivity extends AbstractNfcActivity
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
             this.currentUser.setName(userEditText.getText().toString());
             String stringFormat;
+            // check empty string
+            if (this.currentUser.getName().isEmpty()) {
+                stringFormat = "Nutzername darf nicht leer sein.";
+            }
+            // TODO: check existing username
+            else if (false) {
+            }
             // check if user exists: rename only
-            if (this.currentUser.isPersisted()) {
+            else if (this.currentUser.isPersisted()) {
                 db.updateUser(this.currentUser);
                 stringFormat = "Nutzer %1s wurde umbenannt.";
             }
@@ -255,10 +274,12 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void DeleteUserClick(View view) {
         if (this.currentUser != null) {
+            // TODO: show confirmation dialog
             String name = this.currentUser.getName();
             db.deleteUser(currentUser);
             this.currentUser = null;
             updateUserList();
+            selectFirstListItem();
 
             String message = String.format("Nutzer %1s wurde gelöscht.", name);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
