@@ -82,7 +82,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(USERS_KEY_NAME, user.getName());
         values.put(USERS_KEY_NFCID, user.getNfcId());
-        values.put(USERS_KEY_ROLE, user.getRole());
+        values.put(USERS_KEY_ROLE, user.getDBRole());
 
         // 3. insert
         db.insert(TABLE_USERS, // table
@@ -226,7 +226,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(USERS_KEY_NAME, user.getName());
         values.put(USERS_KEY_NFCID, user.getNfcId());
-        values.put(USERS_KEY_ROLE, user.getRole());
+        values.put(USERS_KEY_ROLE, user.getDBRole());
 
         // 3. updating row
         int i = db.update(TABLE_USERS, //table

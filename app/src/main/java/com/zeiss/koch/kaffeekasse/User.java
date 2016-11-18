@@ -55,8 +55,12 @@ class User {
         return nfcid;
     }
 
-    public String getRole() {
+    public String getDBRole() {
         return ConvertRoleToDatabaseString(role);
+    }
+
+    public User.Role getRole() {
+        return role;
     }
 
     public void setName(String name) {

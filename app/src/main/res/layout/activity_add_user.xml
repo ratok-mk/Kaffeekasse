@@ -10,15 +10,42 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusableInTouchMode="true"
     tools:context="com.zeiss.koch.kaffeekasse.AddUserActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/registerUserTextView"
         style="@style/TextAppearance.Huge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nutzer registrieren" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <Spinner
+            android:id="@+id/userSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_gravity="center_vertical"
+            android:minWidth="250dp" />
+        <Button
+            android:id="@+id/registerUserButton"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center_vertical"
+            android:onClick="RegisterUserClick"
+            android:text="Nutzer mit NFC registrieren " />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/addUserTextView"
+        style="@style/TextAppearance.Huge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nutzer hinzufügen" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
