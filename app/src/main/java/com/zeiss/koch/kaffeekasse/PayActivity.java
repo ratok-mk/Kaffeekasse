@@ -2,8 +2,6 @@ package com.zeiss.koch.kaffeekasse;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -133,9 +131,7 @@ public class PayActivity extends AppCompatActivity {
         balanceText.setText(formatted);
 
         if (animate) {
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
-            set.setTarget(balanceText);
-            set.start();
+            AnimationHandler.highlight(this, balanceText);
         }
     }
 
@@ -145,9 +141,7 @@ public class PayActivity extends AppCompatActivity {
         purchaseText.setText(formatted);
 
         if (animate) {
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
-            set.setTarget(purchaseText);
-            set.start();
+            AnimationHandler.highlight(this, purchaseText);
         }
     }
 

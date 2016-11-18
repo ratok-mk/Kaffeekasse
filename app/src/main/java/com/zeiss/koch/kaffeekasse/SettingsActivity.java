@@ -30,14 +30,12 @@ public class SettingsActivity extends AbstractNfcActivity
         implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
     private String currentNfcTag;
-    ViewGroup userCreditLayout;
-    ViewGroup userDetailsLayout;
+    private ViewGroup userCreditLayout;
+    private ViewGroup userDetailsLayout;
     private ListView userListView;
-    private ArrayAdapter userListAdapter;
     private List<User> users;
     private List<User.Role> roles;
     private Spinner roleSpinner;
-    private ArrayAdapter<String> spinnerAdapter;
     private User currentUser;
     private User.Role role;
 
@@ -67,7 +65,7 @@ public class SettingsActivity extends AbstractNfcActivity
         userDetailsLayout = (ViewGroup) findViewById(R.id.userDetailsLayout);
         userListView = (ListView) findViewById(R.id.userListView);
 
-        db = new SqlDatabaseHelper(this);
+        this.db = new SqlDatabaseHelper(this);
         updateUserList();
         selectFirstListItem();
         updateRoleSpinner();
@@ -109,7 +107,7 @@ public class SettingsActivity extends AbstractNfcActivity
             this.roles.add(role);
             roleStrings.add(User.ConvertRoleToGuiString(role));
         }
-        spinnerAdapter = new ArrayAdapter(this,
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, roleStrings);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         roleSpinner.setAdapter(spinnerAdapter);
@@ -173,7 +171,7 @@ public class SettingsActivity extends AbstractNfcActivity
             nfcValue.setText(nfcId.isEmpty() ? getString(R.string.nfc_unset) : nfcId);
 
             // update balance
-            Double balance = db.getBalance(this.currentUser);
+            Double balance = this.db.getBalance(this.currentUser);
             TextView balanceText = (TextView) findViewById(R.id.textBalance);
 
             final String formatted = Formater.valueToCurrencyString(balance);
@@ -194,7 +192,7 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     private void updateUserList() {
-        this.users = db.getAllUsers();
+        this.users = this.db.getAllUsers();
         Collections.sort(this.users, new UserComparator());
 
         List<String> userList = new ArrayList<>();
@@ -202,7 +200,7 @@ public class SettingsActivity extends AbstractNfcActivity
         for (User user : this.users) {
             userList.add(user.getName());
         }
-        userListAdapter = new ArrayAdapter(this, R.layout.user_list_item, userList);
+        ArrayAdapter userListAdapter = new ArrayAdapter(this, R.layout.user_list_item, userList);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
 
@@ -250,7 +248,6 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void renameUserClick(View view) {
         if (this.currentUser != null) {
-            SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             final EditText userEditText = (EditText) findViewById(R.id.userRenameText);
             final String name = userEditText.getText().toString();
             this.currentUser.setName(name);
@@ -258,18 +255,18 @@ public class SettingsActivity extends AbstractNfcActivity
             // check empty string
             if (this.currentUser.getName().isEmpty()) {
                 stringFormat = "Nutzername darf nicht leer sein.";
-            } else if (db.getUserByName(name) != null) {
+            } else if (this.db.getUserByName(name) != null) {
                 stringFormat = "Nutzername exisitert bereits.";
             }
             // check if user exists: rename only
             else if (this.currentUser.isPersisted()) {
-                db.updateUser(this.currentUser);
+                this.db.updateUser(this.currentUser);
                 updateUserList();
                 stringFormat = "Nutzer %1s wurde umbenannt.";
             }
             // new user: store in db
             else {
-                db.addUser(this.currentUser);
+                this.db.addUser(this.currentUser);
                 updateUserList();
                 stringFormat = "Nutzer %1s wurde hinzugefügt.";
             }
@@ -297,7 +294,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
     private void deleteUser() {
         String name = this.currentUser.getName();
-        db.deleteUser(this.currentUser);
+        this.db.deleteUser(this.currentUser);
         this.currentUser = null;
         updateUserList();
         selectFirstListItem();
@@ -308,9 +305,8 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void updateNfcClick(View view) {
         if (this.currentUser != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
-            SqlDatabaseHelper db = new SqlDatabaseHelper(this);
             this.currentUser.setNfcId(this.currentNfcTag);
-            db.updateUser(this.currentUser);
+            this.db.updateUser(this.currentUser);
 
             String message = String.format(
                     "NFC ID von %1s wurde auf %2$s geändert.",
@@ -338,13 +334,12 @@ public class SettingsActivity extends AbstractNfcActivity
     public void chargeCreditClick(View view) {
         if (this.currentUser != null) {
             if (this.chargeAmount.intValue() != 0) {
-                SqlDatabaseHelper db = new SqlDatabaseHelper(this);
                 Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
-                db.addPayment(payment);
-                Double balance = db.getBalance(this.currentUser);
+                this.db.addPayment(payment);
+                Double balance = this.db.getBalance(this.currentUser);
 
                 String message = String.format(
-                        "Kontostand von %1s wurde um %2s verändert.\nNeuer Kontostand: %3s",
+                        "Guthaben von %1s wurde um %2s aufgeladen.\nNeuer Kontostand: %3s",
                         this.currentUser.getName(),
                         Formater.valueToCurrencyString(chargeAmount),
                         Formater.valueToCurrencyString(balance)
@@ -363,7 +358,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
             roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
             this.currentUser.setRole(this.role);
-            db.updateUser(this.currentUser);
+            this.db.updateUser(this.currentUser);
 
             String message = String.format(
                     "Rolle von %1s wurde auf %2$s geändert.",
@@ -375,9 +370,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
     private void setupChargeCreditView() {
         if (this.currentUser != null) {
-            SqlDatabaseHelper db = new SqlDatabaseHelper(this);
-            Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
-            Double balance = db.getBalance(this.currentUser);
+            Double balance = this.db.getBalance(this.currentUser);
             if (balance != null) {
                 TextView balanceText = (TextView) findViewById(R.id.chargeBalanceTextView);
                 final String formatted = Formater.valueToCurrencyString(balance);
