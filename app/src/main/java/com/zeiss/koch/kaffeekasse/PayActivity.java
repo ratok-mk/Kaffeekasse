@@ -2,8 +2,6 @@ package com.zeiss.koch.kaffeekasse;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -82,7 +80,6 @@ public class PayActivity extends AppCompatActivity {
         }
 
         SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
-        // CustomToast.showText(this, getResources().getString(R.string.automatic_logoff), Toast.LENGTH_LONG);
         ShowTotalPurchase();
         finish();
     }
@@ -133,9 +130,7 @@ public class PayActivity extends AppCompatActivity {
         balanceText.setText(formatted);
 
         if (animate) {
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
-            set.setTarget(balanceText);
-            set.start();
+            AnimationHandler.highlight(this, balanceText);
         }
     }
 
@@ -145,9 +140,7 @@ public class PayActivity extends AppCompatActivity {
         purchaseText.setText(formatted);
 
         if (animate) {
-            AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.highlight);
-            set.setTarget(purchaseText);
-            set.start();
+            AnimationHandler.highlight(this, purchaseText);
         }
     }
 
@@ -182,8 +175,9 @@ public class PayActivity extends AppCompatActivity {
     }
 
     private void ShowTotalPurchase() {
-        String text =
-            String.format("Einkauf von %1$s: %2$.2f€", this.currentUser.getName(), this.totalPurchase);
+        String text = String.format("Einkauf von %1$s: %2s",
+                this.currentUser.getName(),
+                Formater.valueToCurrencyString(this.totalPurchase));
         CustomToast.showText(this, text, Toast.LENGTH_LONG);
     }
 }
