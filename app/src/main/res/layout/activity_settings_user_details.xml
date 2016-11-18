@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginLeft="32dp"
     android:layout_weight="0.5"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:showIn="@layout/activity_settings_user_management">
 
     <TableRow
@@ -13,8 +13,10 @@
 
         <TextView
             android:id="@+id/textUserNameLabel"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:gravity="center_vertical"
             android:text="Nutzer:" />
 
@@ -45,8 +47,10 @@
 
         <TextView
             android:id="@+id/textUserRoleLabel"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:gravity="center_vertical"
             android:text="Rolle:" />
 
@@ -74,8 +78,10 @@
 
         <TextView
             android:id="@+id/textNfcLabel"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:gravity="center_vertical"
             android:text="NFC ID:" />
 
@@ -103,6 +109,7 @@
 
         <TextView
             android:id="@+id/textBalanceLabel"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -139,6 +146,7 @@
                 style="@android:style/TextAppearance.Medium"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
+                android:layout_marginRight="16dp"
                 android:layout_weight="1"
                 android:onClick="newUserClick"
                 android:scaleType="fitCenter"
