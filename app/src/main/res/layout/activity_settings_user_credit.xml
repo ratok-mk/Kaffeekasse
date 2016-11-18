@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_margin="8dp"
     android:layout_weight="0.5"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal">
 
         <ImageButton
@@ -54,18 +55,44 @@
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:useDefaultMargins="true"
+        android:layout_marginBottom="16dp"
         android:alignmentMode="alignBounds"
-        android:background="@color/background_grey">
+        android:orientation="horizontal"
+        android:useDefaultMargins="true">
+
+        <EditText
+            android:id="@+id/manualAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Manueller Betrag"
+            android:inputType="numberDecimal" />
+
+        <ImageButton
+            android:id="@+id/manualAmountClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:onClick="manualAmountClick"
+            app:srcCompat="@drawable/ic_check_black_24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignBounds"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.5"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/chargeBalanceTextView"
@@ -73,31 +100,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="2"
                 android:gravity="center" />
 
             <TextView
-                android:text="@string/balance"
                 android:id="@+id/chargeBalanceLabelTextView"
                 style="@android:style/TextAppearance.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:textAllCaps="true"
-                android:textColor="@color/light_grey"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:layout_weight="1" />
+                android:text="@string/balance"
+                android:textAllCaps="true"
+                android:textColor="@color/light_grey" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/chargeAmountTextView"
@@ -105,24 +133,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="2"
                 android:gravity="center" />
 
             <TextView
-                android:text="@string/amount"
                 android:id="@+id/chargeAmountLabelTextView"
                 style="@android:style/TextAppearance.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:textAllCaps="true"
-                android:textColor="@color/light_grey"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/amount"
+                android:textAllCaps="true"
+                android:textColor="@color/light_grey" />
         </LinearLayout>
 
     </LinearLayout>

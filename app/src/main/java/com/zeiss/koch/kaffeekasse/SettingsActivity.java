@@ -416,6 +416,16 @@ public class SettingsActivity extends AbstractNfcActivity
         updateChargeView(true);
     }
 
+    public void manualAmountClick(View view) {
+        EditText manualAmountText = (EditText) findViewById(R.id.manualAmount);
+        Double manualAmount = Double.parseDouble(manualAmountText.getText().toString());
+        if (manualAmount != null) {
+            chargeAmount += manualAmount.doubleValue();
+            manualAmountText.setText("");
+            updateChargeView(true);
+        }
+    }
+
     public void restoreDatabaseClick(View view) {
         File mPath = DBFileBackupHelper.BackupDirectory();
         FileDialog fileDialog = new FileDialog(this, mPath, null);
