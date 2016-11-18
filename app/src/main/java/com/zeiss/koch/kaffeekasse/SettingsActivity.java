@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -120,15 +121,15 @@ public class SettingsActivity extends AbstractNfcActivity
 
 
     private void CheckBackup(DBFileBackupHelper backup) {
-//        if (!backup.BackupIsUpToDate()) {
-//            backup.Backup();
-//        }
-//
-//        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
-//        backupCheckBox.setChecked(backup.BackupIsUpToDate());
-//
-//        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
-//        backupTextView.setText(backup.LastBackupDate());
+        if (!backup.BackupIsUpToDate()) {
+            backup.Backup();
+        }
+
+        CheckBox backupCheckBox = (CheckBox) findViewById(R.id.backupCheckBox);
+        backupCheckBox.setChecked(backup.BackupIsUpToDate());
+
+        TextView backupTextView = (TextView) findViewById(R.id.dateTextView);
+        backupTextView.setText(backup.LastBackupDate());
     }
 
 //    private void showPayments() {
@@ -415,7 +416,7 @@ public class SettingsActivity extends AbstractNfcActivity
         updateChargeView(true);
     }
 
-    public void RestoreDatabaseClick(View view) {
+    public void restoreDatabaseClick(View view) {
         File mPath = DBFileBackupHelper.BackupDirectory();
         FileDialog fileDialog = new FileDialog(this, mPath, null);
         fileDialog.addFileListener(new FileDialog.FileSelectedListener() {

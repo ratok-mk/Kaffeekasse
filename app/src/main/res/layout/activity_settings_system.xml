@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="32dp">
+
+    <CheckBox
+        android:id="@+id/backupCheckBox"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:checked="false"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="Backup" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Date: " />
+
+    <Button
+        android:id="@+id/restoreDbButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:onClick="restoreDatabaseClick"
+        android:text="Datenbank wiederherstellen" />
 
 </LinearLayout>
