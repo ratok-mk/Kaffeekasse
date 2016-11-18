@@ -245,8 +245,8 @@ public class SettingsActivity extends AbstractNfcActivity
     public void newUserClick(View view) {
 
         this.currentUser = new User("", "");
-        // TODO: remove selection, method below does not work :(
         userListView.clearChoices();
+        userListView.requestLayout();
         setCurrentUserToView();
     }
 
