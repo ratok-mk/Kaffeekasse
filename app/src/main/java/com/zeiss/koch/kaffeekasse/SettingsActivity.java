@@ -68,7 +68,7 @@ public class SettingsActivity extends AbstractNfcActivity
         this.db = new SqlDatabaseHelper(this);
         updateUserList();
         selectFirstListItem();
-        updateRoleSpinner();
+        setupRoleSpinner();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         CheckBackup(backup);
@@ -84,22 +84,26 @@ public class SettingsActivity extends AbstractNfcActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ViewGroup userManagementLayout = (ViewGroup) findViewById(R.id.userManagementLayout);
-//        ViewGroup userFinanceLayout = (ViewGroup) findViewById(R.id.userFinanceLayout);
+        ViewGroup systemSettingsLayout = (ViewGroup) findViewById(R.id.systemSettingsLayout);
         switch (item.getItemId()) {
-            case R.id.action_user:
+            case R.id.action_settings_user:
+                showUserDetailsView();
+                systemSettingsLayout.setVisibility(View.GONE);
                 userManagementLayout.setVisibility(View.VISIBLE);
-//                userFinanceLayout.setVisibility(View.GONE);
                 updateUserList();
                 break;
-            case R.id.action_account:
+            case R.id.action_settings_system:
                 userManagementLayout.setVisibility(View.GONE);
-//                userFinanceLayout.setVisibility(View.VISIBLE);
+                systemSettingsLayout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.action_exit_application:
+                exitApplication();
                 break;
         }
         return true;
     }
 
-    private void updateRoleSpinner() {
+    private void setupRoleSpinner() {
         roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
         roles = new ArrayList<>();
         List<String> roleStrings = new ArrayList<>();
@@ -434,7 +438,7 @@ public class SettingsActivity extends AbstractNfcActivity
         CustomToast.showText(this, message, Toast.LENGTH_LONG);
     }
 
-    public void ExitClick(View view) {
+    public void exitApplication() {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
