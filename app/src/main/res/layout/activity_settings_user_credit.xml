@@ -28,6 +28,7 @@
             android:layout_height="150dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="note10Click"
             android:scaleType="center"
             app:srcCompat="@drawable/note10" />
 
@@ -37,6 +38,7 @@
             android:layout_height="150dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="note20Click"
             android:scaleType="center"
             app:srcCompat="@drawable/note20" />
 
@@ -46,8 +48,83 @@
             android:layout_height="150dp"
             android:layout_margin="20dp"
             android:layout_weight="1"
+            android:onClick="note50Click"
             android:scaleType="center"
             app:srcCompat="@drawable/note50" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:useDefaultMargins="true"
+        android:alignmentMode="alignBounds"
+        android:background="@color/background_grey">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:id="@+id/chargeBalanceTextView"
+                style="@style/balance_plus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:text="@string/balance"
+                android:id="@+id/chargeBalanceLabelTextView"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAllCaps="true"
+                android:textColor="@color/light_grey"
+                android:gravity="center"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/chargeAmountTextView"
+                style="@style/balance_plus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:text="@string/amount"
+                android:id="@+id/chargeAmountLabelTextView"
+                style="@android:style/TextAppearance.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAllCaps="true"
+                android:textColor="@color/light_grey"
+                android:layout_weight="1"
+                android:gravity="center" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <Button
@@ -57,17 +134,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:onClick="updateAccountClick"
-        android:text="Kontostand korrigieren" />
-
-    <TextView
-        android:id="@+id/balanceLabelTextView"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="8dp"
-        android:text="Kontostand:" />
+        android:onClick="chargeCreditClick"
+        android:text="Guthaben aufladen" />
 
     <TextView
         android:id="@+id/balanceTextView"

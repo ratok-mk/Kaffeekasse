@@ -69,7 +69,6 @@ public class SettingsActivity extends AbstractNfcActivity
 
         db = new SqlDatabaseHelper(this);
         updateUserList();
-        setupChargeCreditView();
         selectFirstListItem();
         updateRoleSpinner();
 
@@ -243,7 +242,6 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     public void newUserClick(View view) {
-
         this.currentUser = new User("", "");
         userListView.clearChoices();
         userListView.requestLayout();
@@ -260,8 +258,7 @@ public class SettingsActivity extends AbstractNfcActivity
             // check empty string
             if (this.currentUser.getName().isEmpty()) {
                 stringFormat = "Nutzername darf nicht leer sein.";
-            }
-            else if (db.getUserByName(name) != null) {
+            } else if (db.getUserByName(name) != null) {
                 stringFormat = "Nutzername exisitert bereits.";
             }
             // check if user exists: rename only
@@ -338,7 +335,7 @@ public class SettingsActivity extends AbstractNfcActivity
         userDetailsLayout.setVisibility(View.VISIBLE);
     }
 
-    public void updateAccountClick(View view) {
+    public void chargeCreditClick(View view) {
         if (this.currentUser != null) {
             if (this.chargeAmount.intValue() != 0) {
                 SqlDatabaseHelper db = new SqlDatabaseHelper(this);
@@ -347,12 +344,16 @@ public class SettingsActivity extends AbstractNfcActivity
                 Double balance = db.getBalance(this.currentUser);
 
                 String message = String.format(
-                        "Kontostand von %1s wurde um %2$.2f€ verändert. Neuer Kontostand: %3$.2f€",
+                        "Kontostand von %1s wurde um %2s verändert.\nNeuer Kontostand: %3s",
                         this.currentUser.getName(),
-                        chargeAmount,
-                        balance);
+                        Formater.valueToCurrencyString(chargeAmount),
+                        Formater.valueToCurrencyString(balance)
+                );
                 CustomToast.showText(this, message, Toast.LENGTH_LONG);
                 setCurrentUserToView();
+                showUserDetailsView();
+                TextView balanceText = (TextView) findViewById(R.id.textBalance);
+                AnimationHandler.highlight(this, balanceText);
             }
         }
     }
@@ -373,18 +374,48 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     private void setupChargeCreditView() {
-        chargeAmount = 0.0;
-        // TODO: show current user's balance
-        updateChargeView();
+        if (this.currentUser != null) {
+            SqlDatabaseHelper db = new SqlDatabaseHelper(this);
+            Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
+            Double balance = db.getBalance(this.currentUser);
+            if (balance != null) {
+                TextView balanceText = (TextView) findViewById(R.id.chargeBalanceTextView);
+                final String formatted = Formater.valueToCurrencyString(balance);
+                balanceText.setText(formatted);
+            }
+
+            chargeAmount = 0.0;
+            updateChargeView(false);
+        }
     }
 
-    private void updateChargeView() {
-        // TODO: show chargeAmount in textview
+    private void updateChargeView(boolean animate) {
+        TextView chargeAmountText = (TextView) findViewById(R.id.chargeAmountTextView);
+        final String formatted = Formater.valueToCurrencyString(this.chargeAmount);
+        chargeAmountText.setText(formatted);
+        if (animate) {
+            AnimationHandler.highlight(this, chargeAmountText);
+        }
     }
 
     public void note5Click(View view) {
         chargeAmount += 5.0;
-        updateChargeView();
+        updateChargeView(true);
+    }
+
+    public void note10Click(View view) {
+        chargeAmount += 10.0;
+        updateChargeView(true);
+    }
+
+    public void note20Click(View view) {
+        chargeAmount += 20.0;
+        updateChargeView(true);
+    }
+
+    public void note50Click(View view) {
+        chargeAmount += 50.0;
+        updateChargeView(true);
     }
 
     public void RestoreDatabaseClick(View view) {
