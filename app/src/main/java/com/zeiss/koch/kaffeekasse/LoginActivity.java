@@ -22,10 +22,12 @@ public class LoginActivity extends AbstractNfcActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         this.date = new Date();
+        String dateString = Formater.dateToLocalString(this.date);
         TextView textViewDate = (TextView) findViewById(R.id.textViewDate);
-        textViewDate.setText(this.date.toString());
-        db = new SqlDatabaseHelper(this);
+        textViewDate.setText(dateString);
+        this.db = new SqlDatabaseHelper(this);
     }
 
     @Override
@@ -42,6 +44,7 @@ public class LoginActivity extends AbstractNfcActivity {
                 startActivity(newIntent);
             } else {
                 CustomToast.showText(this, "Could not find admin with NFC ID: " + userTagId, Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
             }
         }
     }
