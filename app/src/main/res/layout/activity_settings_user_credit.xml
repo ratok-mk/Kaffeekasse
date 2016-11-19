@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
             android:onClick="manualAmountClick"
-            app:srcCompat="@drawable/ic_check_black_24dp" />
+            app:srcCompat="@drawable/ic_check_24dp" />
 
     </LinearLayout>
 

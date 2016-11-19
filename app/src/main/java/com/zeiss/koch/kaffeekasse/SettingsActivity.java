@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,9 +68,9 @@ public class SettingsActivity extends AbstractNfcActivity
         userListView = (ListView) findViewById(R.id.userListView);
 
         this.db = new SqlDatabaseHelper(this);
+        setupRoleSpinner();
         updateUserList();
         selectFirstListItem();
-        setupRoleSpinner();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
         CheckBackup(backup);
@@ -156,6 +157,7 @@ public class SettingsActivity extends AbstractNfcActivity
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
         switch (parent.getId()) {
             case R.id.userListView:
+                SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
                 showUserDetailsView();
                 this.currentUser = this.users.get(pos);
                 setCurrentUserToView();
@@ -169,7 +171,16 @@ public class SettingsActivity extends AbstractNfcActivity
             TextView renameText = (TextView) findViewById(R.id.userRenameText);
             renameText.setText(this.currentUser.getName());
 
-            // TODO: update role
+            // update role
+            final String role = User.ConvertRoleToGuiString(this.currentUser.getRole());
+            SpinnerAdapter spinnerAdapter = roleSpinner.getAdapter();
+            for (int i = 0; i < spinnerAdapter.getCount(); i++) {
+                if (role.equals(spinnerAdapter.getItem(i).toString())) {
+                    roleSpinner.performItemClick(roleSpinner, i, 0);
+                    roleSpinner.setSelection(i);
+                    break;
+                }
+            }
 
             TextView nfcValue = (TextView) findViewById(R.id.textNfcValue);
             final String nfcId = this.currentUser.getNfcId();
@@ -249,6 +260,7 @@ public class SettingsActivity extends AbstractNfcActivity
         userListView.clearChoices();
         userListView.requestLayout();
         setCurrentUserToView();
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
     }
 
     public void renameUserClick(View view) {
@@ -257,26 +269,32 @@ public class SettingsActivity extends AbstractNfcActivity
             final String name = userEditText.getText().toString();
             this.currentUser.setName(name);
             String stringFormat;
+            SoundManager.SoundType sound;
             // check empty string
             if (this.currentUser.getName().isEmpty()) {
                 stringFormat = "Nutzername darf nicht leer sein.";
+                sound = SoundManager.SoundType.DENIED;
             } else if (this.db.getUserByName(name) != null) {
                 stringFormat = "Nutzername exisitert bereits.";
+                sound = SoundManager.SoundType.DENIED;
             }
             // check if user exists: rename only
             else if (this.currentUser.isPersisted()) {
                 this.db.updateUser(this.currentUser);
                 updateUserList();
                 stringFormat = "Nutzer %1s wurde umbenannt.";
+                sound = SoundManager.SoundType.BUTTON;
             }
             // new user: store in db
             else {
                 this.db.addUser(this.currentUser);
                 updateUserList();
                 stringFormat = "Nutzer %1s wurde hinzugefügt.";
+                sound = SoundManager.SoundType.BUTTON;
             }
 
             final String message = String.format(stringFormat, name);
+            SoundManager.getInstance().play(this, sound);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
         }
     }
@@ -306,6 +324,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
         String message = String.format("Nutzer %1s wurde gelöscht.", name);
         CustomToast.showText(this, message, Toast.LENGTH_LONG);
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
     }
 
     public void updateNfcClick(View view) {
@@ -318,6 +337,7 @@ public class SettingsActivity extends AbstractNfcActivity
                     this.currentUser.getName(),
                     this.currentNfcTag);
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
+            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
         }
     }
 
@@ -336,28 +356,6 @@ public class SettingsActivity extends AbstractNfcActivity
         userDetailsLayout.setVisibility(View.VISIBLE);
     }
 
-    public void chargeCreditClick(View view) {
-        if (this.currentUser != null) {
-            if (this.chargeAmount.intValue() != 0) {
-                Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
-                this.db.addPayment(payment);
-                Double balance = this.db.getBalance(this.currentUser);
-
-                String message = String.format(
-                        "Guthaben von %1s wurde um %2s aufgeladen.\nNeuer Kontostand: %3s",
-                        this.currentUser.getName(),
-                        Formater.valueToCurrencyString(chargeAmount),
-                        Formater.valueToCurrencyString(balance)
-                );
-                CustomToast.showText(this, message, Toast.LENGTH_LONG);
-                setCurrentUserToView();
-                showUserDetailsView();
-                TextView balanceText = (TextView) findViewById(R.id.textBalance);
-                AnimationHandler.highlight(this, balanceText);
-            }
-        }
-    }
-
     public void updateRoleClick(View view) {
         if (this.currentUser != null && this.role != null) {
 
@@ -370,6 +368,7 @@ public class SettingsActivity extends AbstractNfcActivity
                     this.currentUser.getName(),
                     User.ConvertRoleToGuiString(this.role));
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
+            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
         }
     }
 
@@ -394,6 +393,7 @@ public class SettingsActivity extends AbstractNfcActivity
         if (animate) {
             AnimationHandler.highlight(this, chargeAmountText);
         }
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
     }
 
     public void note5Click(View view) {
@@ -418,11 +418,42 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void manualAmountClick(View view) {
         EditText manualAmountText = (EditText) findViewById(R.id.manualAmount);
-        Double manualAmount = Double.parseDouble(manualAmountText.getText().toString());
-        if (manualAmount != null) {
-            chargeAmount += manualAmount.doubleValue();
-            manualAmountText.setText("");
-            updateChargeView(true);
+        try {
+            Double manualAmount = Double.parseDouble(manualAmountText.getText().toString());
+            if (manualAmount != null) {
+                chargeAmount += manualAmount.doubleValue();
+                manualAmountText.setText("");
+                updateChargeView(true);
+            }
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    public void chargeCreditClick(View view) {
+        if (this.currentUser != null) {
+            if (this.chargeAmount > 0.0) {
+                Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
+                this.db.addPayment(payment);
+                Double balance = this.db.getBalance(this.currentUser);
+
+                String message = String.format(
+                        "Guthaben von %1s wurde um %2s aufgeladen.\nNeuer Kontostand: %3s",
+                        this.currentUser.getName(),
+                        Formater.valueToCurrencyString(chargeAmount),
+                        Formater.valueToCurrencyString(balance)
+                );
+                SoundManager.getInstance().play(this, SoundManager.SoundType.PAY);
+                CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                // update and got back to user details view
+                setCurrentUserToView();
+                showUserDetailsView();
+                // animate updated balance
+                TextView balanceText = (TextView) findViewById(R.id.textBalance);
+                AnimationHandler.highlight(this, balanceText);
+            } else {
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+                CustomToast.showText(this, "Betrag muss größer als 0,00 € sein!", Toast.LENGTH_LONG);
+            }
         }
     }
 

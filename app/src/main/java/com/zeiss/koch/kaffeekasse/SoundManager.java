@@ -11,7 +11,8 @@ public class SoundManager {
         NFC,
         BUTTON,
         PAY,
-        BACK
+        BACK,
+        DENIED
     }
 
     private static SoundManager instance;
@@ -19,11 +20,12 @@ public class SoundManager {
     private HashMap<SoundType, Integer> map;
 
     private SoundManager() {
-        this.map = new HashMap<SoundType, Integer>();
+        this.map = new HashMap<>();
         this.map.put(SoundType.NFC, R.raw.nfc);
         this.map.put(SoundType.BUTTON, R.raw.button);
         this.map.put(SoundType.PAY, R.raw.payment);
         this.map.put(SoundType.BACK, R.raw.back);
+        this.map.put(SoundType.DENIED, R.raw.denied);
     }
 
     public static SoundManager getInstance() {

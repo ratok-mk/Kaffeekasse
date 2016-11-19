@@ -6,6 +6,7 @@
         <item name="android:buttonStyle">@style/buttonStyle</item>
         <item name="android:imageButtonStyle">@style/imageButtonStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/spinnerItemStyle</item>
+        <item name="android:soundEffectsEnabled">false</item>
     </style>
 
     <style name="buttonStyle" parent="Widget.AppCompat.Button">
