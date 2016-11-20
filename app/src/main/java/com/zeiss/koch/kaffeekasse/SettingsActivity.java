@@ -93,10 +93,12 @@ public class SettingsActivity extends AbstractNfcActivity
                 systemSettingsLayout.setVisibility(View.GONE);
                 userManagementLayout.setVisibility(View.VISIBLE);
                 updateUserList();
+                selectFirstListItem();
                 break;
             case R.id.action_settings_system:
                 userManagementLayout.setVisibility(View.GONE);
                 systemSettingsLayout.setVisibility(View.VISIBLE);
+                setTitle(getString(R.string.app_name) + " / Systemeinstellungen" );
                 break;
             case R.id.action_exit_application:
                 exitApplication();
@@ -161,6 +163,7 @@ public class SettingsActivity extends AbstractNfcActivity
                 showUserDetailsView();
                 this.currentUser = this.users.get(pos);
                 setCurrentUserToView();
+                setTitle(getString(R.string.app_name) + " / Nutzer verwalten");
                 break;
         }
     }
@@ -201,10 +204,6 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     public void onNothingSelected(AdapterView parent) {
-        switch (parent.getId()) {
-            case R.id.roleSpinner:
-                break;
-        }
     }
 
     private void updateUserList() {
@@ -257,6 +256,7 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void newUserClick(View view) {
         this.currentUser = new User("", "");
+        setTitle(getString(R.string.app_name) + " / Nutzer anlegen");
         userListView.clearChoices();
         userListView.requestLayout();
         setCurrentUserToView();
