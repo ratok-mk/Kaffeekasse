@@ -9,11 +9,12 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/textUserNameLabel"
-            style="@android:style/TextAppearance.Medium"
+            style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
@@ -29,7 +30,8 @@
             android:hint="Vorname Nachname"
             android:inputType="textPersonName"
             android:maxLength="30"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:gravity="center" />
 
         <ImageButton
             android:id="@+id/RenameUserButton"
@@ -43,11 +45,12 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/textUserRoleLabel"
-            style="@android:style/TextAppearance.Medium"
+            style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
@@ -59,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:minWidth="150dp" />
+            android:minWidth="150dp"
+            android:gravity="center" />
 
         <ImageButton
             android:id="@+id/updateRoleButton"
@@ -74,11 +78,12 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/textNfcLabel"
-            style="@android:style/TextAppearance.Medium"
+            style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
@@ -90,7 +95,7 @@
             style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|start" />
+            android:gravity="center" />
 
         <ImageButton
             android:id="@+id/updateNfcIdButton"
@@ -105,11 +110,12 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/textBalanceLabel"
-            style="@android:style/TextAppearance.Medium"
+            style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

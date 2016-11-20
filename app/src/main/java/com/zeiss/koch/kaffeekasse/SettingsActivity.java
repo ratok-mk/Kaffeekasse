@@ -301,17 +301,24 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void deleteUserClick(View view) {
         if (this.currentUser != null) {
-            String name = this.currentUser.getName();
-            new AlertDialog.Builder(this)
-                    .setTitle("Nutzer löschen")
-                    .setMessage(String.format("Soll %1s wirklich gelöscht werden?", name))
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            SettingsActivity.this.deleteUser();
-                        }
-                    })
-                    .setNegativeButton(R.string.no, null).show();
+            if (this.currentUser.isPersisted()) {
+                SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
+                String name = this.currentUser.getName();
+                new AlertDialog.Builder(this)
+                        .setTitle("Nutzer löschen")
+                        .setMessage(String.format("Soll %1s wirklich gelöscht werden?", name))
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                SettingsActivity.this.deleteUser();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null).show();
+            }
+            else {
+                CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+            }
         }
     }
 
@@ -329,21 +336,35 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void updateNfcClick(View view) {
         if (this.currentUser != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
-            this.currentUser.setNfcId(this.currentNfcTag);
-            this.db.updateUser(this.currentUser);
+            if (this.currentUser.isPersisted()) {
+                this.currentUser.setNfcId(this.currentNfcTag);
+                this.db.updateUser(this.currentUser);
 
-            String message = String.format(
-                    "NFC ID von %1s wurde auf %2$s geändert.",
-                    this.currentUser.getName(),
-                    this.currentNfcTag);
-            CustomToast.showText(this, message, Toast.LENGTH_LONG);
-            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
+                String message = String.format(
+                        "NFC ID von %1s wurde auf %2$s geändert.",
+                        this.currentUser.getName(),
+                        this.currentNfcTag);
+                CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
+            }
+            else {
+                CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+            }
         }
     }
 
     public void showChargeCreditViewClick(View view) {
-        setupChargeCreditView();
-        showChargeCreditView();
+        if (this.currentUser != null && this.role != null) {
+            if (this.currentUser.isPersisted()) {
+                setupChargeCreditView();
+                showChargeCreditView();
+            }
+            else {
+                CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+            }
+        }
     }
 
     private void showChargeCreditView() {
@@ -359,16 +380,22 @@ public class SettingsActivity extends AbstractNfcActivity
     public void updateRoleClick(View view) {
         if (this.currentUser != null && this.role != null) {
 
-            roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
-            this.currentUser.setRole(this.role);
-            this.db.updateUser(this.currentUser);
+            if (this.currentUser.isPersisted()) {
+                roleSpinner = (Spinner) findViewById(R.id.roleSpinner);
+                this.currentUser.setRole(this.role);
+                this.db.updateUser(this.currentUser);
 
-            String message = String.format(
-                    "Rolle von %1s wurde auf %2$s geändert.",
-                    this.currentUser.getName(),
-                    User.ConvertRoleToGuiString(this.role));
-            CustomToast.showText(this, message, Toast.LENGTH_LONG);
-            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
+                String message = String.format(
+                        "Rolle von %1s wurde auf %2$s geändert.",
+                        this.currentUser.getName(),
+                        User.ConvertRoleToGuiString(this.role));
+                CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
+            }
+            else {
+                CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
+                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+            }
         }
     }
 
