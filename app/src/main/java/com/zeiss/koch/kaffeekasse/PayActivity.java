@@ -73,24 +73,13 @@ public class PayActivity extends AppCompatActivity {
         }
     }
 
-    private void automaticExit() {
-        if (this.timer != null) {
-            this.timer.cancel();
-            this.timer = null;
-        }
-
-        SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
-        ShowTotalPurchase();
-        finish();
-    }
-
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
             final float fraction = (logoffTime.getTime() - new java.util.Date().getTime()) / 1000.0f;
             final String caption = "" + (int) Math.ceil(fraction) + " s";
 
             if (fraction <= 0) {
-                automaticExit();
+                exitView();
             }
 
             timeoutProgress.setProgress(fraction / INITIAL_TIMEOUT_S * timeoutProgress.getMax());
@@ -169,6 +158,14 @@ public class PayActivity extends AppCompatActivity {
     }
 
     public void finishClick(View view) {
+        exitView();
+    }
+
+    private void exitView() {
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
+        }
         SoundManager.getInstance().play(this, SoundManager.SoundType.BACK);
         ShowTotalPurchase();
         finish();

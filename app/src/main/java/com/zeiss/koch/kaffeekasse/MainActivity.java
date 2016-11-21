@@ -173,17 +173,14 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
     }
 
     public void settingsButtonClick(View view) {
+        SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }

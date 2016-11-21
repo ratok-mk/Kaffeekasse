@@ -20,7 +20,6 @@
         android:gravity="top|right"
         android:text="date"
         android:textColor="@color/dark_grey">
-        <requestFocus />
     </TextView>
 
     <LinearLayout
