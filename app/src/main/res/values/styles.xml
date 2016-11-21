@@ -5,6 +5,7 @@
         <item name="android:textAppearanceLarge">@style/TextAppearance.Huge</item>
         <item name="android:buttonStyle">@style/buttonStyle</item>
         <item name="android:imageButtonStyle">@style/imageButtonStyle</item>
+        <item name="android:spinnerItemStyle">@style/spinnerItemStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/spinnerItemStyle</item>
         <item name="android:soundEffectsEnabled">false</item>
     </style>
@@ -16,8 +17,7 @@
     </style>
 
     <style name="spinnerItemStyle" parent="@android:style/Widget.Material.DropDownItem.Spinner">
-        <item name="android:textSize">25sp</item>
-        <item name="android:height">50sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="imageButtonStyle" parent="Widget.AppCompat.ImageButton">
