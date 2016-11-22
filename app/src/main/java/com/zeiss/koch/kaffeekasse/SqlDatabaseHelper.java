@@ -18,20 +18,21 @@ import java.util.List;
 public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
     private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "name TEXT, "+
-            "nfcid TEXT, "+
+            "name TEXT, " +
+            "nfcid TEXT, " +
             "role TEXT )";
 
     private final String CREATE_PAYMENTS_TABLE = "CREATE TABLE payments ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "datetime TEXT, " +
-            "userid INTEGER, "+
-            "amount DOUBLE )";
+            "userid INTEGER, " +
+            "amount DOUBLE, " +
+            "FOREIGN KEY(userid) REFERENCES users(id) ON DELETE CASCADE )";
 
     public SqlDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,9 +48,8 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // upgrade
         if (newVersion > oldVersion) {
-            // update to v6: drop treasurer role
-            if (oldVersion < 6) {
-                db.execSQL("UPDATE users SET role = 'admin' WHERE role = 'treasurer'");
+            // update to v2: add altering statements...
+            if (oldVersion < 2) {
             }
             // add more statements here on subsequent upgrades
         }
