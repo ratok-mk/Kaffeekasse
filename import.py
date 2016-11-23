@@ -53,7 +53,8 @@ def format_data(user, balance):
 with open("kaffeekasse.csv", "rb") as csvfile:
     reader = csv.reader(csvfile, delimiter=';', quotechar='"')
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    os.remove(DBFILE)
+    if (os.path.isfile(DBFILE)):
+        os.remove(DBFILE)
     conn = sqlite3.connect(DBFILE)
     c = conn.cursor()
     setup_tables(c)
