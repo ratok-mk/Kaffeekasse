@@ -55,6 +55,13 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // downgrade
+        if (newVersion < oldVersion) {
+        }
+    }
+
     public String getDatabaseName()
     {
         return DATABASE_NAME;
