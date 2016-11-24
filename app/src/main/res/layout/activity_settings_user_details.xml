@@ -28,6 +28,7 @@
             style="@android:style/TextAppearance.Large"
             android:layout_width="300dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:ems="10"
             android:gravity="center"
             android:hint="Vorname Nachname"
@@ -35,16 +36,22 @@
             android:maxLength="30"
             android:maxLines="1" />
 
-        <ImageButton
-            android:id="@+id/RenameUserButton"
-            style="@android:style/TextAppearance.Medium"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="16dp"
-            android:backgroundTint="@color/button_grey"
-            android:onClick="renameUserClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_check_24dp" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/button_grey"
+            android:gravity="center"
+            android:onClick="renameUserClick">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_check_24dp" />
+
+        </RelativeLayout>
+
     </TableRow>
 
     <TableRow
@@ -67,21 +74,27 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:layout_marginRight="16dp"
             android:gravity="center"
             android:minWidth="150dp"
             android:textAlignment="center" />
 
-        <ImageButton
-            android:id="@+id/updateRoleButton"
-            style="@android:style/TextAppearance.Medium"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="16dp"
-            android:backgroundTint="@color/button_grey"
-            android:onClick="updateRoleClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_check_24dp"
-            android:text="Rolle ändern" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/button_grey"
+            android:gravity="center"
+            android:onClick="updateRoleClick">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_check_24dp" />
+
+        </RelativeLayout>
+
     </TableRow>
 
     <TableRow
@@ -104,19 +117,27 @@
             style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:gravity="center" />
 
-        <ImageButton
+        <RelativeLayout
             android:id="@+id/updateNfcIdButton"
-            style="@android:style/TextAppearance.Medium"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="16dp"
-            android:backgroundTint="@color/button_grey"
-            android:onClick="updateNfcClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_cached_24dp"
-            android:text="Nutzer aktualisieren" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/button_grey"
+            android:gravity="center"
+            android:onClick="updateNfcClick">
+
+            <ImageView
+                android:id="@+id/updateNfcIdIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_cached_24dp" />
+
+        </RelativeLayout>
+
     </TableRow>
 
     <TableRow
@@ -137,18 +158,25 @@
             android:id="@+id/textBalance"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
             android:gravity="center" />
 
-        <ImageButton
-            android:id="@+id/chargeCreditButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="16dp"
-            android:backgroundTint="@color/button_grey"
-            android:onClick="showChargeCreditViewClick"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_keyboard_arrow_up_24dp"
-            android:text="Guthaben aufladen" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/button_grey"
+            android:gravity="center"
+            android:onClick="showChargeCreditViewClick">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_keyboard_arrow_up_24dp" />
+
+        </RelativeLayout>
+
     </TableRow>
 
     <TableRow

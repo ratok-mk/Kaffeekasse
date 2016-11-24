@@ -16,7 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -31,7 +33,6 @@ import java.util.List;
 public class SettingsActivity extends AbstractNfcActivity
         implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
-    private String currentNfcTag;
     private ViewGroup userCreditLayout;
     private ViewGroup userDetailsLayout;
     private ListView userListView;
@@ -40,10 +41,10 @@ public class SettingsActivity extends AbstractNfcActivity
     private Spinner roleSpinner;
     private User currentUser;
     private User.Role role;
+    private boolean nfcAware;
 
     private boolean isInFocus = false;
     private SqlDatabaseHelper db;
-
     private Double chargeAmount;
 
     @Override
@@ -73,7 +74,9 @@ public class SettingsActivity extends AbstractNfcActivity
         selectFirstListItem();
 
         DBFileBackupHelper backup = new DBFileBackupHelper(this);
-        CheckBackup(backup);
+        checkBackup(backup);
+
+        setNfcAware(false);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class SettingsActivity extends AbstractNfcActivity
             case R.id.action_settings_system:
                 userManagementLayout.setVisibility(View.GONE);
                 systemSettingsLayout.setVisibility(View.VISIBLE);
-                setTitle(getString(R.string.app_name) + " / Systemeinstellungen" );
+                setTitle(getString(R.string.app_name) + " / Systemeinstellungen");
                 break;
             case R.id.action_exit_application:
                 exitApplication();
@@ -122,8 +125,7 @@ public class SettingsActivity extends AbstractNfcActivity
         roleSpinner.setOnItemSelectedListener(this);
     }
 
-
-    private void CheckBackup(DBFileBackupHelper backup) {
+    private void checkBackup(DBFileBackupHelper backup) {
         if (!backup.BackupIsUpToDate()) {
             backup.Backup();
         }
@@ -185,9 +187,13 @@ public class SettingsActivity extends AbstractNfcActivity
                 }
             }
 
+            // update nfc id
             TextView nfcValue = (TextView) findViewById(R.id.textNfcValue);
             final String nfcId = this.currentUser.getNfcId();
             nfcValue.setText(nfcId.isEmpty() ? getString(R.string.nfc_unset) : nfcId);
+
+            // disable nfc awareness
+            setNfcAware(false);
 
             // update balance
             Double balance = this.db.getBalance(this.currentUser);
@@ -235,12 +241,28 @@ public class SettingsActivity extends AbstractNfcActivity
     protected void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
-            // In case we would still use the Tag Discovered Intent
+            SoundManager.SoundType sound;
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            this.currentNfcTag = NfcHelper.getId(tag);
+            String currentNfcTag = NfcHelper.getId(tag);
 
-            TextView nfcTextView = (TextView) this.findViewById(R.id.textNfcValue);
-            nfcTextView.setText(this.currentNfcTag);
+            if (this.currentUser != null && this.currentUser.isPersisted() && !currentNfcTag.isEmpty() && this.nfcAware) {
+                // set to view
+                TextView nfcTextView = (TextView) this.findViewById(R.id.textNfcValue);
+                nfcTextView.setText(currentNfcTag);
+                // store in db
+                this.currentUser.setNfcId(currentNfcTag);
+                this.db.updateUser(this.currentUser);
+
+                String message = String.format(
+                        "NFC ID von %1s wurde auf %2$s geändert.",
+                        this.currentUser.getName(),
+                        currentNfcTag);
+                CustomToast.showText(this, message, Toast.LENGTH_LONG);
+                sound = SoundManager.SoundType.NFC;
+            } else {
+                sound = SoundManager.SoundType.DENIED;
+            }
+            SoundManager.getInstance().play(this, sound);
         }
     }
 
@@ -314,8 +336,7 @@ public class SettingsActivity extends AbstractNfcActivity
                             }
                         })
                         .setNegativeButton(R.string.no, null).show();
-            }
-            else {
+            } else {
                 CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
                 SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
             }
@@ -334,24 +355,31 @@ public class SettingsActivity extends AbstractNfcActivity
         SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
     }
 
-    public void updateNfcClick(View view) {
-        if (this.currentUser != null && this.currentNfcTag != null && !this.currentNfcTag.isEmpty()) {
-            if (this.currentUser.isPersisted()) {
-                this.currentUser.setNfcId(this.currentNfcTag);
-                this.db.updateUser(this.currentUser);
+    private void setNfcAware(boolean nfcAware) {
+        this.nfcAware = nfcAware;
+        // update animation
+        ImageView iconImage = (ImageView) findViewById(R.id.updateNfcIdIcon);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.updateNfcIdButton);
+        AnimationHandler.setIconRotation(this, iconImage, layout, nfcAware);
+    }
 
-                String message = String.format(
-                        "NFC ID von %1s wurde auf %2$s geändert.",
-                        this.currentUser.getName(),
-                        this.currentNfcTag);
-                CustomToast.showText(this, message, Toast.LENGTH_LONG);
-                SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
-            }
-            else {
+    public void updateNfcClick(View view) {
+        SoundManager.SoundType sound = SoundManager.SoundType.BUTTON;
+        // try to switch on
+        if (!this.nfcAware) {
+            // check if user is saved
+            if (this.currentUser != null && this.currentUser.isPersisted()) {
+                setNfcAware(true);
+            } else {
                 CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
-                SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
+                sound = SoundManager.SoundType.DENIED;
             }
         }
+        // switch off
+        else {
+            setNfcAware(false);
+        }
+        SoundManager.getInstance().play(this, sound);
     }
 
     public void showChargeCreditViewClick(View view) {
@@ -359,8 +387,7 @@ public class SettingsActivity extends AbstractNfcActivity
             if (this.currentUser.isPersisted()) {
                 setupChargeCreditView();
                 showChargeCreditView();
-            }
-            else {
+            } else {
                 CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
                 SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
             }
@@ -391,8 +418,7 @@ public class SettingsActivity extends AbstractNfcActivity
                         User.ConvertRoleToGuiString(this.role));
                 CustomToast.showText(this, message, Toast.LENGTH_LONG);
                 SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
-            }
-            else {
+            } else {
                 CustomToast.showText(this, getString(R.string.msg_save_user_first), Toast.LENGTH_LONG);
                 SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
             }
@@ -409,38 +435,38 @@ public class SettingsActivity extends AbstractNfcActivity
             }
 
             chargeAmount = 0.0;
-            updateChargeView(false);
+            updateChargeCreditView(true);
         }
     }
 
-    private void updateChargeView(boolean animate) {
+    private void updateChargeCreditView(boolean initial) {
         TextView chargeAmountText = (TextView) findViewById(R.id.chargeAmountTextView);
         final String formatted = Formater.valueToCurrencyString(this.chargeAmount);
         chargeAmountText.setText(formatted);
-        if (animate) {
+        if (!initial) {
             AnimationHandler.highlight(this, chargeAmountText);
+            SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
         }
-        SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
     }
 
     public void note5Click(View view) {
         chargeAmount += 5.0;
-        updateChargeView(true);
+        updateChargeCreditView(false);
     }
 
     public void note10Click(View view) {
         chargeAmount += 10.0;
-        updateChargeView(true);
+        updateChargeCreditView(false);
     }
 
     public void note20Click(View view) {
         chargeAmount += 20.0;
-        updateChargeView(true);
+        updateChargeCreditView(false);
     }
 
     public void note50Click(View view) {
         chargeAmount += 50.0;
-        updateChargeView(true);
+        updateChargeCreditView(false);
     }
 
     public void manualAmountClick(View view) {
@@ -450,7 +476,7 @@ public class SettingsActivity extends AbstractNfcActivity
             if (manualAmount != null) {
                 chargeAmount += manualAmount.doubleValue();
                 manualAmountText.setText("");
-                updateChargeView(true);
+                updateChargeCreditView(false);
             }
         } catch (NumberFormatException e) {
         }
