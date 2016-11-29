@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +46,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         verifyStoragePermissions(this);
         setContentView(R.layout.activity_main);
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        setVersionInfo();
         backupDatabase();
         this.db = new SqlDatabaseHelper(this);
         updateUserList();
@@ -185,4 +186,12 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         startActivity(intent);
     }
 
+    private void setVersionInfo() {
+        TextView versionText = (TextView) findViewById(R.id.versionText);
+        TextView gitCommitText = (TextView) findViewById(R.id.gitCommitText);
+        TextView buildDateText = (TextView) findViewById(R.id.buildDateText);
+        versionText.setText(BuildConfig.VERSION_NAME);
+        gitCommitText.setText(BuildConfig.GIT_HASH);
+        buildDateText.setText(BuildConfig.BUILD_DATE);
+    }
 }
