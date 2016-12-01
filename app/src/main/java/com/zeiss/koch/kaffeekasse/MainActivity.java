@@ -100,7 +100,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
                 newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
                 startActivity(newIntent);
             } else {
-                Intent newIntent = new Intent(this, AddUserActivity.class);
+                Intent newIntent = new Intent(this, RegisterUserActivity.class);
                 newIntent.putExtra(EXTRA_MESSAGE_NFCID, userTagId);
                 startActivity(newIntent);
             }
