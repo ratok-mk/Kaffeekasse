@@ -23,35 +23,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
-        <Spinner
-            android:id="@+id/userSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_gravity="center_vertical"
-            android:minWidth="250dp"
-            android:layout_weight="1"
-            style="@style/spinnerStyle.Highlight"/>
+        android:layout_weight="4">
+
+        <ListView
+            android:id="@+id/userList"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:cacheColorHint="#00000000"
+            android:dividerHeight="1px"
+            android:background="#AAAAAA"
+            android:alpha="200"
+            android:choiceMode="singleChoice"/>
+
         <Button
             android:id="@+id/registerUserButton"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_margin="8dp"
+            android:layout_margin="16dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             android:onClick="RegisterUserClick"
-            android:text="Nutzer mit Ausweis registrieren " />
+            android:text="Gescannten Ausweis Für den ausgewählten Nutzer registrieren " />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
         android:layout_weight="1">
         <Button
             android:id="@+id/openAddUserButton"
-            android:layout_width="350dp"
-            android:layout_height="60dp"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:onClick="OpenAddUserClick"
+            android:textSize="12dp"
             android:text="Neuen Nutzer hinzufügen " />
 
     </LinearLayout>

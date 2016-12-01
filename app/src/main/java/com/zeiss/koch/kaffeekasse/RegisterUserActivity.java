@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class RegisterUserActivity extends AppCompatActivity
-        implements AdapterView.OnItemSelectedListener {
+        implements AdapterView.OnItemClickListener {
 
-    public static final String EXTRA_MESSAGE_NFCID = "com.zeiss.koch.kaffeekasse.NFCID.RegisterUser" ;
+    public static final String EXTRA_MESSAGE_NFCID = "com.zeiss.koch.kaffeekasse.NFCID.RegisterUser";
     private SqlDatabaseHelper db;
     private String nfcId;
     private List<User> users;
-    private Spinner userSpinner;
-    private ArrayAdapter spinnerAdapter;
+    private ListView userList;
+    private ArrayAdapter userListAdapter;
     private User currentUser;
     private List<String> registeredNfcTags;
 
@@ -36,13 +36,17 @@ public class RegisterUserActivity extends AppCompatActivity
 
         db = new SqlDatabaseHelper(this);
         updateUsers();
-        updateUserSpinner();
+        updateUserList();
 
-        if (registeredNfcTags.contains(nfcId))
-        {
+        if (registeredNfcTags.contains(nfcId)) {
             CustomToast.showText(this, "NFC Tag ist bereits registriert.", Toast.LENGTH_LONG);
             finish();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        this.currentUser = this.users.get(i);
     }
 
     private void updateUsers() {
@@ -50,33 +54,15 @@ public class RegisterUserActivity extends AppCompatActivity
         Collections.sort(this.users, new UserComparator());
         registeredNfcTags = new ArrayList<>();
         Iterator<User> it = this.users.iterator();
-        while(it.hasNext())
-        {
+        while (it.hasNext()) {
             User user = it.next();
             if (!user.getNfcId().isEmpty()) {
                 registeredNfcTags.add(user.getNfcId());
             }
 
             if (user.getRole() == User.Role.ADMIN || !user.getNfcId().isEmpty()) {
-               it.remove();
+                it.remove();
             }
-        }
-    }
-
-    public void onItemSelected(AdapterView<?> parent,
-                               View view, int pos, long id) {
-        switch (parent.getId()) {
-            case R.id.userSpinner:
-                this.currentUser = this.users.get(pos);
-                break;
-        }
-    }
-
-    public void onNothingSelected(AdapterView parent) {
-        switch (parent.getId()) {
-            case R.id.userSpinner:
-                this.currentUser = null;
-                break;
         }
     }
 
@@ -85,12 +71,11 @@ public class RegisterUserActivity extends AppCompatActivity
             this.currentUser.setNfcId(nfcId);
             db.updateUser(this.currentUser);
             CharSequence message =
-                String.format("Nutzer %1$s mit NFC Tag registriert.", this.currentUser.getName());
+                    String.format("Nutzer %1$s mit NFC Tag registriert.", this.currentUser.getName());
             CustomToast.showText(this, message, Toast.LENGTH_LONG);
             finish();
         }
     }
-
 
 
     public void OpenAddUserClick(View view) {
@@ -100,18 +85,31 @@ public class RegisterUserActivity extends AppCompatActivity
         finish();
     }
 
-    private void updateUserSpinner() {
-        userSpinner = (Spinner) findViewById(R.id.userSpinner);
+    private void updateUserList() {
+        userList = (ListView) findViewById(R.id.userList);
         List<String> userStrings = new ArrayList<>();
 
         for (User user : users) {
             userStrings.add(user.getName());
         }
 
-        spinnerAdapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, userStrings);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        userSpinner.setAdapter(spinnerAdapter);
-        userSpinner.setOnItemSelectedListener(this);
+        userListAdapter = new ArrayAdapter(this, R.layout.user_list_item, userStrings);
+        userList.setAdapter(userListAdapter);
+        userList.setOnItemClickListener(this);
+
+        selectCurrentUser();
+    }
+
+    private void selectCurrentUser() {
+        // select current user
+        if (this.currentUser != null) {
+            final String userName = this.currentUser.getName();
+            for (int i = 0; i < userListAdapter.getCount(); i++) {
+                if (userName.equals(userListAdapter.getItem(i).toString())) {
+                    userList.performItemClick(userList, i, 0);
+                    break;
+                }
+            }
+        }
     }
 }
