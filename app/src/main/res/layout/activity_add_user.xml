@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="75dp"
             android:layout_gravity="center_vertical"
-            android:minWidth="250dp" />
+            android:minWidth="250dp"
+            style="@style/spinnerStyle.Highlight"/>
         <Button
             android:id="@+id/registerUserButton"
             android:layout_width="wrap_content"

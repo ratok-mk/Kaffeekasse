@@ -8,5 +8,6 @@
     <color name="dark_grey">#666666</color>
     <color name="light_grey">#AAAAAA</color>
     <color name="stroke">#000000</color>
+    <color name="highlight">#99FF6600</color>
     <color name="nfc_aware">#c29e3a</color>
 </resources>
