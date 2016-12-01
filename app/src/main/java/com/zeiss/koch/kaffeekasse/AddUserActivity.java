@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class AddUserActivity extends AppCompatActivity
 
     private void updateUsers() {
         this.users = db.getAllUsers();
+        Collections.sort(this.users, new UserComparator());
         registeredNfcTags = new ArrayList<>();
         Iterator<User> it = this.users.iterator();
         while(it.hasNext())
@@ -59,7 +61,6 @@ public class AddUserActivity extends AppCompatActivity
                it.remove();
             }
         }
-
     }
 
     public void onItemSelected(AdapterView<?> parent,
@@ -74,6 +75,7 @@ public class AddUserActivity extends AppCompatActivity
     public void onNothingSelected(AdapterView parent) {
         switch (parent.getId()) {
             case R.id.userSpinner:
+                this.currentUser = null;
                 break;
         }
     }
@@ -117,5 +119,6 @@ public class AddUserActivity extends AppCompatActivity
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(spinnerAdapter);
         userSpinner.setOnItemSelectedListener(this);
+        userSpinner.selec
     }
 }

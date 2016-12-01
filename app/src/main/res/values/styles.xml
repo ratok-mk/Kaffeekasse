@@ -25,7 +25,7 @@
     </style>
 
     <style name="TextAppearance.Huge" parent="android:TextAppearance.Large">
-        <item name="android:textSize">60dp</item>
+        <item name="android:textSize">50dp</item>
     </style>
     <style name="TextAppearance.Medium.Warning" parent="android:TextAppearance.Medium">
         <item name="android:textColor">@color/warning</item>
