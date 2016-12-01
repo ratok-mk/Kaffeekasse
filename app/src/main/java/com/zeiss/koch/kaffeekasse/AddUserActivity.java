@@ -119,6 +119,5 @@ public class AddUserActivity extends AppCompatActivity
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         userSpinner.setAdapter(spinnerAdapter);
         userSpinner.setOnItemSelectedListener(this);
-        userSpinner.selec
     }
 }
