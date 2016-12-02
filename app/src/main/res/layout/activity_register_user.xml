@@ -40,11 +40,11 @@
             android:id="@+id/registerUserButton"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:layout_margin="16dp"
+            android:layout_margin="32dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             android:onClick="RegisterUserClick"
-            android:text="Gescannten Ausweis Für den ausgewählten Nutzer registrieren " />
+            android:text="Registrierung abschließen" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

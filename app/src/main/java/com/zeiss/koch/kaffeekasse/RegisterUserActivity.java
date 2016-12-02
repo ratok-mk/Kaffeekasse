@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class RegisterUserActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         this.currentUser = this.users.get(i);
+        Button openAddUserButton = (Button) findViewById(R.id.openAddUserButton);
+        openAddUserButton.setVisibility(View.INVISIBLE);
     }
 
     private void updateUsers() {
