@@ -67,6 +67,12 @@ public class RegisterUserActivity extends AppCompatActivity
                 it.remove();
             }
         }
+
+        if (this.users != null && this.users.size() == 0)
+        {
+            OpenAddUserActivity();
+            finish();
+        }
     }
 
     public void RegisterUserClick(View view) {
@@ -82,10 +88,14 @@ public class RegisterUserActivity extends AppCompatActivity
 
 
     public void OpenAddUserClick(View view) {
+        OpenAddUserActivity();
+        finish();
+    }
+
+    private void OpenAddUserActivity() {
         Intent newIntent = new Intent(this, AddUserActivity.class);
         newIntent.putExtra(EXTRA_MESSAGE_NFCID, nfcId);
         startActivity(newIntent);
-        finish();
     }
 
     private void updateUserList() {
