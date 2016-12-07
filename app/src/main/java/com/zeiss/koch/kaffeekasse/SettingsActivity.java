@@ -434,7 +434,9 @@ public class SettingsActivity extends AbstractNfcActivity
                 balanceText.setText(formatted);
             }
 
-            chargeAmount = 0.0;
+            this.chargeAmount = 0.0;
+            EditText manualAmountText = (EditText) findViewById(R.id.manualAmount);
+            manualAmountText.setText("");
             updateChargeCreditView(true);
         }
     }
@@ -484,15 +486,15 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void chargeCreditClick(View view) {
         if (this.currentUser != null) {
-            if (this.chargeAmount > 0.0) {
+            if (this.chargeAmount != 0.0) {
                 Payment payment = new Payment(new Date(), this.currentUser.getId(), chargeAmount);
                 this.db.addPayment(payment);
                 Double balance = this.db.getBalance(this.currentUser);
 
                 String message = String.format(
-                        "Guthaben von %1s wurde um %2s aufgeladen.\nNeuer Kontostand: %3s",
+                        "Guthaben von %1s wurde um %2s geändert.\nNeuer Kontostand: %3s",
                         this.currentUser.getName(),
-                        Formater.valueToCurrencyString(chargeAmount),
+                        Formater.valueToCurrencyString(this.chargeAmount),
                         Formater.valueToCurrencyString(balance)
                 );
                 SoundManager.getInstance().play(this, SoundManager.SoundType.PAY);
@@ -505,7 +507,7 @@ public class SettingsActivity extends AbstractNfcActivity
                 AnimationHandler.highlight(this, balanceText);
             } else {
                 SoundManager.getInstance().play(this, SoundManager.SoundType.DENIED);
-                CustomToast.showText(this, "Betrag muss größer als 0,00 € sein!", Toast.LENGTH_LONG);
+                CustomToast.showText(this, "Betrag darf nicht 0,00 € sein!", Toast.LENGTH_LONG);
             }
         }
     }
