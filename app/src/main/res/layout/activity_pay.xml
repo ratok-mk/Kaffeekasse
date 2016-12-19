@@ -14,107 +14,75 @@
 
     <include layout="@layout/view_user" />
 
-    <LinearLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:orientation="horizontal">
+        android:layout_centerVertical="true">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/Button10"
+            android:layout_alignParentStart="true"
+            android:onClick="pay10Click"
+            android:padding="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_tea_cup_1"
+            app:layout_heightPercent="30%"
+            app:layout_widthPercent="30%" />
+
+        <TextView
+            android:id="@+id/textView10"
+            style="@android:style/TextAppearance.Large"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_below="@+id/Button10"
+            android:text="0,10€"
+            android:textAlignment="center"
+            app:layout_widthPercent="30%" />
 
-            <ImageButton
-                android:id="@+id/Button10"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_weight="1"
-                android:onClick="pay10Click"
-                android:padding="24dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_tea_cup_1" />
+        <ImageButton
+            android:id="@+id/Button20"
+            android:layout_centerHorizontal="true"
+            android:onClick="pay20Click"
+            android:padding="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_coffee_cup_1"
+            app:layout_heightPercent="30%"
+            app:layout_widthPercent="30%" />
 
-            <TextView
-                android:id="@+id/textView10"
-                style="@android:style/TextAppearance.Large"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/Button10"
-                android:layout_weight="1"
-                android:text="0,10€"
-                android:textAlignment="center" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView20"
+            style="@android:style/TextAppearance.Large"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/Button20"
+            android:layout_centerHorizontal="true"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="16sp"
-            android:paddingRight="16sp">
+            android:text="0,20€"
+            android:textAlignment="center"
+            app:layout_widthPercent="30%" />
 
-            <ImageButton
-                android:id="@+id/Button20"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_alignTop="@+id/Button10"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"
-                android:onClick="pay20Click"
-                android:padding="24dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_coffee_cup_1" />
 
-            <TextView
-                android:id="@+id/textView20"
-                style="@android:style/TextAppearance.Large"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/Button20"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="1"
-                android:text="0,20€"
-                android:textAlignment="center" />
+        <ImageButton
+            android:id="@+id/Button40"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1"
+            android:onClick="pay40Click"
+            android:padding="24dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_frappe_4"
+            app:layout_heightPercent="30%"
+            app:layout_widthPercent="30%" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView40"
+            style="@android:style/TextAppearance.Large"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/Button40"
+            android:text="0,40€"
+            android:textAlignment="center"
+            app:layout_widthPercent="30%" />
 
-            <ImageButton
-                android:id="@+id/Button40"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/Button20"
-                android:layout_weight="1"
-                android:onClick="pay40Click"
-                android:padding="24dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_frappe_4" />
-
-            <TextView
-                android:id="@+id/textView40"
-                style="@android:style/TextAppearance.Large"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/Button40"
-                android:text="0,40€"
-                android:textAlignment="center" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </android.support.percent.PercentRelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,11 +95,11 @@
             android:id="@+id/finishButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:layout_weight="1"
-            android:onClick="finishClick"
-            android:text="@string/back"
             android:gravity="center"
-            android:layout_margin="16dp" />
+            android:onClick="finishClick"
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/timeToFinishTextView"
