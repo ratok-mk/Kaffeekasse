@@ -36,8 +36,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/Button10"
             android:text="0,10€"
-            android:textAlignment="center"
-            app:layout_widthPercent="30%" />
+            app:layout_widthPercent="30%"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textViewPurchaseCount10"
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/Button10"
+            android:layout_alignBottom="@+id/Button10"
+            android:paddingStart="12dp"
+            android:paddingBottom="8dp"
+            android:text="0"
+            android:textAlignment="textStart" />
 
         <ImageButton
             android:id="@+id/Button20"
@@ -52,13 +64,25 @@
         <TextView
             android:id="@+id/textView20"
             style="@android:style/TextAppearance.Large"
+            app:layout_widthPercent="30%"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Button20"
             android:layout_centerHorizontal="true"
-            android:layout_weight="1"
             android:text="0,20€"
-            android:textAlignment="center"
-            app:layout_widthPercent="30%" />
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textViewPurchaseCount20"
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/Button20"
+            android:layout_alignBottom="@+id/Button20"
+            android:paddingStart="12dp"
+            android:paddingBottom="8dp"
+            android:text="0"
+            android:textAlignment="textStart"
+            />
 
 
         <ImageButton
@@ -81,6 +105,18 @@
             android:text="0,40€"
             android:textAlignment="center"
             app:layout_widthPercent="30%" />
+
+        <TextView
+            android:id="@+id/textViewPurchaseCount40"
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/Button40"
+            android:layout_alignBottom="@+id/Button40"
+            android:paddingStart="12dp"
+            android:paddingBottom="8dp"
+            android:text="0"
+            android:textAlignment="textStart" />
 
     </android.support.percent.PercentRelativeLayout>
 
