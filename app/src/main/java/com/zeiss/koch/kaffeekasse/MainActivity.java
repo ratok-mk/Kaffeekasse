@@ -82,6 +82,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public void onResume() {
         super.onResume();
         updateUserList();
+        backupDatabase();
     }
 
     @Override
