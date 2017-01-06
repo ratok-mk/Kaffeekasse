@@ -88,7 +88,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     @Override
-    protected void handleIntent(Intent intent) {
+    protected void handleNfcIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent

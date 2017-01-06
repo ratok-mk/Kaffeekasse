@@ -59,10 +59,10 @@ public abstract class AbstractNfcActivity extends AppCompatActivity{
          *
          * In our case this method gets called, when the user attaches a Tag to the device.
          */
-        handleIntent(intent);
+        handleNfcIntent(intent);
     }
 
-    protected abstract void handleIntent(Intent intent); /*{
+    protected abstract void handleNfcIntent(Intent intent); /*{
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
             // In case we would still use the Tag Discovered Intent
