@@ -195,6 +195,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         TextView buildDateText = (TextView) findViewById(R.id.buildDateText);
         versionText.setText(BuildConfig.VERSION_NAME);
         gitCommitText.setText(BuildConfig.GIT_HASH);
-        buildDateText.setText(BuildConfig.BUILD_DATE);
+        String buildDateShort = BuildConfig.BUILD_DATE.substring(0, 8);
+        buildDateText.setText(buildDateShort);
     }
 }

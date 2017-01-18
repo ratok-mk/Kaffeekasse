@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Formatter;
 
 /**
  * User
@@ -53,6 +54,10 @@ class Payment {
 
     public String getDatetime() {
         return dateFormat.format(datetime);
+    }
+
+    public String getDatetimeFormated() {
+        return Formater.dateToLocalString(datetime);
     }
 
     public int getUserid() {

@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -190,6 +192,31 @@ public class PayActivity extends AppCompatActivity {
         String text = String.format("Einkauf von %1s: %2s",
                 this.currentUser.getName(),
                 Formater.valueToCurrencyString(this.totalPurchase));
+        CustomToast.showText(this, text, Toast.LENGTH_LONG);
+    }
+
+    public void historyClick(View view) {
+        List<Payment> allPayments = db.getAllPayments();
+        List<Payment> userPayments = new ArrayList<>();
+        for (Payment payment:allPayments) {
+            if (payment.getUserid() == this.currentUser.getId())
+            {
+                userPayments.add(payment);
+            }
+        }
+
+        int payments = 0;
+        int index = userPayments.size()-1;
+        String text = String.format("Letzte Einkäufe von %1s:\n",this.currentUser.getName());
+        while (index > 0 && payments < 5)
+        {
+            Payment payment = userPayments.get(index);
+            text += String.format("Datum: %1s  -  Betrag: %2s\n",
+                    payment.getDatetimeFormated(), Formater.valueToCurrencyString(payment.getAmount()));
+            index--;
+            payments++;
+        }
+
         CustomToast.showText(this, text, Toast.LENGTH_LONG);
     }
 }
