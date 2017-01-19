@@ -142,11 +142,11 @@
             style="@android:style/TextAppearance.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
+            android:layout_gravity="center_vertical|center"
             android:layout_marginEnd="16dp"
             android:layout_weight="3"
-            android:text="@string/automatic_logoff_in"
-            android:textAlignment="textEnd" />
+            android:textAlignment="center"
+            android:text="@string/automatic_logoff_in"/>
 
         <com.github.lzyzsd.circleprogress.DonutProgress
             android:id="@+id/timeout_progress"
@@ -157,6 +157,16 @@
             app:donut_progress="75"
             app:donut_text_color="@color/text"
             app:donut_unfinished_color="@color/dark_grey" />
+
+        <Button
+            android:id="@+id/historyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="historyClick"
+            android:text="@string/history" />
 
     </LinearLayout>
 
