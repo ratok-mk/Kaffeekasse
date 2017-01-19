@@ -344,4 +344,32 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return payments;
     }
+
+    public List<Payment> getUserPayments(User user) {
+        List<Payment> payments = new LinkedList<>();
+
+        String query = "SELECT  * FROM " + TABLE_PAYMENTS + " WHERE userid='" + user.getId() + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Payment payment = null;
+        if (cursor.moveToFirst()) {
+            do {
+                payment = new Payment(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getDouble(3)
+                );
+
+
+                // Add user to books
+                payments.add(payment);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return payments;
+    }
 }
