@@ -211,7 +211,7 @@ public class PayActivity extends AppCompatActivity {
         while (index > 0 && payments < 5)
         {
             Payment payment = userPayments.get(index);
-            text += String.format("Datum: %1s  -  Betrag: %2s\n",
+            text += String.format("Betrag: %2s  -  Datum: %1s\n",
                     payment.getDatetimeFormated(), Formater.valueToCurrencyString(payment.getAmount()));
             index--;
             payments++;
