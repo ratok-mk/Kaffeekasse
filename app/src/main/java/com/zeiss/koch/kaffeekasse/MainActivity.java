@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -130,6 +133,22 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         userListAdapter = new CustomUserListAdapter(this, this.users);
         userList.setAdapter(userListAdapter);
         userList.setOnItemClickListener(this);
+
+        EditText editTxt = (EditText) findViewById(R.id.searchFilter) ;
+        editTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                userListAdapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     private void setupDrawer() {
