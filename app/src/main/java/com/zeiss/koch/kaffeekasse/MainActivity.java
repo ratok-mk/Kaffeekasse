@@ -114,7 +114,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-        User user = this.users.get(pos);
+        User user = (User)parent.getItemAtPosition(pos);
         if (user != null) {
             this.drawerLayout.closeDrawers();
             SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
