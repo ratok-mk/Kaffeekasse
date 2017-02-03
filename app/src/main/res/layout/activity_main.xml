@@ -152,6 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 app:srcCompat="@android:drawable/ic_search_category_default" />
 
             <EditText
@@ -159,10 +160,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start|center"
+                android:layout_weight="8"
                 style="@android:style/TextAppearance.Large"
                 android:textColor="@color/light_grey"
                 android:hint="Suche"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                />
+            <ImageButton
+                android:id="@+id/clearSearchFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:onClick="clearSearchFilterClick"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+                />
         </LinearLayout>
 
         <ListView

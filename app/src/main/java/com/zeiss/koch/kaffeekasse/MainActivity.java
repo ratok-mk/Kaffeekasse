@@ -134,8 +134,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         userList.setAdapter(userListAdapter);
         userList.setOnItemClickListener(this);
 
-        EditText editTxt = (EditText) findViewById(R.id.searchFilter) ;
-        editTxt.addTextChangedListener(new TextWatcher() {
+        EditText editText = (EditText) findViewById(R.id.searchFilter);
+        editText.setOnEditorActionListener(new DoneOnEditorActionListener());
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 userListAdapter.getFilter().filter(s.toString());
@@ -218,5 +219,10 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             String buildDateShort = BuildConfig.BUILD_DATE.substring(0, 8);
             buildDateText.setText(buildDateShort);
         }
+    }
+
+    public void clearSearchFilterClick(View view) {
+        EditText editText = (EditText) findViewById(R.id.searchFilter);
+        editText.setText("");
     }
 }
