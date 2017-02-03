@@ -150,7 +150,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:srcCompat="@android:drawable/ic_search_category_default" />
 
@@ -161,7 +161,8 @@
                 android:layout_gravity="start|center"
                 style="@android:style/TextAppearance.Large"
                 android:textColor="@color/light_grey"
-                android:hint="Suche"/>
+                android:hint="Suche"
+                android:singleLine="true" />
         </LinearLayout>
 
         <ListView

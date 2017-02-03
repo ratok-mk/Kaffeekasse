@@ -57,7 +57,7 @@ public class CustomUserListAdapter extends BaseAdapter implements Filterable {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        User user = originalData.get(position);
+        User user = filteredData.get(position);
         Double balance = db.getBalance(user);
         String balanceText = Formater.valueToCurrencyString(balance);
         holder.txtName.setText(String.format("%1$d. %2$s", position + 1, user.getName()));
