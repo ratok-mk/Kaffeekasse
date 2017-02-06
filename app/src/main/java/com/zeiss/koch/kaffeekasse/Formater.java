@@ -16,7 +16,7 @@ public class Formater {
     }
 
     public static String dateToLocalString(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy-HH:mm");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
         return formatter.format(date);
     }

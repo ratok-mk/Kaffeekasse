@@ -203,9 +203,9 @@ public class PayActivity extends AppCompatActivity {
         while (index > 0 && payments < 5)
         {
             Payment payment = userPayments.get(index);
-            text += String.format("\nBetrag: %1s  -  Datum: %2s",
-                    Formater.valueToCurrencyString(payment.getAmount()),
-                    payment.getDatetimeFormated());
+            text += String.format("\n%1s:   %2s",
+                    payment.getDatetimeFormated(),
+                    Formater.valueToCurrencyString(payment.getAmount()));
             index--;
             payments++;
         }

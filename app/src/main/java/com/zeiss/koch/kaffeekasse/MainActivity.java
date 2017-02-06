@@ -2,6 +2,7 @@ package com.zeiss.koch.kaffeekasse;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -55,8 +57,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         backupDatabase();
         this.db = new SqlDatabaseHelper(this);
         updateUserList();
+        EditText editText = (EditText) findViewById(R.id.searchFilter);
+        editText.setText("");
     }
-
 
     /**
      * Checks if the app has permission to write to device storage
@@ -88,6 +91,8 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         super.onResume();
         updateUserList();
         backupDatabase();
+        EditText editText = (EditText) findViewById(R.id.searchFilter);
+        editText.setText("");
     }
 
     @Override
@@ -166,6 +171,9 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(title);
+                EditText editText = (EditText) findViewById(R.id.searchFilter);
+                InputMethodManager imm = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
             }
 
             /** Called when a drawer has settled in a completely open state. */
