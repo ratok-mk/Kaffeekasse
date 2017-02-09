@@ -69,7 +69,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="Manueller Betrag"
-            android:inputType="numberSigned" />
+            android:inputType="number|numberSigned|numberDecimal" />
 
         <ImageButton
             android:id="@+id/manualAmountClick"
