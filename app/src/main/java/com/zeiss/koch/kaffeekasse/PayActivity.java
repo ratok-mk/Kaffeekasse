@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +40,8 @@ public class PayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_pay);
+        setActionBarTitle();
+
         this.timeoutProgress = (DonutProgress) findViewById(R.id.timeout_progress);
 
         db = new SqlDatabaseHelper(this);
@@ -59,17 +61,7 @@ public class PayActivity extends AppCompatActivity {
 
         setLogoffTime(this.INITIAL_TIMEOUT_S);
 
-        this.timer = new Timer();
-        this.timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                timerHandler.obtainMessage(1).sendToTarget();
-            }
-        }, 0, 100);
-    }
-
-    private void setLogoffTime(int timeoutInS) {
-        this.logoffTime = new java.util.Date(new java.util.Date().getTime() + 1000 * timeoutInS);
+        startTimerTask();
     }
 
     @Override
@@ -81,8 +73,38 @@ public class PayActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (this.timer == null) {
+            startTimerTask();
+        }
+    }
+
+    private void startTimerTask() {
+        this.timer = new Timer();
+        this.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timerHandler.obtainMessage(1).sendToTarget();
+            }
+        }, 0, 100);
+    }
+
+    private void setActionBarTitle() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Bezahlung - " + Formater.timeToLocalString(new java.util.Date()));
+        }
+    }
+
+    private void setLogoffTime(int timeoutInS) {
+        this.logoffTime = new java.util.Date(new java.util.Date().getTime() + 1000 * timeoutInS);
+    }
+
     private Handler timerHandler = new Handler() {
         public void handleMessage(Message msg) {
+            setActionBarTitle();
             final float fraction = (logoffTime.getTime() - new java.util.Date().getTime()) / 1000.0f;
             final String caption = "" + (int) Math.ceil(fraction) + " s";
 
