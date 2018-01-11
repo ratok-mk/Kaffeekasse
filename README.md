@@ -1,6 +1,6 @@
 # Kaffeekasse
 
-Android Cashier app for coffee automata.
+Android Cashier app for coffee automata using NFC tags for user identification.
 
 Features:
 - User management
