@@ -12,7 +12,8 @@ public class SoundManager {
         BUTTON,
         PAY,
         BACK,
-        DENIED
+        DENIED,
+        ALERT
     }
 
     private static SoundManager instance;
@@ -26,6 +27,7 @@ public class SoundManager {
         this.map.put(SoundType.PAY, R.raw.payment);
         this.map.put(SoundType.BACK, R.raw.back);
         this.map.put(SoundType.DENIED, R.raw.denied);
+        this.map.put(SoundType.ALERT, R.raw.alert);
     }
 
     public static SoundManager getInstance() {

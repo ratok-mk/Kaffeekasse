@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,6 +107,8 @@ public class PayActivity extends AppCompatActivity {
             timeoutProgress.setFinishedStrokeColor(getColor(colorCountDownCircle));
             timeoutProgress.setTextColor(getColor(colorCountDownText));
         }
+
+
     };
 
     private void updateUsername(User user) {
@@ -117,12 +120,16 @@ public class PayActivity extends AppCompatActivity {
     private void updateBalance(User user, Boolean animate) {
         Double balance = db.getBalance(user);
         TextView balanceText = (TextView) findViewById(R.id.balanceTextView);
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.activity_pay);
 
         final String formatted = Formater.valueToCurrencyString(balance);
         if (balance < 0.0) {
             balanceText.setTextAppearance(R.style.balance_minus);
+            layout.setBackgroundColor(getResources().getColor(R.color.warning));
+            SoundManager.getInstance().play(this, SoundManager.SoundType.ALERT);
         } else {
             balanceText.setTextAppearance(R.style.balance_plus);
+            layout.setBackgroundColor(getResources().getColor(R.color.background_grey));
         }
         balanceText.setText(formatted);
 
