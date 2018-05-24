@@ -20,4 +20,10 @@ public class Formater {
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
         return formatter.format(date);
     }
+
+    public static String timeToLocalString(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+        return formatter.format(date);
+    }
 }

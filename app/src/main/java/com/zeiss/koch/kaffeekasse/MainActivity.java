@@ -9,8 +9,11 @@ import android.content.res.Configuration;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +28,8 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener {
     // Storage Permissions
@@ -45,6 +50,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +65,47 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         updateUserList();
         EditText editText = (EditText) findViewById(R.id.searchFilter);
         editText.setText("");
+
+        startTimerTask();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUserList();
+        backupDatabase();
+        EditText editText = (EditText) findViewById(R.id.searchFilter);
+        editText.setText("");
+
+        if (this.timer == null) {
+            startTimerTask();
+        }
+    }
+
+    private void startTimerTask() {
+        this.timer = new Timer();
+        this.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                timerHandler.obtainMessage(1).sendToTarget();
+            }
+        }, 0, 1000);
+    }
+
+    private Handler timerHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            setActionBarTitle();
+        }
+    };
 
     /**
      * Checks if the app has permission to write to device storage
@@ -86,14 +132,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         backup.Backup();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUserList();
-        backupDatabase();
-        EditText editText = (EditText) findViewById(R.id.searchFilter);
-        editText.setText("");
-    }
+
 
     @Override
     protected void handleIntent(Intent intent) {
@@ -159,7 +198,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     private void setupDrawer() {
         final String title = getResources().getString(R.string.userlist);
-        getSupportActionBar().setTitle(title);
+        setActionBarTitle();
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 this.drawerLayout,
@@ -170,7 +209,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(title);
+                setActionBarTitle();
                 EditText editText = (EditText) findViewById(R.id.searchFilter);
                 InputMethodManager imm = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -179,7 +218,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(title);
+                setActionBarTitle();
             }
         };
 
@@ -188,6 +227,14 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+    }
+
+    private void setActionBarTitle() {
+        final String title = getResources().getString(R.string.userlist);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title + " - " + Formater.timeToLocalString(new java.util.Date()));
+        }
     }
 
     @Override

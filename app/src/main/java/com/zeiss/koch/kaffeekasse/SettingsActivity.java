@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -439,6 +444,7 @@ public class SettingsActivity extends AbstractNfcActivity
             this.chargeAmount = 0.0;
             EditText manualAmountText = (EditText) findViewById(R.id.manualAmount);
             manualAmountText.setText("");
+            manualAmountText.setOnEditorActionListener(new DoneOnEditorActionListener());
             updateChargeCreditView(true);
         }
     }
@@ -477,6 +483,7 @@ public class SettingsActivity extends AbstractNfcActivity
         EditText manualAmountText = (EditText) findViewById(R.id.manualAmount);
         try {
             Double manualAmount = Double.parseDouble(manualAmountText.getText().toString());
+            manualAmount = round(manualAmount, 2);
             if (manualAmount != null) {
                 chargeAmount += manualAmount.doubleValue();
                 manualAmountText.setText("");
@@ -535,6 +542,14 @@ public class SettingsActivity extends AbstractNfcActivity
                 "Datenbank wurde aus Datei %1$s wiederhergestellt.",
                 file.getAbsolutePath());
         CustomToast.showText(this, message, Toast.LENGTH_LONG);
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     public void exitApplication() {
