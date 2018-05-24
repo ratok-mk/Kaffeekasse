@@ -95,7 +95,7 @@ public class PayActivity extends AppCompatActivity {
     private void setActionBarTitle() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle("Bezahlung - " + Formater.timeToLocalString(new java.util.Date()));
+            actionBar.setTitle("Bezahlung - " + Formater.dateToLocalString(new java.util.Date()));
         }
     }
 
