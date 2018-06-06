@@ -120,8 +120,8 @@ public class PayActivity extends AppCompatActivity {
             int colorCountDownCircle;
 
             if (WARN_LIMIT_S >= (int) Math.ceil(fraction)) {
-                colorCountDownCircle = R.color.warning;
-                colorCountDownText = R.color.warning;
+                colorCountDownCircle = R.color.warning_red;
+                colorCountDownText = R.color.warning_red;
             } else {
                 colorCountDownCircle = R.color.light_grey;
                 colorCountDownText = R.color.text;
@@ -145,9 +145,15 @@ public class PayActivity extends AppCompatActivity {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.activity_pay);
 
         final String formatted = Formater.valueToCurrencyString(balance);
-        if (balance < 0.0) {
+        if (balance <= 1.0 && balance >= 0.0)
+        {
+            balanceText.setTextAppearance(R.style.balance_low);
+            layout.setBackgroundColor(getResources().getColor(R.color.warning_yellow));
+            SoundManager.getInstance().play(this, SoundManager.SoundType.WARNING);
+        }
+        else if (balance < 0.0) {
             balanceText.setTextAppearance(R.style.balance_minus);
-            layout.setBackgroundColor(getResources().getColor(R.color.warning));
+            layout.setBackgroundColor(getResources().getColor(R.color.warning_red));
             SoundManager.getInstance().play(this, SoundManager.SoundType.ALERT);
         } else {
             balanceText.setTextAppearance(R.style.balance_plus);

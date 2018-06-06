@@ -60,9 +60,13 @@
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIYLl6Bcf7Rr9nTCR2RjFxgW4_DLTCsHylyYAv4w" />
 
-
-        <activity android:name=".RegisterUserActivity"></activity>
-        <activity android:name=".AddUserActivity"></activity>
+        <activity android:name=".RegisterUserActivity" />
+        <activity android:name=".AddUserActivity" />
+        <activity
+            android:name=".ScreensaverActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_screensaver"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

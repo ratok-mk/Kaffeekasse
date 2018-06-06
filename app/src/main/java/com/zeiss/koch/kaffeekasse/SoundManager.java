@@ -13,7 +13,8 @@ public class SoundManager {
         PAY,
         BACK,
         DENIED,
-        ALERT
+        ALERT,
+        WARNING
     }
 
     private static SoundManager instance;
@@ -28,6 +29,7 @@ public class SoundManager {
         this.map.put(SoundType.BACK, R.raw.back);
         this.map.put(SoundType.DENIED, R.raw.denied);
         this.map.put(SoundType.ALERT, R.raw.alert);
+        this.map.put(SoundType.WARNING, R.raw.warning);
     }
 
     public static SoundManager getInstance() {

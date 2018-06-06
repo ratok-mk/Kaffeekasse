@@ -75,8 +75,8 @@ public class LoginActivity extends AbstractNfcActivity {
             int colorCountDownCircle;
 
             if (WARN_LIMIT_S >= (int) Math.ceil(fraction)) {
-                colorCountDownCircle = R.color.warning;
-                colorCountDownText = R.color.warning;
+                colorCountDownCircle = R.color.warning_red;
+                colorCountDownText = R.color.warning_red;
             } else {
                 colorCountDownCircle = R.color.light_grey;
                 colorCountDownText = R.color.text;

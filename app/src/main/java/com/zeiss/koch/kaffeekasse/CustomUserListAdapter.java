@@ -63,7 +63,11 @@ public class CustomUserListAdapter extends BaseAdapter implements Filterable {
         holder.txtName.setText(String.format("%1$d. %2$s", position + 1, user.getName()));
         holder.txtInfo.setText(balanceText);
 
-        if (balance < 0.0)
+        if (balance < 1.0 && balance >= 0.0)
+        {
+            holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Warning_Yellow);
+        }
+        else if (balance < 0.0)
         {
             holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Warning);
         }

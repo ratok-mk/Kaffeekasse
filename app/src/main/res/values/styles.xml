@@ -21,10 +21,12 @@
         <item name="android:textSize">22sp</item>
         <item name="android:background">@color/button_grey</item>
     </style>
+
     <style name="spinnerStyle.Highlight" parent="spinnerStyle">
         <item name="android:textSize">22sp</item>
         <item name="android:background">@color/highlight</item>
     </style>
+
     <style name="spinnerItemStyle" parent="@android:style/Widget.Material.DropDownItem.Spinner">
         <item name="android:textSize">22sp</item>
     </style>
@@ -36,12 +38,21 @@
     <style name="TextAppearance.Huge" parent="android:TextAppearance.Large">
         <item name="android:textSize">50dp</item>
     </style>
+
+    <style name="TextAppearance.Huge.Dark" parent="TextAppearance.Huge">
+        <item name="android:textColor">@color/background_grey</item>
+    </style>
+
     <style name="TextAppearance.Medium.Warning" parent="android:TextAppearance.Medium">
-        <item name="android:textColor">@color/warning</item>
+        <item name="android:textColor">@color/warning_red</item>
     </style>
 
     <style name="TextAppearance.Large.Warning" parent="android:TextAppearance.Large">
-        <item name="android:textColor">@color/warning</item>
+        <item name="android:textColor">@color/warning_red</item>
+    </style>
+
+    <style name="TextAppearance.Large.Warning.Yellow" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/warning_yellow</item>
     </style>
 
     <style name="balance_plus" parent="android:TextAppearance.Large">
@@ -49,7 +60,21 @@
     </style>
 
     <style name="balance_minus" parent="balance_plus">
-        <item name="android:textColor">@color/warning</item>
+        <item name="android:textColor">@color/warning_red</item>
+    </style>
+
+    <style name="balance_low" parent="balance_plus">
+        <item name="android:textColor">@color/warning_yellow</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="DarkTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

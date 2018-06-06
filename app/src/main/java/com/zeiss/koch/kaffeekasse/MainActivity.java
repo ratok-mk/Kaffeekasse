@@ -33,6 +33,9 @@ import java.util.TimerTask;
 
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener {
     // Storage Permissions
+
+    private static final int SCREENSAVER_TIMEOUT_MS = 300000;
+
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -50,7 +53,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
-    private Timer timer;
+    private Timer timer, screensaverTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,11 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             this.timer.cancel();
             this.timer = null;
         }
+
+        if (this.screensaverTimer != null) {
+            this.screensaverTimer.cancel();
+            this.screensaverTimer = null;
+        }
     }
 
     @Override
@@ -88,6 +96,10 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
         if (this.timer == null) {
             startTimerTask();
+        }
+
+        if (this.screensaverTimer == null) {
+            startScreensaverTimerTask();
         }
     }
 
@@ -106,6 +118,27 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             setActionBarTitle();
         }
     };
+
+    private void startScreensaverTimerTask() {
+        this.screensaverTimer = new Timer();
+        this.screensaverTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                screensaverTimerHandler.obtainMessage(1).sendToTarget();
+            }
+        }, SCREENSAVER_TIMEOUT_MS, SCREENSAVER_TIMEOUT_MS);
+    }
+
+    private Handler screensaverTimerHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            startScreenSaver();
+        }
+    };
+
+    private void startScreenSaver() {
+        Intent newIntent = new Intent(this, ScreensaverActivity.class);
+        startActivity(newIntent);
+    }
 
     /**
      * Checks if the app has permission to write to device storage
@@ -233,7 +266,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         final String title = getResources().getString(R.string.userlist);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(title + " - " + Formater.timeToLocalString(new java.util.Date()));
+            actionBar.setTitle(title + " - " + Formater.dateToLocalString(new java.util.Date()));
         }
     }
 

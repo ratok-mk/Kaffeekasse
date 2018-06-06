@@ -17,4 +17,7 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="msg_save_user_first">Bitte zuerst Nutzer speichern.</string>
+
+    <string name="title_activity_screensaver">ScreensaverActivity</string>
+    <string name="screensaver">Screensaver</string>
 </resources>
