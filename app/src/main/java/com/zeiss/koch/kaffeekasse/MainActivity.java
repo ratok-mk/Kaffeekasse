@@ -37,6 +37,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     private static final int SCREENSAVER_TIMEOUT_MS = 300000;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CODE_SCREENSAVER = 0x0077;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -137,7 +138,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
 
     private void startScreenSaver() {
         Intent newIntent = new Intent(this, ScreensaverActivity.class);
-        startActivity(newIntent);
+        startActivityForResult(newIntent, REQUEST_CODE_SCREENSAVER);
     }
 
     /**
@@ -175,17 +176,37 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             String userTagId = NfcHelper.getId(tag);
 
-            this.drawerLayout.closeDrawers();
-            SoundManager.getInstance().play(this, SoundManager.SoundType.NFC);
-            User user = this.db.getUserByNfcId(userTagId);
-            if (user != null) {
-                Intent newIntent = new Intent(this, PayActivity.class);
-                newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
-                startActivity(newIntent);
-            } else {
-                Intent newIntent = new Intent(this, RegisterUserActivity.class);
-                newIntent.putExtra(EXTRA_MESSAGE_NFCID, userTagId);
-                startActivity(newIntent);
+            reactToUserTagId(userTagId);
+        }
+    }
+
+    private void reactToUserTagId(String userTagId) {
+        this.drawerLayout.closeDrawers();
+        SoundManager.getInstance().play(this, SoundManager.SoundType.NFC);
+        User user = this.db.getUserByNfcId(userTagId);
+        if (user != null) {
+            Intent newIntent = new Intent(this, PayActivity.class);
+            newIntent.putExtra(EXTRA_MESSAGE_USERID, user.getId());
+            startActivity(newIntent);
+        } else {
+            Intent newIntent = new Intent(this, RegisterUserActivity.class);
+            newIntent.putExtra(EXTRA_MESSAGE_NFCID, userTagId);
+            startActivity(newIntent);
+        }
+    }
+
+    //-------- When a result is returned from another Activity onActivityResult is called.--------- //
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // First we need to check if the requestCode matches the one we used.
+        if(requestCode == REQUEST_CODE_SCREENSAVER) {
+
+            if(resultCode == Activity.RESULT_OK) {
+                // Get the result from the returned Intent
+                final String userTagId = data.getStringExtra(ScreensaverActivity.EXTRA_DATA_NFCTAG);
+                reactToUserTagId(userTagId);
             }
         }
     }
