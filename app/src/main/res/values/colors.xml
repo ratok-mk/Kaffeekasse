@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="warning_red">#FF4444</color>
-    <color name="warning_yellow">#FFDD00</color>
+    <color name="warning_yellow">#FFBB00</color>
     <color name="text">#FFFFFF</color>
     <color name="toast_grey">#333333</color>
     <color name="button_grey">#333333</color>

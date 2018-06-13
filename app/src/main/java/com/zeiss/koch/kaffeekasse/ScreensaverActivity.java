@@ -23,7 +23,7 @@ public class ScreensaverActivity extends AbstractNfcActivity {
     // Constant used to identify data sent between Activities.
     public static final String EXTRA_DATA_NFCTAG = "EXTRA_DATA_NFCTAG";
 
-    private static final int UI_ANIMATION_DELAY = 300;
+    private static final int UI_ANIMATION_DELAY = 1000;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
