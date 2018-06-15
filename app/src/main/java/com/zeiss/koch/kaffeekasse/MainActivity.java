@@ -34,7 +34,7 @@ import java.util.TimerTask;
 public class MainActivity extends AbstractNfcActivity implements AdapterView.OnItemClickListener {
     // Storage Permissions
 
-    private static final int SCREENSAVER_TIMEOUT_MS = 300000;
+    private static final int SCREENSAVER_TIMEOUT_MS = 180000;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_CODE_SCREENSAVER = 0x0077;

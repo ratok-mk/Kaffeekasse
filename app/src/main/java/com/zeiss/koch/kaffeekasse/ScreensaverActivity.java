@@ -23,7 +23,7 @@ public class ScreensaverActivity extends AbstractNfcActivity {
     // Constant used to identify data sent between Activities.
     public static final String EXTRA_DATA_NFCTAG = "EXTRA_DATA_NFCTAG";
 
-    private static final int UI_ANIMATION_DELAY = 1000;
+    private static final int UI_ANIMATION_DELAY = 500;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -50,7 +50,7 @@ public class ScreensaverActivity extends AbstractNfcActivity {
             // Delayed display of UI elements
             ActionBar actionBar = getActionBar();
             if (actionBar != null) {
-                actionBar.show();
+                actionBar.hide();
             }
             mControlsView.setVisibility(View.VISIBLE);
         }
@@ -80,7 +80,7 @@ public class ScreensaverActivity extends AbstractNfcActivity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100);
+        delayedHide(UI_ANIMATION_DELAY);
     }
 
     @Override

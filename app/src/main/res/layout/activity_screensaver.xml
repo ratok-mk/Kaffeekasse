@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_overlay"
+    android:fitsSystemWindows="true"
     tools:context="com.zeiss.koch.kaffeekasse.ScreensaverActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -11,31 +12,33 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
+
+
     <FrameLayout
+        android:id="@+id/fullscreen_content_controls"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@color/transparent_overlay"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent">
 
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
+        <com.zeiss.koch.kaffeekasse.ScreenSaverView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent">
+            android:paddingBottom="60dp"
+            android:paddingLeft="0dp" />
 
-            <Button
-                android:id="@+id/deactivateButton"
-                style="@style/TextAppearance.Huge.Dark"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/screensaver"
-                android:background="@color/black_overlay"
-                android:onClick="deactivateButtonClick"/>
+        <Button
+            android:id="@+id/deactivateButton"
+            style="@style/TextAppearance.Huge.Dark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:onClick="deactivateButtonClick"
+            android:text="" />
 
-        </LinearLayout>
+
     </FrameLayout>
 
 </FrameLayout>
