@@ -43,7 +43,7 @@ public class CustomUserListAdminAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.user_list_item, null);
+            convertView = mInflater.inflate(R.layout.activity_settings_user_list_item, null);
             holder = new ViewHolder();
             holder.txtName = (TextView) convertView.findViewById(R.id.userListAdminText);
             holder.txtInfo = (TextView) convertView.findViewById(R.id.userListAdminInfo);
