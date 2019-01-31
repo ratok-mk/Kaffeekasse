@@ -52,7 +52,11 @@ class Payment {
         return id;
     }
 
-    public String getDatetime() {
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public String getDatetimeForDatabase() {
         return dateFormat.format(datetime);
     }
 

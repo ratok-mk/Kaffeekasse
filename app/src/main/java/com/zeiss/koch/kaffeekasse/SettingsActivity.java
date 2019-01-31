@@ -150,7 +150,7 @@ public class SettingsActivity extends AbstractNfcActivity
 //        String paymentsTable = "Id;Date;UserId;Amount\n";
 //        for(Payment payment:payments)
 //        {
-//            paymentsTable += String.format("%1$04d;%2$s;%3$04d;%4$.2f€\n", payment.getId(), payment.getDatetime(), payment.getUserid(), payment.getAmount());
+//            paymentsTable += String.format("%1$04d;%2$s;%3$04d;%4$.2f€\n", payment.getId(), payment.getDatetimeForDatabase(), payment.getUserid(), payment.getAmount());
 //        }
 //
 //        paymentsTextView.setText(paymentsTable);
@@ -222,13 +222,7 @@ public class SettingsActivity extends AbstractNfcActivity
     private void updateUserList() {
         this.users = this.db.getAllUsers();
         Collections.sort(this.users, new UserComparator());
-
-        List<String> userList = new ArrayList<>();
-
-        for (User user : this.users) {
-            userList.add(user.getName());
-        }
-        ArrayAdapter userListAdapter = new ArrayAdapter(this, R.layout.user_list_item, userList);
+        CustomUserListAdminAdapter userListAdapter = new CustomUserListAdminAdapter(this, this.users);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
 
@@ -236,7 +230,8 @@ public class SettingsActivity extends AbstractNfcActivity
         if (this.currentUser != null) {
             final String userName = this.currentUser.getName();
             for (int i = 0; i < userListAdapter.getCount(); i++) {
-                if (userName.equals(userListAdapter.getItem(i).toString())) {
+                User currentListUser = (User)userListAdapter.getItem(i);
+                if (userName.equals(currentListUser.getName())) {
                     userListView.performItemClick(userListView, i, 0);
                     break;
                 }

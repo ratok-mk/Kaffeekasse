@@ -286,7 +286,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(PAYMENTS_KEY_DATETIME, payment.getDatetime());
+        values.put(PAYMENTS_KEY_DATETIME, payment.getDatetimeForDatabase());
         values.put(PAYMENTS_KEY_USERID, payment.getUserid());
         values.put(PAYMENTS_KEY_AMOUNT, payment.getAmount());
 
