@@ -56,18 +56,7 @@ public class CustomUserListAdminAdapter extends BaseAdapter {
         User user = originalData.get(position);
         holder.txtName.setText(String.format("%1$d. %2$s", position + 1, user.getName()));
 
-        List<Payment> userPayments = db.getUserPayments(user);
-        boolean userIsActive = true;
-        java.util.Date currentDate = new java.util.Date();
-        if (userPayments.size() > 0) {
-            if (dateDiff(currentDate, userPayments.get(0).getDatetime(), TimeUnit.DAYS) >= 90) {
-                userIsActive = false;
-            }
-
-        }
-        else {
-            userIsActive = false;
-        }
+        boolean userIsActive = db.getUserIsActive(user);;
 
         if (userIsActive) {
             holder.txtInfo.setText("Active");

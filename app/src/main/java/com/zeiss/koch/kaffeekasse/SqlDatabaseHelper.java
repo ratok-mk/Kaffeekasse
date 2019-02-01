@@ -21,6 +21,7 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "AccountDB";
+
     private final String CREATE_USERS_TABLE = "CREATE TABLE users ( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, " +
@@ -371,5 +372,21 @@ public class SqlDatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return payments;
+    }
+
+    public boolean getUserIsActive(User user) {
+        final String INACTIVE_TIME = "-3 month";
+        String query = "SELECT  * FROM " + TABLE_PAYMENTS + " WHERE userid='" + user.getId() + "' AND datetime >= date('now','" + INACTIVE_TIME + "')";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        boolean isActive = false;
+        if (cursor.moveToFirst()) {
+            isActive = true;
+        }
+
+        cursor.close();
+        return isActive;
     }
 }
