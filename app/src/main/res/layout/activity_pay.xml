@@ -64,12 +64,12 @@
         <TextView
             android:id="@+id/textView20"
             style="@android:style/TextAppearance.Large"
-            app:layout_widthPercent="30%"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Button20"
             android:layout_centerHorizontal="true"
-            android:text="0,20€"
-            android:textAlignment="center" />
+            android:text="0,25€"
+            android:textAlignment="center"
+            app:layout_widthPercent="30%" />
 
         <TextView
             android:id="@+id/textViewPurchaseCount20"

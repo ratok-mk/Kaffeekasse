@@ -29,7 +29,7 @@ public class PayActivity extends AppCompatActivity {
     private Double totalPurchase;
 
     private int purchase10 = 0;
-    private int purchase20 = 0;
+    private int purchase25 = 0;
     private int purchase40 = 0;
 
     final static private int INITIAL_TIMEOUT_S = 15;
@@ -184,10 +184,10 @@ public class PayActivity extends AppCompatActivity {
     }
 
     public void pay20Click(View view) {
-        payAmount(-0.2);
-        purchase20++;
+        payAmount(-0.25);
+        purchase25++;
         TextView purchaseCount20Text = (TextView)findViewById(R.id.textViewPurchaseCount20);
-        purchaseCount20Text.setText(String.format("%1d", purchase20));
+        purchaseCount20Text.setText(String.format("%1d", purchase25));
     }
 
     public void pay40Click(View view) {
