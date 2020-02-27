@@ -2,7 +2,10 @@ package com.zeiss.koch.kaffeekasse;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,7 +22,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PayActivity extends AppCompatActivity {
+public class PayActivity extends AbstractNfcActivity {
 
     private User currentUser;
     private SqlDatabaseHelper db;
@@ -35,6 +38,9 @@ public class PayActivity extends AppCompatActivity {
     final static private int INITIAL_TIMEOUT_S = 15;
     final static private int RESET_TIMEOUT_S = 5;
     final static private int WARN_LIMIT_S = 3;
+
+    // Constant used to identify data sent between Activities.
+    public static final String EXTRA_DATA_NFCTAG = "EXTRA_DATA_NFCTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,21 @@ public class PayActivity extends AppCompatActivity {
         if (this.timer != null) {
             this.timer.cancel();
             this.timer = null;
+        }
+    }
+
+    @Override
+    protected void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+            // In case we would still use the Tag Discovered Intent
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String userTagId = NfcHelper.getId(tag);
+
+            final Intent data = new Intent();
+            data.putExtra(EXTRA_DATA_NFCTAG, userTagId);
+            setResult(Activity.RESULT_OK, data);
+            finish();
         }
     }
 
