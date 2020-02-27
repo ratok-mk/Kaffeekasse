@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,8 +19,10 @@ import java.util.concurrent.TimeUnit;
  * Created by ogmkoch on 31.01.2019.
  */
 
-public class CustomUserListAdminAdapter extends BaseAdapter {
+public class CustomUserListAdminAdapter extends BaseAdapter implements Filterable {
     private static List<User> originalData;
+    private List<User> filteredData;
+    private ItemFilter mFilter = new ItemFilter();
 
     private LayoutInflater mInflater;
     private final SqlDatabaseHelper db;
@@ -25,15 +30,16 @@ public class CustomUserListAdminAdapter extends BaseAdapter {
     public CustomUserListAdminAdapter(Context context, List<User> results) {
         db = new SqlDatabaseHelper(context);
         originalData = results;
+        filteredData = results;
         mInflater = LayoutInflater.from(context);
     }
 
     public int getCount() {
-        return originalData.size();
+        return filteredData.size();
     }
 
-    public Object getItem(int position) {
-        return originalData.get(position);
+    public User getItem(int position) {
+        return filteredData.get(position);
     }
 
     public long getItemId(int position) {
@@ -53,7 +59,7 @@ public class CustomUserListAdminAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        User user = originalData.get(position);
+        User user = filteredData.get(position);
         holder.txtName.setText(String.format("%1$d. %2$s", position + 1, user.getName()));
 
         boolean userIsActive = db.getUserIsActive(user);;
@@ -82,8 +88,45 @@ public class CustomUserListAdminAdapter extends BaseAdapter {
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 
+    @Override
+    public Filter getFilter() {
+        return mFilter;
+    }
+
     static class ViewHolder {
         TextView txtName;
         TextView txtInfo;
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+            FilterResults results = new FilterResults();
+            final List<User> list = originalData;
+            int count = list.size();
+            final ArrayList<User> nlist = new ArrayList<User>(count);
+
+            User filterableUser ;
+            for (int i = 0; i < count; i++) {
+                filterableUser = list.get(i);
+                if (filterableUser.getName().toLowerCase().contains(filterString)) {
+                    nlist.add(filterableUser);
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredData = (ArrayList<User>) results.values;
+            notifyDataSetChanged();
+        }
+
     }
 }

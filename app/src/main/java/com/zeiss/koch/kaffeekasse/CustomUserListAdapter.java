@@ -36,7 +36,7 @@ public class CustomUserListAdapter extends BaseAdapter implements Filterable {
         return filteredData.size();
     }
 
-    public Object getItem(int position) {
+    public User getItem(int position) {
         return filteredData.get(position);
     }
 

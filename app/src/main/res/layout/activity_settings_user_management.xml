@@ -3,20 +3,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     tools:showIn="@layout/activity_settings">
 
-    <ListView
-        android:id="@+id/userListView"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
-        android:layout_width="400dp" />
+        android:layout_gravity="left|start"
+        android:layout_weight="3"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="@color/background_grey">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_search_category_default" />
+
+            <EditText
+                android:id="@+id/searchFilterAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center"
+                android:layout_weight="8"
+                style="@android:style/TextAppearance.Large"
+                android:textColor="@color/light_grey"
+                android:hint="Suche"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                />
+            <ImageButton
+                android:id="@+id/clearSearchFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:onClick="clearSearchFilterClick"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+                />
+        </LinearLayout>
+        <ListView
+            android:id="@+id/userListView"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:layout_weight="2"
+            android:layout_width="match_parent" />
+    </LinearLayout>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_settings"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="2"
         android:background="@color/background_grey"
         android:focusableInTouchMode="true"
         android:orientation="vertical"

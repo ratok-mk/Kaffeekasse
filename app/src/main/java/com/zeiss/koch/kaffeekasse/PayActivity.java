@@ -91,7 +91,7 @@ public class PayActivity extends AbstractNfcActivity {
             final Intent data = new Intent();
             data.putExtra(EXTRA_DATA_NFCTAG, userTagId);
             setResult(Activity.RESULT_OK, data);
-            finish();
+            exitView();
         }
     }
 

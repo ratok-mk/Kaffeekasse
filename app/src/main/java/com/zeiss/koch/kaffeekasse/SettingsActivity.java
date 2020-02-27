@@ -42,6 +42,7 @@ public class SettingsActivity extends AbstractNfcActivity
     private ViewGroup userCreditLayout;
     private ViewGroup userDetailsLayout;
     private ListView userListView;
+    private CustomUserListAdminAdapter userListAdapter;
     private List<User> users;
     private List<User.Role> roles;
     private Spinner roleSpinner;
@@ -52,6 +53,7 @@ public class SettingsActivity extends AbstractNfcActivity
     private boolean isInFocus = false;
     private SqlDatabaseHelper db;
     private Double chargeAmount;
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -170,7 +172,7 @@ public class SettingsActivity extends AbstractNfcActivity
             case R.id.userListView:
                 SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
                 showUserDetailsView();
-                this.currentUser = this.users.get(pos);
+                this.currentUser = this.userListAdapter.getItem(pos);
                 setCurrentUserToView();
                 setTitle(getString(R.string.app_name) + " / Nutzer verwalten");
                 break;
@@ -222,9 +224,26 @@ public class SettingsActivity extends AbstractNfcActivity
     private void updateUserList() {
         this.users = this.db.getAllUsers();
         Collections.sort(this.users, new UserComparator());
-        CustomUserListAdminAdapter userListAdapter = new CustomUserListAdminAdapter(this, this.users);
+        userListAdapter = new CustomUserListAdminAdapter(this, this.users);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
+
+        EditText editText = (EditText) findViewById(R.id.searchFilterAdmin);
+        editText.setOnEditorActionListener(new DoneOnEditorActionListener());
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                userListAdapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         // select current user
         if (this.currentUser != null) {
@@ -276,6 +295,11 @@ public class SettingsActivity extends AbstractNfcActivity
                 newUserClick(null);
             }
         }
+    }
+
+    public void clearSearchFilterClick(View view) {
+        EditText editText = (EditText) findViewById(R.id.searchFilterAdmin);
+        editText.setText("");
     }
 
     public void newUserClick(View view) {
