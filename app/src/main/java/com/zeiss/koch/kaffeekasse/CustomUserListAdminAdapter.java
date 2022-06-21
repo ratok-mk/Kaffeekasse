@@ -14,6 +14,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.zeiss.koch.kaffeekasse.R.style.TextAppearance_Medium_Warning;
+import static com.zeiss.koch.kaffeekasse.R.style.TextAppearance_Medium_Warning_Yellow;
+
 
 /**
  * Created by ogmkoch on 31.01.2019.
@@ -66,11 +69,11 @@ public class CustomUserListAdminAdapter extends BaseAdapter implements Filterabl
 
         if (userIsActive) {
             holder.txtInfo.setText("Active");
-            holder.txtInfo.setTextAppearance(android.R.style.TextAppearance_Large);
+            holder.txtInfo.setTextAppearance(android.R.style.TextAppearance_Medium);
         }
         else {
             holder.txtInfo.setText("Inactive");
-            holder.txtInfo.setTextAppearance(R.style.TextAppearance_Large_Warning_Yellow);
+            holder.txtInfo.setTextAppearance(TextAppearance_Medium_Warning_Yellow);
         }
 
         return convertView;

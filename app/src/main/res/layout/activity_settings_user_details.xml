@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/textUserNameLabel"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
@@ -25,8 +25,8 @@
 
         <EditText
             android:id="@+id/userRenameText"
-            style="@android:style/TextAppearance.Large"
-            android:layout_width="300dp"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
             android:ems="10"
@@ -45,8 +45,8 @@
             android:onClick="renameUserClick">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_check_24dp" />
 
@@ -61,7 +61,7 @@
 
         <TextView
             android:id="@+id/textUserRoleLabel"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
@@ -88,8 +88,8 @@
             android:onClick="updateRoleClick">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_check_24dp" />
 
@@ -104,7 +104,7 @@
 
         <TextView
             android:id="@+id/textNfcLabel"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
@@ -114,7 +114,7 @@
 
         <TextView
             android:id="@+id/textNfcValue"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="8dp"
@@ -131,8 +131,8 @@
 
             <ImageView
                 android:id="@+id/updateNfcIdIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_cached_24dp" />
 
@@ -147,7 +147,7 @@
 
         <TextView
             android:id="@+id/textBalanceLabel"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -170,8 +170,8 @@
             android:onClick="showChargeCreditViewClick">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_margin="8dp"
                 android:src="@drawable/ic_keyboard_arrow_up_24dp" />
 

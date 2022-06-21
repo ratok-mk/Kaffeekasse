@@ -47,6 +47,11 @@
         <item name="android:textColor">@color/warning_red</item>
     </style>
 
+    <style name="TextAppearance.Medium.Warning.Yellow" parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@color/warning_yellow</item>
+    </style>
+
+
     <style name="TextAppearance.Large.Warning" parent="android:TextAppearance.Large">
         <item name="android:textColor">@color/warning_red</item>
     </style>
