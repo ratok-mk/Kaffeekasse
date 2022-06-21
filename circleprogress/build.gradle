@@ -1,6 +1,11 @@
 apply plugin: 'com.android.library'
 
 android {
+    signingConfigs {
+        release {
+            // enter sign config here
+        }
+    }
     compileSdkVersion 23
 
     defaultConfig {
@@ -14,7 +19,10 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            minifyEnabled true
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -16,6 +16,11 @@ def getDate() {
 }
 
 android {
+    signingConfigs {
+        release {
+            // enter sign config here
+        }
+    }
     compileSdkVersion 23
     defaultConfig {
         applicationId "com.zeiss.koch.kaffeekasse"
@@ -28,9 +33,23 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            minifyEnabled true
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            shrinkResources true
+
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
