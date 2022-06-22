@@ -65,7 +65,7 @@ public class CustomUserListAdminAdapter extends BaseAdapter implements Filterabl
         User user = filteredData.get(position);
         holder.txtName.setText(String.format("%1$d. %2$s", position + 1, user.getName()));
 
-        boolean userIsActive = db.getUserIsActive(user);;
+        boolean userIsActive = db.getUserIsActive(user);
 
         if (userIsActive) {
             holder.txtInfo.setText("Active");

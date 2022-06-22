@@ -3,61 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     android:layout_weight="0.5"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="2dp"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/note5Button"
             android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_margin="20dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:onClick="note5Click"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
+            android:background="@color/background_grey"
             app:srcCompat="@drawable/note5" />
 
         <ImageButton
             android:id="@+id/note10Button"
             android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_margin="20dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:onClick="note10Click"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
+            android:background="@color/background_grey"
             app:srcCompat="@drawable/note10" />
 
         <ImageButton
             android:id="@+id/note20Button"
             android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_margin="20dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:onClick="note20Click"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
+            android:background="@color/background_grey"
             app:srcCompat="@drawable/note20" />
 
         <ImageButton
             android:id="@+id/note50Button"
             android:layout_width="80dp"
-            android:layout_height="150dp"
-            android:layout_margin="20dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:onClick="note50Click"
-            android:scaleType="center"
+            android:scaleType="fitCenter"
+            android:background="@color/background_grey"
             app:srcCompat="@drawable/note50" />
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         android:alignmentMode="alignBounds"
         android:orientation="horizontal"
         android:useDefaultMargins="true">
@@ -107,7 +123,7 @@
 
             <TextView
                 android:id="@+id/chargeBalanceLabelTextView"
-                style="@android:style/TextAppearance.Medium"
+                style="@android:style/TextAppearance.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -123,7 +139,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -140,7 +155,7 @@
 
             <TextView
                 android:id="@+id/chargeAmountLabelTextView"
-                style="@android:style/TextAppearance.Medium"
+                style="@android:style/TextAppearance.Small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -155,24 +170,14 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/updateAccountButton"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:onClick="chargeCreditClick"
-        android:text="Guthaben aufladen" />
-
-    <TextView
-        android:id="@+id/balanceTextView"
-        style="@android:style/TextAppearance.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:text="" />
-
+        <Button
+            android:id="@+id/updateAccountButton"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:onClick="chargeCreditClick"
+            android:text="Guthaben aufladen" />
 
 </LinearLayout>

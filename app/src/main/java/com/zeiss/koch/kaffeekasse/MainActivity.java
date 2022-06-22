@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,8 +49,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public final static String EXTRA_MESSAGE_USERID = "com.zeiss.koch.kaffeekasse.USERID";
     public final static String EXTRA_MESSAGE_NFCID = "com.zeiss.koch.kaffeekasse.NFCID";
 
-    private ListView userList;
-    private List<User> users;
     private CustomUserListAdapter userListAdapter;
 
     private SqlDatabaseHelper db;
@@ -57,6 +56,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout drawerLayout;
     private Timer timer, screensaverTimer;
+    private Date lastBackupDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         this.drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setVersionInfo();
         backupDatabase();
+        this.lastBackupDate = new Date();
         this.db = new SqlDatabaseHelper(this);
         updateUserList();
         EditText editText = (EditText) findViewById(R.id.searchFilter);
@@ -93,7 +94,13 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public void onResume() {
         super.onResume();
         updateUserList();
-        backupDatabase();
+
+        Date currentDate = new Date();
+        long diffInMinutes = (currentDate.getTime() - lastBackupDate.getTime()) / (1000 * 60);
+        if (diffInMinutes >= 15) {
+            backupDatabase();
+        }
+
         EditText editText = (EditText) findViewById(R.id.searchFilter);
         editText.setText("");
 
@@ -233,10 +240,10 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     private void updateUserList() {
         setupDrawer();
 
-        this.users = this.db.getAllUsers();
-        Collections.sort(this.users, new UserComparator());
-        userList = (ListView) findViewById(R.id.userList);
-        userListAdapter = new CustomUserListAdapter(this, this.users);
+        List<User> users = this.db.getAllUsers();
+        Collections.sort(users, new UserComparator());
+        ListView userList = (ListView) findViewById(R.id.userList);
+        userListAdapter = new CustomUserListAdapter(this, users);
         userList.setAdapter(userListAdapter);
         userList.setOnItemClickListener(this);
 

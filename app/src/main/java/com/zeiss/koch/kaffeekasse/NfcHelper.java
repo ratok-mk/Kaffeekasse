@@ -11,11 +11,11 @@ public class NfcHelper {
 
     public static String getId(Tag nfcTag) {
         byte[] tag = nfcTag.getId();
-        String tagConverted = "";
+        StringBuilder tagConverted = new StringBuilder();
         for(int i = 0 ; i < tag.length ; ++i) {
-            tagConverted += String.format("%02X", tag[i]);
+            tagConverted.append(String.format("%02X", tag[i]));
         }
 
-        return tagConverted;
+        return tagConverted.toString();
     }
 }

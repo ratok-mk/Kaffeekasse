@@ -255,17 +255,17 @@ public class PayActivity extends AbstractNfcActivity {
         List<Payment> userPayments = db.getUserPayments(this.currentUser);
         int payments = 0;
         int index = userPayments.size()-1;
-        String text = String.format("Letzte Einkäufe von %1s:",this.currentUser.getName());
+        StringBuilder text = new StringBuilder(String.format("Letzte Einkäufe von %1s:", this.currentUser.getName()));
         while (index > 0 && payments < 5)
         {
             Payment payment = userPayments.get(index);
-            text += String.format("\n%1s:   %2s",
+            text.append(String.format("\n%1s:   %2s",
                     payment.getDatetimeFormated(),
-                    Formater.valueToCurrencyString(payment.getAmount()));
+                    Formater.valueToCurrencyString(payment.getAmount())));
             index--;
             payments++;
         }
 
-        CustomToast.showText(this, text, Toast.LENGTH_LONG);
+        CustomToast.showText(this, text.toString(), Toast.LENGTH_LONG);
     }
 }

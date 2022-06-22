@@ -28,10 +28,6 @@ public class ScreenSaverView extends View {
     private Bitmap bitmapStarfield;
     private int paddingLeft;
     private int paddingTop;
-    private int paddingRight;
-    private int paddingBottom;
-    private int contentWidth;
-    private int contentHeight;
     private Random random;
 
 
@@ -107,10 +103,10 @@ public class ScreenSaverView extends View {
     private void drawStarfield() {
         paddingLeft = getPaddingLeft();
         paddingTop = getPaddingTop();
-        paddingRight = getPaddingRight();
-        paddingBottom = getPaddingBottom();
-        contentWidth = getWidth() - paddingLeft - paddingRight;
-        contentHeight = getHeight() - paddingTop - paddingBottom;
+        int paddingRight = getPaddingRight();
+        int paddingBottom = getPaddingBottom();
+        int contentWidth = getWidth() - paddingLeft - paddingRight;
+        int contentHeight = getHeight() - paddingTop - paddingBottom;
 
         if (bitmapStarfield != null) {
             bitmapStarfield.recycle();
@@ -129,8 +125,8 @@ public class ScreenSaverView extends View {
         {
             float radius = random.nextFloat() * radiusScale + minRadius;
             bitmapCanvas.drawCircle(
-                    paddingLeft + (contentWidth) / 2 + (random.nextInt() % (contentWidth / 2)),
-                    paddingTop + (contentHeight) / 2 + (random.nextInt() % (contentHeight / 2)),
+                    paddingLeft + (contentWidth) / 2.0f + (random.nextInt() % (contentWidth / 2.0f)),
+                    paddingTop + (contentHeight) / 2.0f + (random.nextInt() % (contentHeight / 2.0f)),
                     radius, mPaintStar);
         }
     }

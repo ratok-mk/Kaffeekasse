@@ -43,7 +43,6 @@ public class SettingsActivity extends AbstractNfcActivity
     private ViewGroup userDetailsLayout;
     private ListView userListView;
     private CustomUserListAdminAdapter userListAdapter;
-    private List<User> users;
     private List<User.Role> roles;
     private Spinner roleSpinner;
     private User currentUser;
@@ -222,9 +221,9 @@ public class SettingsActivity extends AbstractNfcActivity
     }
 
     private void updateUserList() {
-        this.users = this.db.getAllUsers();
-        Collections.sort(this.users, new UserComparator());
-        userListAdapter = new CustomUserListAdminAdapter(this, this.users);
+        List<User> users = this.db.getAllUsers();
+        Collections.sort(users, new UserComparator());
+        userListAdapter = new CustomUserListAdminAdapter(this, users);
         userListView.setAdapter(userListAdapter);
         userListView.setOnItemClickListener(this);
 
