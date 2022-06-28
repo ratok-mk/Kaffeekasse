@@ -99,6 +99,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
         long diffInMinutes = (currentDate.getTime() - lastBackupDate.getTime()) / (1000 * 60);
         if (diffInMinutes >= 15) {
             backupDatabase();
+            lastBackupDate = currentDate;
         }
 
         EditText editText = (EditText) findViewById(R.id.searchFilter);
@@ -176,7 +177,6 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
 
-
     @Override
     protected void handleIntent(Intent intent) {
         String action = intent.getAction();
@@ -209,17 +209,17 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_CODE_SCREENSAVER) {
+        if (requestCode == REQUEST_CODE_SCREENSAVER) {
 
-            if(resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 final String userTagId = data.getStringExtra(ScreensaverActivity.EXTRA_DATA_NFCTAG);
                 reactToUserTagId(userTagId);
             }
         }
 
-        if(requestCode == REQUEST_CODE_PAYACTIVITY) {
+        if (requestCode == REQUEST_CODE_PAYACTIVITY) {
 
-            if(resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 final String userTagId = data.getStringExtra(PayActivity.EXTRA_DATA_NFCTAG);
                 reactToUserTagId(userTagId);
             }
@@ -227,7 +227,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-        User user = (User)parent.getItemAtPosition(pos);
+        User user = (User) parent.getItemAtPosition(pos);
         if (user != null) {
             this.drawerLayout.closeDrawers();
             SoundManager.getInstance().play(this, SoundManager.SoundType.BUTTON);
@@ -280,7 +280,7 @@ public class MainActivity extends AbstractNfcActivity implements AdapterView.OnI
                 super.onDrawerClosed(view);
                 setActionBarTitle();
                 EditText editText = (EditText) findViewById(R.id.searchFilter);
-                InputMethodManager imm = (InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
             }
 

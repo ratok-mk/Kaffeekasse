@@ -38,7 +38,7 @@
 
         <Button
             android:id="@+id/registerUserButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_margin="32dp"
             android:layout_gravity="center_vertical"
@@ -57,7 +57,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:onClick="OpenAddUserClick"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:text="Neuen Nutzer hinzufügen " />
 
     </LinearLayout>

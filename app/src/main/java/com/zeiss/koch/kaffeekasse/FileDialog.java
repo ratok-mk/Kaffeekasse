@@ -10,6 +10,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -143,9 +144,7 @@ public class FileDialog {
                 }
             };
             String[] fileList1 = path.list(filter);
-            for (String file : fileList1) {
-                r.add(file);
-            }
+            r.addAll(Arrays.asList(fileList1));
         }
         fileList = (String[]) r.toArray(new String[]{});
     }

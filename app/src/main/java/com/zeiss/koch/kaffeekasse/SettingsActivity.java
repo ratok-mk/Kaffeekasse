@@ -541,6 +541,10 @@ public class SettingsActivity extends AbstractNfcActivity
 
     public void restoreDatabaseClick(View view) {
         File mPath = DBFileBackupHelper.BackupDirectory();
+        if (!mPath.exists()) {
+            mPath.mkdirs();
+        }
+
         FileDialog fileDialog = new FileDialog(this, mPath, null);
         fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
             public void fileSelected(File file) {
