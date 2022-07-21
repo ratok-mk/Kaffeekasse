@@ -61,7 +61,6 @@
     </style>
 
     <style name="balance_plus" parent="android:TextAppearance.Large">
-        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="balance_minus" parent="balance_plus">
